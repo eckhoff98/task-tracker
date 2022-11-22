@@ -7,6 +7,25 @@ function App() {
 
   const [tasks, setTasks] = useState("")
 
+  function Task(task, time, discription = "", reminder = false) {
+    this.task = task
+    this.time = time
+    this.discription = discription
+    this.reminder = reminder
+  }
+
+  let demoTasks = [
+    new Task("Test task 1", "1 pm", "test discription", false),
+    new Task("Test task 2", "5 pm", "test discription", true),
+    new Task("Test task 3", "3 pm", "test discription", false)
+  ]
+
+  const addTask = (task) => {
+    demoTasks = [...demoTasks, task]
+  }
+  addTask(new Task("Test task 4", "12 pm", "test discription", false))
+  addTask(new Task("Test task 5", "9 pm", "test discription", false))
+
   const getTasks = () => {
     axios({
       method: "GET",
@@ -64,12 +83,15 @@ function App() {
     postTasks()
     putTasks()
     deleteTasks()
+
+
   }, [])
+
 
   return (
     <div className="App">
       <p>Hello, world</p>
-      <p>{JSON.stringify(tasks)}</p>
+      <p>{JSON.stringify(demoTasks)}</p>
     </div>
   )
 }
