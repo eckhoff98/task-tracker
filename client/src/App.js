@@ -10,21 +10,6 @@ function App() {
 
   const [tasks, setTasks] = useState([])
 
-  function Task(name, time, discription = "", reminder = false, id) {
-    this.name = name
-    this.time = time
-    this.discription = discription
-    this.reminder = reminder
-    this.id = id
-  }
-
-
-
-  // const addTask = (task) => {
-  //   demoTasks = [...demoTasks, task]
-  // }
-  // addTask(new Task("Test task 4", "12 pm", "test discription", false))
-  // addTask(new Task("Test task 5", "9 pm", "test discription", false))
 
   const getTasks = () => {
     axios({
@@ -95,12 +80,6 @@ function App() {
   }
 
   useEffect(() => {
-    // const demoTasks = [
-    //   new Task("Test task 1", "1 pm", "test discription", false, Math.random()),
-    //   new Task("Test task 2", "5 pm", "test discription", true, Math.random()),
-    //   new Task("Test task 3", "3 pm", "test discription", false, Math.random())
-    // ]
-    // setTasks(demoTasks)
     getTasks()
   }, [])
 

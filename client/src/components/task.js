@@ -16,9 +16,9 @@ const Task = ({ task, editTasks }) => {
         } else {
             return (
                 <>
-                    <div>{task.name}</div>
-                    <div>{task.discription}</div>
-                    <div>{task.time}</div>
+                    <div>task: {task.name}</div>
+                    <div>discription: {task.discription}</div>
+                    <div>time: {task.time}</div>
                     <div>Reminder: {String(task.reminder)}</div>
                     <div>id: {task.id}</div>
                 </>

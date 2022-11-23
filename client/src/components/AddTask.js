@@ -17,7 +17,7 @@ const AddTask = ({ editTasks }) => {
     return (
         <div>
             <h2> Add task  </h2>
-            <TaskForm task={{}} editTasks={addTask} />
+            <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} editTasks={addTask} />
             <div>---------------------------------------------------------------------</div>
 
         </div>

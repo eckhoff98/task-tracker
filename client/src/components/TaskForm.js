@@ -3,6 +3,8 @@ import { useState } from "react"
 const TaskForm = ({ task, editTasks }) => {
     const [taskData, setTaskData] = useState(task)
 
+
+
     const submit = (e) => {
         e.preventDefault()
         editTasks(taskData)
@@ -47,7 +49,7 @@ const TaskForm = ({ task, editTasks }) => {
                 name="reminder"
                 checked={taskData.reminder ? taskData.reminder : false}
                 value={taskData.reminder ? taskData.reminder : false}
-                onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
+                onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.value })}
             />
             <br />
 
