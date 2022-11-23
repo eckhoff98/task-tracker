@@ -1,7 +1,9 @@
 import './App.css';
 import axios from "axios"
 import { useState, useEffect } from "react"
-import TaskComponent from "./components/task"
+
+import TaskComponent from "./components/Task"
+import AddTask from './components/AddTask';
 
 function App() {
   axios.defaults.withCredentials = true
@@ -30,12 +32,14 @@ function App() {
       withCredentials: true,
       url: "http://localhost:5000/tasks"
     }).then((res) => {
+      console.log(res.data)
+      setTasks(res.data)
     })
   }
 
-  const postTasks = () => {
+  const postTasks = (task) => {
     const data = {
-      task: "task to post"
+      task: task
     }
     axios({
       method: "POST",
@@ -59,9 +63,9 @@ function App() {
     })
   }
 
-  const deleteTasks = () => {
+  const deleteTasks = (task) => {
     const data = {
-      task: "task to delete"
+      task: task
     }
     axios({
       method: "DELETE",
@@ -72,12 +76,16 @@ function App() {
     })
   }
 
+
   const editTasks = (task, change) => {
     if (change.action === "delete") {
       setTasks(tasks.filter((t) => t.id !== task.id))
+      deleteTasks(task)
       return console.log(`Delete task: ${task.name}`)
     }
     else if (change.action === "add") {
+      setTasks([...tasks, task])
+      postTasks(task)
       console.log(`Add task: ${task.name}`)
     }
     else if (change.action === "edit") {
@@ -87,18 +95,20 @@ function App() {
   }
 
   useEffect(() => {
-    const demoTasks = [
-      new Task("Test task 1", "1 pm", "test discription", false, Math.random()),
-      new Task("Test task 2", "5 pm", "test discription", true, Math.random()),
-      new Task("Test task 3", "3 pm", "test discription", false, Math.random())
-    ]
-    setTasks(demoTasks)
+    // const demoTasks = [
+    //   new Task("Test task 1", "1 pm", "test discription", false, Math.random()),
+    //   new Task("Test task 2", "5 pm", "test discription", true, Math.random()),
+    //   new Task("Test task 3", "3 pm", "test discription", false, Math.random())
+    // ]
+    // setTasks(demoTasks)
+    getTasks()
   }, [])
 
 
   return (
     <div className="App">
-      <p>Hello, world</p>
+      <h1>Task Tracker</h1>
+      <AddTask editTasks={editTasks} />
       {tasks.map((task, index) => {
         return <TaskComponent key={index} task={task} editTasks={editTasks} />
       })}

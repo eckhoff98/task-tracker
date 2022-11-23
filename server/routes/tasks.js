@@ -1,13 +1,38 @@
 const express = require("express")
 const router = express.Router()
+const sqlite3 = require("sqlite3")
+
+//connect to sqlite db
+let sql
+const db = new sqlite3.Database("./server.db", sqlite3.OPEN_READWRITE, (err) => {
+    if (err) return console.error(err.message)
+})
 
 router.get("/", (req, res) => {
-    res.send("get task")
+    // Get tasks from db
+    sql = 'SELECT * FROM tasks'
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err
+        }
+        console.log(rows);
+        res.send(rows)
+    })
 })
 
 router.post("/", (req, res) => {
-    console.log(req.body)
-    res.send("post task")
+    data = [
+        req.body.task.name,
+        req.body.task.time,
+        req.body.task.discription,
+        req.body.task.reminder,
+    ]
+    sql = "INSERT INTO tasks (name, time, discription, reminder) VALUES (?,?,?,?)"
+    db.run(sql, data, (err) => {
+        if (err) throw err
+        console.log("Added")
+    })
+    // res.send("post task")
 })
 
 router.put("/", (req, res) => {
@@ -16,8 +41,13 @@ router.put("/", (req, res) => {
 })
 
 router.delete("/", (req, res) => {
-    console.log(req.body)
-    res.send("delete task")
+    data = [req.body.task.id]
+    sql = "DELETE FROM tasks WHERE id = ?"
+    db.run(sql, data, (err) => {
+        if (err) throw err
+        console.log("Removed")
+    })
+    // res.send("delete task")
 })
 
 

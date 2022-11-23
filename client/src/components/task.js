@@ -1,27 +1,26 @@
 import React, { useState } from "react"
+import TaskForm from "./TaskForm"
 
 const Task = ({ task, editTasks }) => {
-    const [editTask, setEditTask] = useState(false)
+    const [editTaskToggel, setEditTaskToggel] = useState(false)
+
+    const modifyTask = (taskData) => {
+        editTasks(taskData, { action: "edit" })
+    }
 
     const EditTaskForm = () => {
-        if (editTask) {
+        if (editTaskToggel) {
             return (
-                <form>
-                    <input type="text" placeholder="name" value={task.name} />
-                    <br />
-                    <input type="text" placeholder="time" value={task.time} />
-                    <br />
-                    <input type="text" placeholder="discription" value={task.discription} />
-                </form>
+                <TaskForm task={task} editTasks={modifyTask} />
             )
         } else {
             return (
                 <>
-                    <div>{task.id}</div>
                     <div>{task.name}</div>
-                    <div>{task.time}</div>
                     <div>{task.discription}</div>
-                    <div>{task.reminder}</div>
+                    <div>{task.time}</div>
+                    <div>Reminder: {String(task.reminder)}</div>
+                    <div>id: {task.id}</div>
                 </>
             )
         }
@@ -30,7 +29,7 @@ const Task = ({ task, editTasks }) => {
     return (
         <div>
             <EditTaskForm />
-            <button onClick={() => setEditTask(!editTask)}>Edit Task</button>
+            <button onClick={() => setEditTaskToggel(!editTaskToggel)}>Edit Task</button>
             <br />
             <button onClick={() => editTasks(task, { action: "delete" })}>Delete task</button>
             <div>---------------------------------------------------------------------</div>
