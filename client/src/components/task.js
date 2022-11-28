@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
 
 const Task = ({ task, editTasks }) => {
@@ -8,8 +8,15 @@ const Task = ({ task, editTasks }) => {
     const modifyTask = (taskData) => {
         editTasks(taskData, { action: "change" })
         setEditTaskToggel(!editTaskToggel)
-        setEditTaskText("Edit")
     }
+    useEffect(() => {
+        if (editTaskToggel) {
+            setEditTaskText("Cancel")
+        } else {
+            setEditTaskText("Edit")
+        }
+
+    }, [editTaskToggel])
 
 
 
@@ -36,7 +43,6 @@ const Task = ({ task, editTasks }) => {
             <EditTaskForm />
             <button onClick={() => {
                 setEditTaskToggel(!editTaskToggel)
-                setEditTaskText("Cancle")
             }}>{editTaskText}</button>
             <br />
             <button onClick={() => editTasks(task, { action: "delete" })}>Delete task</button>
