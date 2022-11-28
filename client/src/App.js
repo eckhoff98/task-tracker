@@ -18,7 +18,7 @@ function App() {
       url: "http://localhost:5000/tasks"
     }).then((res) => {
       console.log(res.data)
-      setTasks(res.data)
+      setTasks([...res.data])
     })
   }
 
@@ -32,12 +32,13 @@ function App() {
       data: data,
       url: "http://localhost:5000/tasks"
     }).then((res) => {
+      getTasks()
     })
   }
 
-  const putTasks = () => {
+  const putTasks = (task) => {
     const data = {
-      task: "task to put"
+      task: task
     }
     axios({
       method: "PUT",
@@ -45,6 +46,7 @@ function App() {
       data: data,
       url: "http://localhost:5000/tasks"
     }).then((res) => {
+      getTasks()
     })
   }
 
@@ -58,23 +60,22 @@ function App() {
       data: data,
       url: "http://localhost:5000/tasks"
     }).then((res) => {
+      getTasks()
     })
   }
 
 
   const editTasks = (task, change) => {
     if (change.action === "delete") {
-      setTasks(tasks.filter((t) => t.id !== task.id))
+      // setTasks(tasks.filter((t) => t.id !== task.id))
       deleteTasks(task)
-      return console.log(`Delete task: ${task.name}`)
     }
     else if (change.action === "add") {
-      setTasks([...tasks, task])
+      // setTasks([...tasks, task])
       postTasks(task)
-      console.log(`Add task: ${task.name}`)
     }
-    else if (change.action === "edit") {
-      console.log(`Edit task: ${task.name}`)
+    else if (change.action === "change") {
+      putTasks(task)
     }
 
   }

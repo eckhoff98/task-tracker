@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const TaskForm = ({ task, editTasks }) => {
     const [taskData, setTaskData] = useState(task)
@@ -10,6 +10,7 @@ const TaskForm = ({ task, editTasks }) => {
         editTasks(taskData)
         console.log(taskData)
     }
+
 
     return (
         <form onSubmit={submit}>
@@ -47,9 +48,11 @@ const TaskForm = ({ task, editTasks }) => {
             <input
                 type="checkbox"
                 name="reminder"
-                checked={taskData.reminder ? taskData.reminder : false}
-                value={taskData.reminder ? taskData.reminder : false}
-                onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.value })}
+                // checked={taskData.reminder ? taskData.reminder : false}
+                // value={taskData.reminder ? taskData.reminder : false}
+                checked={taskData.reminder}
+                value={taskData.reminder}
+                onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
             />
             <br />
 

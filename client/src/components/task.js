@@ -3,10 +3,15 @@ import TaskForm from "./TaskForm"
 
 const Task = ({ task, editTasks }) => {
     const [editTaskToggel, setEditTaskToggel] = useState(false)
+    const [editTaskText, setEditTaskText] = useState("Edit")
 
     const modifyTask = (taskData) => {
-        editTasks(taskData, { action: "edit" })
+        editTasks(taskData, { action: "change" })
+        setEditTaskToggel(!editTaskToggel)
+        setEditTaskText("Edit")
     }
+
+
 
     const EditTaskForm = () => {
         if (editTaskToggel) {
@@ -19,7 +24,7 @@ const Task = ({ task, editTasks }) => {
                     <div>task: {task.name}</div>
                     <div>discription: {task.discription}</div>
                     <div>time: {task.time}</div>
-                    <div>Reminder: {String(task.reminder)}</div>
+                    <div>Reminder: {String(Boolean(task.reminder))}</div>
                     <div>id: {task.id}</div>
                 </>
             )
@@ -29,7 +34,10 @@ const Task = ({ task, editTasks }) => {
     return (
         <div>
             <EditTaskForm />
-            <button onClick={() => setEditTaskToggel(!editTaskToggel)}>Edit Task</button>
+            <button onClick={() => {
+                setEditTaskToggel(!editTaskToggel)
+                setEditTaskText("Cancle")
+            }}>{editTaskText}</button>
             <br />
             <button onClick={() => editTasks(task, { action: "delete" })}>Delete task</button>
             <div>---------------------------------------------------------------------</div>

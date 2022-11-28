@@ -15,7 +15,6 @@ router.get("/", (req, res) => {
         if (err) {
             throw err
         }
-        console.log(rows);
         res.send(rows)
     })
 })
@@ -32,11 +31,23 @@ router.post("/", (req, res) => {
         if (err) throw err
         console.log("Added")
     })
-    // res.send("post task")
+    res.send("post task")
 })
 
 router.put("/", (req, res) => {
+    console.log("Putting task")
     console.log(req.body)
+    data = [
+        req.body.task.name,
+        req.body.task.time,
+        req.body.task.discription,
+        req.body.task.reminder,
+        req.body.task.id
+    ]
+    sql = "UPDATE tasks SET name = ?, time = ?, discription = ?, reminder = ? WHERE id = ?"
+    db.run(sql, data, (err) => {
+        if (err) throw err
+    })
     res.send("put task")
 })
 
@@ -47,7 +58,7 @@ router.delete("/", (req, res) => {
         if (err) throw err
         console.log("Removed")
     })
-    // res.send("delete task")
+    res.send("delete task")
 })
 
 
