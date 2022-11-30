@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 const TaskForm = ({ task, editTasks }) => {
     const [taskData, setTaskData] = useState(task)
-
 
 
     const submit = (e) => {
@@ -11,54 +10,49 @@ const TaskForm = ({ task, editTasks }) => {
         console.log(taskData)
     }
 
-
     return (
         <form onSubmit={submit}>
-            <label htmlFor="name">Task name</label>
-            <input
-                type="text"
-                name="name"
-                placeholder="name"
-                value={taskData.name ? taskData.name : ""}
-                onChange={(e) => setTaskData({ ...taskData, name: e.target.value })}
-            />
-            <br />
+            <div className="taskForm">
+                <label className="hideLable" htmlFor="name">Task name</label>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="task"
+                    value={taskData.name ? taskData.name : ""}
+                    onChange={(e) => setTaskData({ ...taskData, name: e.target.value })}
+                />
 
-            <label htmlFor="time">Time</label>
-            <input
-                type="text"
-                name="time"
-                placeholder="time"
-                value={taskData.time ? taskData.time : ""}
-                onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
-            />
-            <br />
+                <label className="hideLable" htmlFor="time">Time</label>
+                <input
+                    type="text"
+                    name="time"
+                    placeholder="time"
+                    value={taskData.time ? taskData.time : ""}
+                    onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
+                />
 
-            <label htmlFor="discription">Discription</label>
-            <input
-                type="text"
-                name="discription"
-                placeholder="discription"
-                value={taskData.discription ? taskData.discription : ""}
-                onChange={(e) => setTaskData({ ...taskData, discription: e.target.value })}
-            />
-            <br />
+                <label className="hideLable" htmlFor="discription">Discription</label>
+                <input
+                    type="text"
+                    name="discription"
+                    placeholder="discription"
+                    value={taskData.discription ? taskData.discription : ""}
+                    onChange={(e) => setTaskData({ ...taskData, discription: e.target.value })}
+                />
 
-            <label htmlFor="reminder">Set Reminder</label>
-            <input
-                type="checkbox"
-                name="reminder"
-                // checked={taskData.reminder ? taskData.reminder : false}
-                // value={taskData.reminder ? taskData.reminder : false}
-                checked={taskData.reminder}
-                value={taskData.reminder}
-                onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
-            />
-            <br />
+                <div>
+                    <label htmlFor="reminder">Set Reminder</label>
+                    <input
+                        type="checkbox"
+                        name="reminder"
+                        checked={taskData.reminder}
+                        value={taskData.reminder}
+                        onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
+                    />
+                </div>
 
-            <button type="submit">submit</button>
-            <br />
-            <br />
+                <button type="submit">Save</button>
+            </div>
         </form>
     )
 }

@@ -23,7 +23,10 @@ const Task = ({ task, editTasks }) => {
     const EditTaskForm = () => {
         if (editTaskToggel) {
             return (
-                <TaskForm task={task} editTasks={modifyTask} />
+                <>
+                    <TaskForm task={task} editTasks={modifyTask} />
+                    <button onClick={() => editTasks(task, { action: "delete" })}>Delete task</button>
+                </>
             )
         } else {
             return (
@@ -39,15 +42,9 @@ const Task = ({ task, editTasks }) => {
     }
 
     return (
-        <div>
+        <div className="task">
             <EditTaskForm />
-            <button onClick={() => {
-                setEditTaskToggel(!editTaskToggel)
-            }}>{editTaskText}</button>
-            <br />
-            <button onClick={() => editTasks(task, { action: "delete" })}>Delete task</button>
-            <div>---------------------------------------------------------------------</div>
-            <br />
+            <button onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
         </div>
     )
 }

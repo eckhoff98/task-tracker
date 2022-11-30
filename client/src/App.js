@@ -2,7 +2,7 @@ import './App.css';
 import axios from "axios"
 import { useState, useEffect } from "react"
 
-import TaskComponent from "./components/Task"
+import Tasks from "./components/Tasks"
 import AddTask from './components/AddTask';
 
 function App() {
@@ -89,9 +89,7 @@ function App() {
     <div className="App">
       <h1>Task Tracker</h1>
       <AddTask editTasks={editTasks} />
-      {tasks.map((task, index) => {
-        return <TaskComponent key={index} task={task} editTasks={editTasks} />
-      })}
+      <Tasks tasks={tasks} editTasks={editTasks} />
     </div>
   )
 }

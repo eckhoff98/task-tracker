@@ -1,0 +1,28 @@
+.blue-block {
+    background-color: darkgrey;
+    padding: 1rem;
+}
+
+.taskForm {
+    background-color: darkgrey;
+    padding: 1rem;
+    display: grid;
+    gap: .5rem;
+}
+
+.task {
+    background-color: lightgray;
+    margin: 1rem;
+    padding: 1rem;
+    display: grid;
+    gap: .5rem;
+}
+
+button {
+    background-color: grey;
+    color: white;
+}
+
+.hideLable {
+    display: none;
+}

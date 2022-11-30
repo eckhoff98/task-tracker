@@ -1,25 +1,27 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
 
 const AddTask = ({ editTasks }) => {
-    const [name, setName] = useState("")
-    const [time, setTime] = useState("")
-    const [discription, setDiscription] = useState("")
-    const [reminder, setReminder] = useState(false)
+    const [addTaskToggle, setAddTaskToggle] = useState(false)
+    const [addTaskText, setAddTaskText] = useState("")
 
-    // const [addTask, setAddTask] = useState({})
+    useEffect(() => {
+        console.log("did this")
+        if (addTaskToggle) {
+            setAddTaskText("Cancel")
+        } else {
+            setAddTaskText("Add")
+        }
+    }, [addTaskToggle])
 
     const addTask = (taskData) => {
-
         editTasks(taskData, { action: "add" })
     }
 
     return (
         <div>
-            <h2> Add task  </h2>
-            <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} editTasks={addTask} />
-            <div>---------------------------------------------------------------------</div>
-
+            <button onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
+            {addTaskToggle && <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} editTasks={addTask} />}
         </div>
     )
 }
