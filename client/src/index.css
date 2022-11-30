@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(180deg, rgb(19, 19, 20) 0%, rgb(9, 38, 61) 35%, rgb(9, 53, 104) 100%);
+    background: rgb(21, 40, 56);
     color: white;
 }
 
@@ -10,7 +10,7 @@ body {
 }
 
 .taskForm {
-    padding: 1rem;
+    /* padding: 1rem; */
     display: grid;
     gap: 1rem;
 }
@@ -21,6 +21,8 @@ body {
     padding: 1rem;
     display: grid;
     gap: 1rem;
+    cursor: pointer;
+    caret-color: transparent;
 }
 
 button {

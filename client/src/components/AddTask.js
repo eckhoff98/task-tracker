@@ -16,6 +16,7 @@ const AddTask = ({ editTasks }) => {
 
     const addTask = (taskData) => {
         editTasks(taskData, { action: "add" })
+        setAddTaskToggle(false)
     }
 
     return (
