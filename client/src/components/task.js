@@ -6,7 +6,8 @@ const Task = ({ task, editTasks }) => {
     const [editTaskToggel, setEditTaskToggel] = useState(false)
     const [editTaskText, setEditTaskText] = useState("Edit")
 
-    const modifyTask = (taskData) => {
+    const form = (taskData) => {
+        console.log("CLICKED SAVE")
         editTasks(taskData, { action: "change" })
         setEditTaskToggel(!editTaskToggel)
     }
@@ -22,7 +23,7 @@ const Task = ({ task, editTasks }) => {
 
     const deleteTask = () => {
         editTasks(task, { action: "delete" })
-        setEditTaskToggel(false)
+        setEditTaskToggel(!editTaskToggel)
         setMoreInfo(false)
     }
 
@@ -31,7 +32,6 @@ const Task = ({ task, editTasks }) => {
             return (<>
                 <div >task: {task.name}</div>
             </>)
-
         }
 
         return (
@@ -51,7 +51,7 @@ const Task = ({ task, editTasks }) => {
         if (editTaskToggel) {
             return (
                 <>
-                    <TaskForm task={task} editTasks={modifyTask} />
+                    <TaskForm task={task} form={form} />
                     <button onClick={() => { deleteTask() }}>Delete task</button>
                 </>
             )
@@ -61,7 +61,7 @@ const Task = ({ task, editTasks }) => {
     }
 
     return (
-        <div className="task" onClick={() => setMoreInfo(!moreInfo)} >
+        <div onClick={() => !editTaskToggel && setMoreInfo(!moreInfo)} className="task" >
             <EditTaskForm />
         </div>
     )

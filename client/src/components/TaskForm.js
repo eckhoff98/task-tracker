@@ -1,12 +1,12 @@
 import { useState } from "react"
 
-const TaskForm = ({ task, editTasks }) => {
+const TaskForm = ({ task, form }) => {
     const [taskData, setTaskData] = useState(task)
 
 
-    const submit = (e) => {
-        e.preventDefault()
-        editTasks(taskData)
+    const submit = () => {
+        // e.preventDefault()
+        form(taskData)
         console.log(taskData)
     }
 
@@ -51,7 +51,7 @@ const TaskForm = ({ task, editTasks }) => {
                     />
                 </div>
 
-                <button type="submit">Save</button>
+                <button type="button" onClick={() => submit()}>Save</button>
             </div>
         </form>
     )
