@@ -41,7 +41,7 @@ const Task = ({ task, editTasks }) => {
                 <div>time: {task.time}</div>
                 <div>Reminder: {String(Boolean(task.reminder))}</div>
                 <div>id: {task.id}</div>
-                <button onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
+                <button className="btn btn-primary" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
             </div>
         )
     }
@@ -52,7 +52,7 @@ const Task = ({ task, editTasks }) => {
             return (
                 <>
                     <TaskForm task={task} form={form} />
-                    <button onClick={() => { deleteTask() }}>Delete task</button>
+                    <button className="btn btn-danger" onClick={() => { deleteTask() }}>Delete task</button>
                 </>
             )
         } else {

@@ -4,13 +4,15 @@ import TaskForm from "./TaskForm"
 const AddTask = ({ editTasks }) => {
     const [addTaskToggle, setAddTaskToggle] = useState(false)
     const [addTaskText, setAddTaskText] = useState("")
+    const [buttonClassName, setButtonClassName] = useState("btn btn-primary")
 
     useEffect(() => {
-        console.log("did this")
         if (addTaskToggle) {
             setAddTaskText("Cancel")
+            setButtonClassName("btn btn-danger")
         } else {
             setAddTaskText("Add")
+            setButtonClassName("btn btn-primary")
         }
     }, [addTaskToggle])
 
@@ -20,8 +22,8 @@ const AddTask = ({ editTasks }) => {
     }
 
     return (
-        <div>
-            <button onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
+        <div className="addTask">
+            <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
             {addTaskToggle && <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} form={addTask} />}
         </div>
     )

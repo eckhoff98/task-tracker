@@ -4,20 +4,24 @@ import { useState, useEffect } from "react"
 
 import Tasks from "./components/Tasks"
 import AddTask from './components/AddTask';
+import NavBar from './components/NavBar';
 
 function App() {
   axios.defaults.withCredentials = true
 
   const [tasks, setTasks] = useState([])
 
+  useEffect(() => {
+    getTasks()
+  }, [])
 
+  // Helper Functions 
   const getTasks = () => {
     axios({
       method: "GET",
       withCredentials: true,
       url: "http://localhost:5000/tasks"
     }).then((res) => {
-      console.log(res.data)
       setTasks([...res.data])
     })
   }
@@ -64,7 +68,6 @@ function App() {
     })
   }
 
-
   const editTasks = (task, change) => {
     if (change.action === "delete") {
       // setTasks(tasks.filter((t) => t.id !== task.id))
@@ -79,15 +82,13 @@ function App() {
     }
 
   }
-
-  useEffect(() => {
-    getTasks()
-  }, [])
-
+  // -------------------- End of (Helpers) --------------------
 
   return (
     <div className="App">
-      <h1>Task Tracker</h1>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossOrigin="anonymous"></link>
+
+      <NavBar appName={"Task Tracker"} />
       <AddTask editTasks={editTasks} />
       <Tasks tasks={tasks} editTasks={editTasks} />
     </div>

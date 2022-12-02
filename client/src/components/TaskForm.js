@@ -5,7 +5,6 @@ const TaskForm = ({ task, form }) => {
 
     const submit = () => {
         // e.preventDefault()
-        console.log(taskData)
         form(taskData)
     }
 
@@ -14,6 +13,7 @@ const TaskForm = ({ task, form }) => {
             <div className="taskForm">
                 <label className="hideLable" htmlFor="name">Task name</label>
                 <input
+                    className="form-control"
                     type="text"
                     name="name"
                     placeholder="task"
@@ -23,6 +23,7 @@ const TaskForm = ({ task, form }) => {
 
                 <label className="hideLable" htmlFor="time">Time</label>
                 <input
+                    className="form-control"
                     type="text"
                     name="time"
                     placeholder="time"
@@ -32,6 +33,7 @@ const TaskForm = ({ task, form }) => {
 
                 <label className="hideLable" htmlFor="discription">Discription</label>
                 <input
+                    className="form-control"
                     type="text"
                     name="discription"
                     placeholder="discription"
@@ -39,18 +41,19 @@ const TaskForm = ({ task, form }) => {
                     onChange={(e) => setTaskData({ ...taskData, discription: e.target.value })}
                 />
 
-                <div>
-                    <label htmlFor="reminder">Set Reminder</label>
+                <div className="form-check">
                     <input
+                        className="form-check-input"
                         type="checkbox"
                         name="reminder"
                         checked={taskData.reminder}
                         value={taskData.reminder}
                         onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
                     />
+                    <label className="form-check-label" htmlFor="reminder">Set Reminder</label>
                 </div>
 
-                <button type="button" onClick={() => submit()}>Save</button>
+                <button type="button" className="btn btn-success" onClick={() => submit()}>Save</button>
             </div>
         </form>
     )
