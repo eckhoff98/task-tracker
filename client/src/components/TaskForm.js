@@ -3,11 +3,10 @@ import { useState } from "react"
 const TaskForm = ({ task, form }) => {
     const [taskData, setTaskData] = useState(task)
 
-
     const submit = () => {
         // e.preventDefault()
-        form(taskData)
         console.log(taskData)
+        form(taskData)
     }
 
     return (

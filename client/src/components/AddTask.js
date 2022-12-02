@@ -22,7 +22,7 @@ const AddTask = ({ editTasks }) => {
     return (
         <div>
             <button onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
-            {addTaskToggle && <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} editTasks={addTask} />}
+            {addTaskToggle && <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} form={addTask} />}
         </div>
     )
 }
