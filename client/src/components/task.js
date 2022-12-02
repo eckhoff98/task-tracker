@@ -61,7 +61,7 @@ const Task = ({ task, editTasks }) => {
     }
 
     return (
-        <div onClick={() => !editTaskToggel && setMoreInfo(!moreInfo)} className="task" >
+        <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)} className="task" >
             <EditTaskForm />
         </div>
     )
