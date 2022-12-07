@@ -4,7 +4,6 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    /* background: rgb(21, 40, 56); */
     color: white;
 }
 
@@ -15,7 +14,6 @@ body {
 }
 
 .taskForm {
-    /* padding: 1em; */
     display: grid;
     gap: 1em;
     caret-color: black;
@@ -40,10 +38,44 @@ body {
     border-radius: 1em;
     color: white;
     padding: 1em;
+
+    display: inline-grid;
+    gap: 1em;
+    grid-template-columns: 1fr 1fr;
+
+    cursor: pointer;
+    caret-color: transparent;
+
+
+}
+
+.task-expanded {
+    background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49));
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 1em;
+    color: white;
+    padding: 1em;
     display: grid;
     gap: 1em;
     cursor: pointer;
     caret-color: transparent;
+}
+
+.task-edit {
+    background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49));
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 1em;
+    color: white;
+    padding: 1em;
+    display: grid;
+    gap: 1em;
+    cursor: pointer;
+    caret-color: transparent;
+
+}
+
+.time {
+    text-align: right;
 }
 
 button {

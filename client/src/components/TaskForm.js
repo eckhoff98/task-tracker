@@ -53,7 +53,7 @@ const TaskForm = ({ task, form }) => {
                     <label className="form-check-label" htmlFor="reminder">Set Reminder</label>
                 </div>
 
-                <button type="button" className="btn btn-success" onClick={() => submit()}>Save</button>
+                <button type="submit" className="btn btn-success" onClick={() => submit()}>Save</button>
             </div>
         </form>
     )
