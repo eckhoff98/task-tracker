@@ -1,6 +1,10 @@
 const express = require("express")
 const router = express.Router()
 const sqlite3 = require("sqlite3")
+const PocketBase = require("pocketbase/cjs")
+
+// Connect to pocketbase
+const pb = new PocketBase('http://127.0.0.1:8090');
 
 //connect to sqlite db
 let sql
@@ -8,59 +12,43 @@ const db = new sqlite3.Database("./server.db", sqlite3.OPEN_READWRITE, (err) => 
     if (err) return console.error(err.message)
 })
 
-router.get("/", (req, res) => {
-    // Get tasks from db
-    sql = 'SELECT * FROM tasks'
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            throw err
-        }
-        res.send(rows)
-    })
+router.get("/", async (req, res) => {
+    try {
+        const result = await pb.collection('tasks').getList(1, 100)
+        res.send(result.items)
+    } catch (err) {
+        console.log(err)
+    }
 })
 
-router.post("/", (req, res) => {
-    data = [
-        req.body.task.name,
-        req.body.task.time,
-        req.body.task.discription,
-        req.body.task.reminder,
-    ]
-    sql = "INSERT INTO tasks (name, time, discription, reminder) VALUES (?,?,?,?)"
-    db.run(sql, data, (err) => {
-        if (err) throw err
-        console.log("Added")
-    })
-    res.send("post task")
+router.post("/", async (req, res) => {
+    try {
+        const task = req.body.task
+        const newRecord = await pb.collection('tasks').create(task);
+        res.send("post task")
+    } catch (err) {
+        console.log(err)
+    }
 })
 
-router.put("/", (req, res) => {
-    console.log("Putting task")
-    console.log(req.body)
-    data = [
-        req.body.task.name,
-        req.body.task.time,
-        req.body.task.discription,
-        req.body.task.reminder,
-        req.body.task.id
-    ]
-    sql = "UPDATE tasks SET name = ?, time = ?, discription = ?, reminder = ? WHERE id = ?"
-    db.run(sql, data, (err) => {
-        if (err) throw err
-    })
-    res.send("put task")
+router.put("/", async (req, res) => {
+    try {
+        const task = req.body.task
+        const record = await pb.collection('tasks').update(task.id, task);
+        res.send("put task")
+    } catch (err) {
+        console.log(err)
+    }
 })
 
-router.delete("/", (req, res) => {
-    data = [req.body.task.id]
-    sql = "DELETE FROM tasks WHERE id = ?"
-    db.run(sql, data, (err) => {
-        if (err) throw err
-        console.log("Removed")
-    })
-    res.send("delete task")
+router.delete("/", async (req, res) => {
+    try {
+        console.log(req.body.task.id)
+        const record = await pb.collection('tasks').delete(req.body.task.id);
+        res.send("delete task")
+    } catch (err) {
+        console.log(err)
+    }
 })
-
-
 
 module.exports = router

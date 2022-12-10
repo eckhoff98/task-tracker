@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
 
+
+
 const AddTask = ({ editTasks }) => {
     const [addTaskToggle, setAddTaskToggle] = useState(false)
     const [addTaskText, setAddTaskText] = useState("")
@@ -20,11 +22,26 @@ const AddTask = ({ editTasks }) => {
         editTasks(taskData, { action: "add" })
         setAddTaskToggle(false)
     }
+    const AddTaskForm = () => {
+        if (addTaskToggle) {
+            return (
+                <div className="card addTaskForm">
+                    <div >
+                        {addTaskToggle && <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} form={addTask} />}
+                    </div>
+                </div>
+            )
+        }
+    }
 
     return (
         <div className="addTask">
-            <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
-            {addTaskToggle && <TaskForm task={{ name: "", time: "", discription: "", reminder: false }} form={addTask} />}
+            <div className="addTaskButtons">
+                <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
+                <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
+                <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
+            </div>
+            <AddTaskForm />
         </div>
     )
 }

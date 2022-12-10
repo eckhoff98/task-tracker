@@ -37,9 +37,10 @@ const TaskForm = ({ task, form }) => {
                             autoComplete="off"
                             checked={taskData.reminder}
                             value={taskData.reminder}
+                            readOnly
                         // onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
                         />
-                        <label class="btn btn-info" htmlFor="btn-check">Reminder</label>
+                        <label className="btn btn-info" htmlFor="btn-check">Reminder</label>
                     </div>
                 </div>
 

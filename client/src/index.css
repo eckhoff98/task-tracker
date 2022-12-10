@@ -1,11 +1,9 @@
 body {
-    /* background-image: linear-gradient(to bottom right, rgb(108, 117, 122), rgb(38, 45, 49)); */
     height: 100%;
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
     caret-color: transparent;
-    /* color: white; */
 }
 
 .tasks {
@@ -24,31 +22,25 @@ body {
     gap: 1em;
 }
 
+.addTaskForm {
+    margin-top: 1em;
+}
 
 .addTask {
-    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    border-radius: 1em;
-    /* color: white; */
     padding: 1em;
-    margin: 1em;
-    /* display: grid; */
+}
+
+.addTaskButtons {
+    display: grid;
     gap: 1em;
-    cursor: pointer;
-    caret-color: transparent;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .task {
-    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 1em;
-    /* color: white; */
     padding: 1em;
-
-    /* display: inline-grid; */
     gap: 1em;
-    /* grid-template-columns: 1fr 1fr; */
-
     cursor: pointer;
     caret-color: transparent;
 }
@@ -60,26 +52,18 @@ body {
 }
 
 .task-expanded {
-    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    /* border-radius: 1em; */
-    /* color: white; */
     padding: 1em;
-    /* display: grid; */
-    /* gap: 1em; */
     cursor: pointer;
     caret-color: transparent;
 }
 
 .task-edit {
-    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 1em;
-    /* color: white; */
     padding: 1em;
     cursor: pointer;
     caret-color: transparent;
-
 }
 
 .hideLable {
