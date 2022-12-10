@@ -6,15 +6,15 @@ import TaskForm from "./TaskForm"
 const AddTask = ({ editTasks }) => {
     const [addTaskToggle, setAddTaskToggle] = useState(false)
     const [addTaskText, setAddTaskText] = useState("")
-    const [buttonClassName, setButtonClassName] = useState("btn btn-primary")
+    const [buttonClassName, setButtonClassName] = useState("btn btn-primary btn-lg")
 
     useEffect(() => {
         if (addTaskToggle) {
             setAddTaskText("Cancel")
-            setButtonClassName("btn btn-danger")
+            setButtonClassName("btn btn-danger btn-lg")
         } else {
             setAddTaskText("Add")
-            setButtonClassName("btn btn-primary")
+            setButtonClassName("btn btn-primary btn-lg")
         }
     }, [addTaskToggle])
 
@@ -38,8 +38,8 @@ const AddTask = ({ editTasks }) => {
         <div className="addTask">
             <div className="addTaskButtons">
                 <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
-                <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
-                <button className={buttonClassName} onClick={() => setAddTaskToggle(!addTaskToggle)}>{addTaskText}</button>
+                <button className="btn btn-secondary">Test button</button>
+                <button className="btn btn-secondary">Test button</button>
             </div>
             <AddTaskForm />
         </div>

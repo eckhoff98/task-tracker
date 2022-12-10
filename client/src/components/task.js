@@ -60,8 +60,8 @@ const Task = ({ task, editTasks }) => {
                         <p className="card-text">Reminder: {String(Boolean(task.reminder))}</p>
                         <p className="card-text">id: {task.id}</p>
                         <div className="taskEditButtons">
-                            <button className="btn btn-primary" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
-                            <button className="btn btn-danger" onClick={() => { deleteTask() }}>Delete task</button>
+                            <button className="btn btn-primary btn-lg" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
+                            <button className="btn btn-danger btn-lg" onClick={() => { deleteTask() }}>Delete task</button>
                         </div>
                     </div>
                 </div>

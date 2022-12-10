@@ -40,7 +40,7 @@ const TaskForm = ({ task, form }) => {
                             readOnly
                         // onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
                         />
-                        <label className="btn btn-info" htmlFor="btn-check">Reminder</label>
+                        <label className="btn btn-info " htmlFor="btn-check">Reminder</label>
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@ const TaskForm = ({ task, form }) => {
                 </div> */}
                 <label style={{ visibility: "hidden" }} htmlFor="discription">Save</label>
                 <div className="d-grid">
-                    <button type="submit" className="btn btn-success " onClick={() => submit()}>Save</button>
+                    <button type="submit" className="btn btn-success btn-lg" onClick={() => submit()}>Save</button>
                 </div>
             </div>
         </form >
