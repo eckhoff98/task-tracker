@@ -34,6 +34,7 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
     try {
         const task = req.body.task
+        console.log(task)
         const record = await pb.collection('tasks').update(task.id, task);
         res.send("put task")
     } catch (err) {

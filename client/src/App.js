@@ -13,6 +13,7 @@ function App() {
   const [tasks, setTasks] = useState([])
 
   useEffect(() => {
+    const date = new Date()
     getTasks()
   }, [])
 
@@ -87,7 +88,9 @@ function App() {
 
   return (
     <div className="App">
+
       <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" ></link>
+
       <NavBar appName={"Task Tracker"} />
       <Routes>
         <Route path="/" element={

@@ -56,8 +56,10 @@ const Task = ({ task, editTasks }) => {
                     </div>
                     <div className="card-body">
                         <p className="card-text">discription: {task.discription}</p>
+                        <p className="card-text">date: {task.date}</p>
                         <p className="card-text">time: {task.time}</p>
                         <p className="card-text">Reminder: {String(Boolean(task.reminder))}</p>
+                        <p className="card-text">location: {task.location}</p>
                         <p className="card-text">id: {task.id}</p>
                         <div className="taskEditButtons">
                             <button className="btn btn-primary btn-lg" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>

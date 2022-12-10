@@ -3,7 +3,6 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    caret-color: transparent;
 }
 
 .tasks {
@@ -18,7 +17,7 @@ body {
 
 .taskFormTime {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 1em;
 }
 
@@ -28,6 +27,13 @@ body {
 
 .addTask {
     padding: 1em;
+}
+
+.reminder {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+
 }
 
 .addTaskButtons {
@@ -42,7 +48,6 @@ body {
     padding: 1em;
     gap: 1em;
     cursor: pointer;
-    caret-color: transparent;
 }
 
 .taskEditButtons {
@@ -55,7 +60,6 @@ body {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     padding: 1em;
     cursor: pointer;
-    caret-color: transparent;
 }
 
 .task-edit {
@@ -63,7 +67,6 @@ body {
     border-radius: 1em;
     padding: 1em;
     cursor: pointer;
-    caret-color: transparent;
 }
 
 .hideLable {
