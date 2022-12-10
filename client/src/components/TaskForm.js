@@ -39,7 +39,7 @@ const TaskForm = ({ task, form }) => {
                             value={taskData.reminder}
                         // onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
                         />
-                        <label class="btn btn-primary" htmlFor="btn-check">Reminder</label>
+                        <label class="btn btn-info" htmlFor="btn-check">Reminder</label>
                     </div>
                 </div>
 
@@ -55,15 +55,16 @@ const TaskForm = ({ task, form }) => {
 
                 {/* <div className="form-check">
                     <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="reminder"
-                        checked={taskData.reminder}
-                        value={taskData.reminder}
-                        onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
+                    className="form-check-input"
+                    type="checkbox"
+                    name="reminder"
+                    checked={taskData.reminder}
+                    value={taskData.reminder}
+                    onChange={(e) => setTaskData({ ...taskData, reminder: e.currentTarget.checked })}
                     />
                     <label className="form-check-label" htmlFor="reminder">Set Reminder</label>
                 </div> */}
+                <label style={{ visibility: "hidden" }} htmlFor="discription">Save</label>
                 <div className="d-grid">
                     <button type="submit" className="btn btn-success " onClick={() => submit()}>Save</button>
                 </div>

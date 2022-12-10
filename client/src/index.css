@@ -51,8 +51,12 @@ body {
 
     cursor: pointer;
     caret-color: transparent;
+}
 
-
+.taskEditButtons {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 1fr 1fr;
 }
 
 .task-expanded {
