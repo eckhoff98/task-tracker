@@ -1,47 +1,50 @@
 body {
-    background-image: linear-gradient(to bottom right, rgb(108, 117, 122), rgb(38, 45, 49));
+    /* background-image: linear-gradient(to bottom right, rgb(108, 117, 122), rgb(38, 45, 49)); */
     height: 100%;
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    color: white;
+    /* color: white; */
 }
 
 .tasks {
     padding: 1em;
     display: grid;
-    gap: 1em;
+    gap: 2em;
 }
 
 .taskForm {
-    display: grid;
-    gap: 1em;
-    caret-color: black;
+    /* display: grid; */
+    /* gap: 1em; */
+    /* caret-color: black; */
+    margin: 1em;
 }
 
+.form-check-input {}
+
 .addTask {
-    background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49));
+    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 1em;
-    color: white;
+    /* color: white; */
     padding: 1em;
     margin: 1em;
-    display: grid;
+    /* display: grid; */
     gap: 1em;
     cursor: pointer;
     caret-color: transparent;
 }
 
 .task {
-    background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49));
+    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 1em;
-    color: white;
+    /* color: white; */
     padding: 1em;
 
-    display: inline-grid;
+    /* display: inline-grid; */
     gap: 1em;
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr; */
 
     cursor: pointer;
     caret-color: transparent;
@@ -50,36 +53,26 @@ body {
 }
 
 .task-expanded {
-    background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49));
+    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    border-radius: 1em;
-    color: white;
+    /* border-radius: 1em; */
+    /* color: white; */
     padding: 1em;
-    display: grid;
-    gap: 1em;
+    /* display: grid; */
+    /* gap: 1em; */
     cursor: pointer;
     caret-color: transparent;
 }
 
 .task-edit {
-    background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49));
+    /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 1em;
-    color: white;
+    /* color: white; */
     padding: 1em;
-    display: grid;
-    gap: 1em;
     cursor: pointer;
     caret-color: transparent;
 
-}
-
-.time {
-    text-align: right;
-}
-
-button {
-    border: none;
 }
 
 .hideLable {

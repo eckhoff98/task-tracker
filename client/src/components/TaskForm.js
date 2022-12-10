@@ -11,7 +11,7 @@ const TaskForm = ({ task, form }) => {
     return (
         <form onSubmit={submit}>
             <div className="taskForm">
-                <label className="hideLable" htmlFor="name">Task name</label>
+                <label htmlFor="name">Task name</label>
                 <input
                     className="form-control"
                     type="text"
@@ -21,7 +21,7 @@ const TaskForm = ({ task, form }) => {
                     onChange={(e) => setTaskData({ ...taskData, name: e.target.value })}
                 />
 
-                <label className="hideLable" htmlFor="time">Time</label>
+                <label htmlFor="time">Time</label>
                 <input
                     className="form-control"
                     type="text"
@@ -31,7 +31,7 @@ const TaskForm = ({ task, form }) => {
                     onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
                 />
 
-                <label className="hideLable" htmlFor="discription">Discription</label>
+                <label htmlFor="discription">Discription</label>
                 <input
                     className="form-control"
                     type="text"
