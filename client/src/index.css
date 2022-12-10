@@ -4,6 +4,7 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    caret-color: transparent;
     /* color: white; */
 }
 
@@ -14,13 +15,15 @@ body {
 }
 
 .taskForm {
-    /* display: grid; */
-    /* gap: 1em; */
-    /* caret-color: black; */
     margin: 1em;
 }
 
-.form-check-input {}
+.taskFormTime {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1em;
+}
+
 
 .addTask {
     /* background-image: linear-gradient(to bottom right, rgb(54, 65, 71), rgb(20, 18, 49)); */

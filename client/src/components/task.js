@@ -59,8 +59,10 @@ const Task = ({ task, editTasks }) => {
                         <p className="card-text">time: {task.time}</p>
                         <p className="card-text">Reminder: {String(Boolean(task.reminder))}</p>
                         <p className="card-text">id: {task.id}</p>
-                        <button className="btn btn-danger" onClick={() => { deleteTask() }}>Delete task</button>
-                        <button className="btn btn-primary" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
+                        <div className="d-grid gap-2">
+                            <button className="btn btn-primary" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
+                            <button className="btn btn-danger" onClick={() => { deleteTask() }}>Delete task</button>
+                        </div>
                     </div>
                 </div>
             </div>
