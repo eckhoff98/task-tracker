@@ -55,10 +55,6 @@ const Register = () => {
                                     <input className="form-check-input" type="checkbox" value="" id="form1Example3" checked />
                                     <label className="form-check-label" htmlFor="form1Example3"> Remember me </label>
                                 </div>
-                                <div>
-                                    Already have an account? &nbsp;
-                                    <a href="/login">Login</a>
-                                </div>
                             </div>
 
                             {/* <!-- Submit button --> */}
@@ -78,6 +74,10 @@ const Register = () => {
                                     <i className="fab fa-twitter me-2"></i>Continue with Twitter</a>
                             </div>
                         </form>
+                        <div className="d-flex justify-content-around align-items-center my-4">
+                            Already have an account? &nbsp;
+                            <a href="/login">Login</a>
+                        </div>
                     </div>
                 </div>
             </div>

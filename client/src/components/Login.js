@@ -66,6 +66,10 @@ const Login = () => {
                                     role="button">
                                     <i className="fab fa-twitter me-2"></i>Continue with Twitter</a>
                             </div>
+                            <div className="d-flex justify-content-around align-items-center my-4">
+                                Don't have an account yet? &nbsp;
+                                <a href="/register">Register</a>
+                            </div>
                         </form>
                     </div>
                 </div>
