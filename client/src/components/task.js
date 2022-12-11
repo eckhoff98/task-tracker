@@ -1,34 +1,24 @@
 import React, { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
 
-const Task = ({ task, editTasks }) => {
+const Task = ({ task, _updateTask, _deleteTask }) => {
     const [moreInfo, setMoreInfo] = useState(false)
     const [editTaskToggel, setEditTaskToggel] = useState(false)
     const [editTaskText, setEditTaskText] = useState("Edit")
-    // const [taskClassName, setTaskClassName] = useState("task")
 
 
 
     useEffect(() => {
         editTaskToggel ? setEditTaskText("Cancel") : setEditTaskText("Edit")
-
-        // if (moreInfo) {
-        //     setTaskClassName("task-expanded")
-        // } else if (editTaskToggel) {
-        //     setTaskClassName("task-edit")
-        // } else {
-        //     setTaskClassName("task")
-        // }
-
     }, [editTaskToggel, moreInfo])
 
     const form = (taskData) => {
-        editTasks(taskData, { action: "change" })
+        _updateTask(taskData)
         setEditTaskToggel(!editTaskToggel)
     }
 
     const deleteTask = () => {
-        editTasks(task, { action: "delete" })
+        _deleteTask(task)
         setMoreInfo(false)
     }
 

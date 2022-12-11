@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
 
-
-
-const AddTask = ({ editTasks }) => {
+const AddTask = ({ _addTask }) => {
     const [addTaskToggle, setAddTaskToggle] = useState(false)
     const [addTaskText, setAddTaskText] = useState("")
     const [buttonClassName, setButtonClassName] = useState("btn btn-primary btn-lg")
@@ -19,7 +17,7 @@ const AddTask = ({ editTasks }) => {
     }, [addTaskToggle])
 
     const addTask = (taskData) => {
-        editTasks(taskData, { action: "add" })
+        _addTask(taskData)
         setAddTaskToggle(false)
     }
 

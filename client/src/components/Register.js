@@ -1,28 +1,20 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import axios from "axios"
-import PocketBase from "pocketbase"
+import { useNavigate } from "react-router-dom"
 
-const Register = () => {
+
+const Register = ({ pb, _loggedIn }) => {
+    const navigate = useNavigate()
     const [registerData, setRegisterData] = useState({
         username: "",
         email: "",
         password: "",
         passwordConfirmation: "",
     })
-
-    const pb = new PocketBase('http://127.0.0.1:8090');
-
-    // const onSubmit = () => {
-    //     axios({
-    //         method: 'POST',
-    //         data: registerData,
-    //         withCredentials: true,
-    //         url: "http://localhost:5000/register"
-    //     }).then((res) => {
-    //         console.log(res)
-    //     })
-    // }
+    useEffect(() => {
+        if (pb.authStore.isValid) {
+            navigate("/")
+        }
+    })
 
     const addUser = async () => {
         console.log("adding user")
@@ -33,10 +25,11 @@ const Register = () => {
                 passwordConfirm: registerData.passwordConfirmation,
                 name: registerData.username
             });
-        } catch (err) {
-            console.log(err)
-        }
-
+            // login and redirect to home
+            await pb.collection('users').authWithPassword(registerData.email, registerData.password);
+            _loggedIn()
+            return navigate("/")
+        } catch (err) { console.log(err) }
     }
 
     return (
@@ -70,7 +63,7 @@ const Register = () => {
                             <div className="d-flex justify-content-around align-items-center mb-4">
                                 {/* <!-- Checkbox --> */}
                                 <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                                    <input className="form-check-input" type="checkbox" value="" id="form1Example3" />
                                     <label className="form-check-label" htmlFor="form1Example3"> Remember me </label>
                                 </div>
                             </div>

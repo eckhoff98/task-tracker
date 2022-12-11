@@ -15,99 +15,64 @@ function App() {
   axios.defaults.withCredentials = true
   const pb = new PocketBase('http://127.0.0.1:8090');
 
-
   const [tasks, setTasks] = useState([])
+  const [loggedInState, setLoggedInState] = useState()
 
   useEffect(() => {
-    getTasks()
-    console.log("render")
-  }, [])
+    if (pb.authStore.isValid) {
+      getTasks()
+    } else {
+      setTasks([])
+    }
+  }, [loggedInState])
 
   // Helper Functions 
-  const getTasks = () => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: "http://localhost:5000/tasks"
-    }).then((res) => {
-      setTasks([...res.data])
-    })
+  const getTasks = async () => {
+    try {
+      const list = await pb.collection('tasks').getList(1, 100);
+      setTasks([...list.items])
+    } catch (err) { console.log(err) }
   }
 
-  const postTasks = (task) => {
-    const data = {
-      task: task
-    }
-    axios({
-      method: "POST",
-      withCredentials: true,
-      data: data,
-      url: "http://localhost:5000/tasks"
-    }).then((res) => {
-      getTasks()
-    })
+  const addTask = async (task) => {
+    try {
+      const record = await pb.collection('tasks').create({ ...task, user_id: pb.authStore.model.id });
+      setTasks([...tasks, task])
+    } catch (err) { console.log(err) }
   }
 
-  const putTasks = (task) => {
-    const data = {
-      task: task
-    }
-    axios({
-      method: "PUT",
-      withCredentials: true,
-      data: data,
-      url: "http://localhost:5000/tasks"
-    }).then((res) => {
-      getTasks()
-    })
+  const updateTask = async (task) => {
+    try {
+      const record = await pb.collection('tasks').update(task.id, task);
+      setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+    } catch (err) { console.log(err) }
   }
 
-  const deleteTasks = (task) => {
-    const data = {
-      task: task
-    }
-    axios({
-      method: "DELETE",
-      withCredentials: true,
-      data: data,
-      url: "http://localhost:5000/tasks"
-    }).then((res) => {
-      getTasks()
-    })
-  }
-
-  const editTasks = (task, change) => {
-    if (change.action === "delete") {
-      // setTasks(tasks.filter((t) => t.id !== task.id))
-      deleteTasks(task)
-    }
-    else if (change.action === "add") {
-      // setTasks([...tasks, task])
-      postTasks(task)
-    }
-    else if (change.action === "change") {
-      putTasks(task)
-    }
-
+  const deleteTask = async (task) => {
+    try {
+      const record = await pb.collection('tasks').delete(task.id);
+      setTasks([...tasks.filter((t) => t.id != task.id)])
+    } catch (err) { console.log(err) }
   }
 
   const logout = () => {
     console.log("LOGOUT")
+    setLoggedInState(false)
     pb.authStore.clear();
   }
   // -------------------- End of (Helpers) --------------------
 
   return (
     <div className="App">
-
       <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" ></link>
 
       <NavBar appName={"Task Tracker"} loggedIn={pb.authStore.isValid} logout={logout} />
+
       <Routes>
         <Route path="/" element={
           <>
-            <AddTask editTasks={editTasks} />
-            <Tasks tasks={tasks} editTasks={editTasks} />
+            <AddTask _addTask={addTask} />
+            <Tasks tasks={tasks} _updateTask={updateTask} _deleteTask={deleteTask} />
           </>
         } />
         <Route path="/about" element={
@@ -115,9 +80,8 @@ function App() {
             about info
           </>
         } />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
+        <Route path="/login" element={<Login _loggedIn={() => setLoggedInState(true)} pb={pb} />} />
+        <Route path="/register" element={<Register pb={pb} _loggedIn={() => setLoggedInState(true)} />} />
       </Routes>
     </div>
   )

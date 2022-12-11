@@ -1,46 +1,31 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import axios from 'axios'
 import React from "react"
-import PocketBase from "pocketbase"
 
 
 // TODO: add hashing for passwords
 
-const Login = () => {
+const Login = ({ _loggedIn, pb }) => {
+    const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
     })
-
-    const navigate = useNavigate();
-
-    const pb = new PocketBase('http://127.0.0.1:8090');
-
-    const onSubmit = () => {
-        axios({
-            method: 'POST',
-            data: loginData,
-            withCredentials: true,
-            url: "http://localhost:5000/login"
-        }).then((res) => {
-            console.log(res)
-        })
-    }
+    useEffect(() => {
+        if (pb.authStore.isValid) {
+            navigate("/")
+        }
+    })
 
     const login = async () => {
-        console.log("logging in")
         try {
             await pb.collection('users').authWithPassword(loginData.email, loginData.password);
-            console.log("redirect")
+            _loggedIn()
             return navigate("/")
-        } catch (err) {
-            console.log(err)
-        }
+        } catch (err) { console.log(err) }
     }
 
     return (
-
         <section className="vh-100">
             <div className="container py-5 h-100">
                 <div className="row d-flex align-items-center justify-content-center h-100">
@@ -61,7 +46,7 @@ const Login = () => {
                             <div className="d-flex justify-content-around align-items-center mb-4">
                                 {/* <!-- Checkbox --> */}
                                 <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                                    <input className="form-check-input" type="checkbox" value="" id="form1Example3" />
                                     <label className="form-check-label" htmlFor="form1Example3"> Remember me </label>
                                 </div>
                                 <a href="#!">Forgot password?</a>
