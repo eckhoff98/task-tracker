@@ -8,15 +8,19 @@ import AddTask from './components/AddTask';
 import NavBar from './components/NavBar';
 import Login from "./components/Login"
 import Register from "./components/Register"
+import PocketBase from "pocketbase"
+
 
 function App() {
   axios.defaults.withCredentials = true
+  const pb = new PocketBase('http://127.0.0.1:8090');
+
 
   const [tasks, setTasks] = useState([])
 
   useEffect(() => {
-    const date = new Date()
     getTasks()
+    console.log("render")
   }, [])
 
   // Helper Functions 
@@ -86,6 +90,11 @@ function App() {
     }
 
   }
+
+  const logout = () => {
+    console.log("LOGOUT")
+    pb.authStore.clear();
+  }
   // -------------------- End of (Helpers) --------------------
 
   return (
@@ -93,7 +102,7 @@ function App() {
 
       <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" ></link>
 
-      <NavBar appName={"Task Tracker"} />
+      <NavBar appName={"Task Tracker"} loggedIn={pb.authStore.isValid} logout={logout} />
       <Routes>
         <Route path="/" element={
           <>

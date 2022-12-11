@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import PocketBase from "pocketbase"
 
 const Register = () => {
     const [registerData, setRegisterData] = useState({
@@ -10,15 +11,32 @@ const Register = () => {
         passwordConfirmation: "",
     })
 
-    const onSubmit = () => {
-        axios({
-            method: 'POST',
-            data: registerData,
-            withCredentials: true,
-            url: "http://localhost:5000/register"
-        }).then((res) => {
-            console.log(res)
-        })
+    const pb = new PocketBase('http://127.0.0.1:8090');
+
+    // const onSubmit = () => {
+    //     axios({
+    //         method: 'POST',
+    //         data: registerData,
+    //         withCredentials: true,
+    //         url: "http://localhost:5000/register"
+    //     }).then((res) => {
+    //         console.log(res)
+    //     })
+    // }
+
+    const addUser = async () => {
+        console.log("adding user")
+        try {
+            await pb.collection('users').create({
+                email: registerData.email,
+                password: registerData.password,
+                passwordConfirm: registerData.passwordConfirmation,
+                name: registerData.username
+            });
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     return (
@@ -59,7 +77,7 @@ const Register = () => {
 
                             {/* <!-- Submit button --> */}
                             <div className="d-grid">
-                                <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => onSubmit()}>Register</button>
+                                <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => addUser()}>Register</button>
 
                                 <div className="divider d-flex align-items-center my-4">
                                     <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>

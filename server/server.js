@@ -1,7 +1,13 @@
 const express = require("express")
 const cors = require("cors")
+const PocketBase = require("pocketbase/cjs")
+
+
 // Routes
 const tasksRoute = require("./routes/tasks")
+
+// Connect to pocketbase
+const pb = new PocketBase('http://127.0.0.1:8090');
 
 const app = express()
 
@@ -16,15 +22,6 @@ app.use(cors({
 }))
 // Routes
 app.use("/tasks", tasksRoute)
-
-app.post("/register", (req, res) => {
-    console.log(req.body)
-    res.send("words")
-})
-app.post("/login", (req, res) => {
-    console.log(req.body)
-    res.send("words")
-})
 
 app.listen(port, (err) => {
     if (err) return console.log(err)

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from 'axios'
 import React from "react"
+import PocketBase from "pocketbase"
+
 
 // TODO: add hashing for passwords
 
@@ -10,6 +12,10 @@ const Login = () => {
         email: "",
         password: "",
     })
+
+    const navigate = useNavigate();
+
+    const pb = new PocketBase('http://127.0.0.1:8090');
 
     const onSubmit = () => {
         axios({
@@ -20,6 +26,17 @@ const Login = () => {
         }).then((res) => {
             console.log(res)
         })
+    }
+
+    const login = async () => {
+        console.log("logging in")
+        try {
+            await pb.collection('users').authWithPassword(loginData.email, loginData.password);
+            console.log("redirect")
+            return navigate("/")
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (
@@ -52,7 +69,7 @@ const Login = () => {
 
                             {/* <!-- Submit button --> */}
                             <div className="d-grid">
-                                <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => onSubmit()}>Sign in</button>
+                                <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => login()}>Sign in</button>
 
                                 <div className="divider d-flex align-items-center my-4">
                                     <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
