@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert"
 
 // TODO: add hashing for passwords
 
-const Login = ({ _loggedIn, pb }) => {
+const Login = ({ _onLogin, pb }) => {
     const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
         email: "",
@@ -21,7 +21,7 @@ const Login = ({ _loggedIn, pb }) => {
     const login = async () => {
         try {
             await pb.collection('users').authWithPassword(loginData.email, loginData.password);
-            _loggedIn()
+            _onLogin()
             return navigate("/")
         } catch (err) {
             console.log(err.data)

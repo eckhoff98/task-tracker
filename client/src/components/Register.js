@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import Alert from "react-bootstrap/Alert"
 
 
-const Register = ({ pb, _loggedIn }) => {
+const Register = ({ pb, _onLogin }) => {
     const navigate = useNavigate()
     const [registerData, setRegisterData] = useState({
         username: "",
@@ -34,7 +34,7 @@ const Register = ({ pb, _loggedIn }) => {
             });
             // login and redirect to home
             await pb.collection('users').authWithPassword(registerData.email, registerData.password);
-            _loggedIn()
+            _onLogin()
             return navigate("/")
         } catch (err) {
             errors(err)

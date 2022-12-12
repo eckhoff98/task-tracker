@@ -110,7 +110,7 @@ function App() {
             about info
           </>
         } />
-        <Route path="/login" element={<Login _loggedIn={() => setLoggedInState(true)} pb={pb} />} />
+        <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
         <Route path="/register" element={<Register pb={pb} _loggedIn={() => setLoggedInState(true)} />} />
       </Routes>
     </div>
