@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
+import { BiCalendarCheck } from "react-icons/bi"
+import moment from "moment"
+
 
 const Task = ({ task, _updateTask, _deleteTask }) => {
     const [moreInfo, setMoreInfo] = useState(false)
     const [editTaskToggel, setEditTaskToggel] = useState(false)
     const [editTaskText, setEditTaskText] = useState("Edit")
 
-
-
     useEffect(() => {
         editTaskToggel ? setEditTaskText("Cancel") : setEditTaskText("Edit")
+        timeToReminder(task.date, task.time)
     }, [editTaskToggel, moreInfo])
+
+    const ReminderIcon = () => {
+        if (task.reminder) return (<BiCalendarCheck size={25} />)
+    }
 
     const form = (taskData) => {
         _updateTask(taskData)
@@ -22,6 +28,10 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         setMoreInfo(false)
     }
 
+    const timeToReminder = (date, time) => {
+        const reminder = new Date(date + " " + time)
+        return moment(reminder).fromNow()
+    }
 
 
     const TaskInfo = () => {
@@ -29,8 +39,9 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
             return (
                 <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}>
                     <div className="card">
-                        <div className="card-header">
+                        <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
+                            <h2 className="taskLessInfo">{timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon /></h2>
                         </div>
                     </div>
                     {/* <div className="time">{task.time}</div> */}
@@ -41,8 +52,9 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         return (
             <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}>
                 <div className="card">
-                    <div className="card-header">
-                        <h2>{task.name}</h2>
+                    <div className="card-header taskLess">
+                        <h2 >{task.name}</h2>
+                        <h2 className="taskLessInfo">{timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon /></h2>
                     </div>
                     <div className="card-body">
                         <p className="card-text">discription: {task.discription}</p>

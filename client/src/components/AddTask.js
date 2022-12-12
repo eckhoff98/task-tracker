@@ -53,7 +53,7 @@ const AddTask = ({ _addTask }) => {
                             date: getCurrentDate(),
                             discription: "",
                             location: "",
-                            reminder: false,
+                            reminder: false
 
                         }}
                             form={addTask} />}

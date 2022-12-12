@@ -10,11 +10,17 @@ const Register = ({ pb, _loggedIn }) => {
         password: "",
         passwordConfirmation: "",
     })
+    const [validationErrors, setValidationErrors] = useState([])
+
     useEffect(() => {
         if (pb.authStore.isValid) {
             navigate("/")
         }
     })
+
+    useEffect(() => {
+        console.log(validationErrors)
+    }, [validationErrors])
 
     const addUser = async () => {
         console.log("adding user")
@@ -29,7 +35,22 @@ const Register = ({ pb, _loggedIn }) => {
             await pb.collection('users').authWithPassword(registerData.email, registerData.password);
             _loggedIn()
             return navigate("/")
-        } catch (err) { console.log(err) }
+        } catch (err) {
+            errors(err)
+        }
+    }
+
+    const errors = (err) => {
+        if (!err.data.data) return
+
+        let errs = []
+        if (err.data.data.email) {
+            errs = [...errs, err.data.data.email]
+        }
+        if (err.data.data.password) {
+            errs = [...errs, err.data.data.password]
+        }
+        setValidationErrors(errs)
     }
 
     return (

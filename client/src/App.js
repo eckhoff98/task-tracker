@@ -37,7 +37,7 @@ function App() {
   const addTask = async (task) => {
     try {
       const record = await pb.collection('tasks').create({ ...task, user_id: pb.authStore.model.id });
-      setTasks([...tasks, task])
+      setTasks([...tasks, record])
     } catch (err) { console.log(err) }
   }
 
@@ -56,7 +56,6 @@ function App() {
   }
 
   const logout = () => {
-    console.log("LOGOUT")
     setLoggedInState(false)
     pb.authStore.clear();
   }
