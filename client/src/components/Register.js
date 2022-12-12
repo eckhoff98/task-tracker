@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import Alert from "react-bootstrap/Alert"
 
 
 const Register = ({ pb, _loggedIn }) => {
@@ -10,7 +11,10 @@ const Register = ({ pb, _loggedIn }) => {
         password: "",
         passwordConfirmation: "",
     })
-    const [validationErrors, setValidationErrors] = useState([])
+
+    const [emailVal, setEmailVal] = useState("")
+    const [passwordVal, setPasswordVal] = useState("")
+    const [passwordConfirmVal, setPasswordConfirmVal] = useState("")
 
     useEffect(() => {
         if (pb.authStore.isValid) {
@@ -18,9 +22,6 @@ const Register = ({ pb, _loggedIn }) => {
         }
     })
 
-    useEffect(() => {
-        console.log(validationErrors)
-    }, [validationErrors])
 
     const addUser = async () => {
         console.log("adding user")
@@ -41,17 +42,13 @@ const Register = ({ pb, _loggedIn }) => {
     }
 
     const errors = (err) => {
+        console.log(err.data)
         if (!err.data.data) return
-
-        let errs = []
-        if (err.data.data.email) {
-            errs = [...errs, err.data.data.email]
-        }
-        if (err.data.data.password) {
-            errs = [...errs, err.data.data.password]
-        }
-        setValidationErrors(errs)
+        err.data.data.email ? setEmailVal(err.data.data.email.message) : setEmailVal("")
+        err.data.data.password ? setPasswordVal(err.data.data.password.message) : setPasswordVal("")
+        err.data.data.passwordConfirm ? setPasswordConfirmVal(err.data.data.passwordConfirm.message) : setPasswordConfirmVal("")
     }
+
 
     return (
         <section className="vh-100">
@@ -65,17 +62,20 @@ const Register = ({ pb, _loggedIn }) => {
                                 <label className="form-label" htmlFor="form1Example13">Username</label>
                             </div>
                             {/* <!-- Email input --> */}
+                            {emailVal && <Alert variant="danger">{emailVal}</Alert>}
                             <div className="form-outline mb-4">
                                 <input className="form-control form-control-lg" type="email" id="form1Example13" onChange={e => setRegisterData({ ...registerData, email: e.target.value })} />
                                 <label className="form-label" htmlFor="form1Example13">Email address</label>
                             </div>
 
                             {/* <!-- Password input --> */}
+                            {passwordVal && <Alert variant="danger">{passwordVal}</Alert>}
                             <div className="form-outline mb-4">
                                 <input className="form-control form-control-lg" type="password" onChange={e => setRegisterData({ ...registerData, password: e.target.value })} />
                                 <label className="form-label" htmlFor="form1Example23">Password</label>
                             </div>
                             {/* <!-- Password input --> */}
+                            {passwordConfirmVal && <Alert variant="danger">{passwordConfirmVal}</Alert>}
                             <div className="form-outline mb-4">
                                 <input className="form-control form-control-lg" type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirmation: e.target.value })} />
                                 <label className="form-label" htmlFor="form1Example23">Password confirmation</label>

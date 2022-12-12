@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 
 import Tasks from "./components/Tasks"
-import AddTask from './components/AddTask';
 import NavBar from './components/NavBar';
 import Login from "./components/Login"
 import Register from "./components/Register"
@@ -14,6 +13,8 @@ import PocketBase from "pocketbase"
 function App() {
   axios.defaults.withCredentials = true
   const pb = new PocketBase('http://127.0.0.1:8090');
+
+
 
   const [tasks, setTasks] = useState([])
   const [loggedInState, setLoggedInState] = useState()
@@ -27,6 +28,27 @@ function App() {
   }, [loggedInState])
 
   // Helper Functions 
+  const getCurrentDate = () => {
+    // convert Javascript Date to HTML Input
+    const now = new Date();
+    const day = ("0" + now.getDate()).slice(-2);
+    const month = ("0" + (now.getMonth() + 1)).slice(-2);
+    const hour = ("0" + (now.getHours())).slice(-2);
+    const min = ("0" + (now.getMinutes())).slice(-2);
+    const today = now.getFullYear() + "-" + month + "-" + day
+    console.log("today " + today)
+    return today
+  }
+
+  const getCurrentTime = () => {
+    // convert Javascript Date to HTML Input
+    const now = new Date();
+    const hour = ("0" + (now.getHours())).slice(-2);
+    const min = ("0" + (now.getMinutes())).slice(-2);
+    const time = `${hour}:${min}`
+    return time
+  }
+
   const getTasks = async () => {
     try {
       const list = await pb.collection('tasks').getList(1, 100);
@@ -35,9 +57,10 @@ function App() {
   }
 
   const addTask = async (task) => {
+    console.log(task)
     try {
       const record = await pb.collection('tasks').create({ ...task, user_id: pb.authStore.model.id });
-      setTasks([...tasks, record])
+      setTasks([...tasks, { ...record, freshTask: true }])
     } catch (err) { console.log(err) }
   }
 
@@ -70,7 +93,15 @@ function App() {
       <Routes>
         <Route path="/" element={
           <>
-            <AddTask _addTask={addTask} />
+            <button className='btn btn-primary btn-lg' type="button" onClick={() => addTask({
+              name: "",
+              time: getCurrentTime(),
+              date: getCurrentDate(),
+              discription: "",
+              location: "",
+              reminder: false
+            })}>Add Task</button>
+            {/* <AddTask _addTask={addTask} /> */}
             <Tasks tasks={tasks} _updateTask={updateTask} _deleteTask={deleteTask} />
           </>
         } />

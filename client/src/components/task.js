@@ -10,6 +10,12 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const [editTaskText, setEditTaskText] = useState("Edit")
 
     useEffect(() => {
+        if (task.freshTask) {
+            setEditTaskToggel(true)
+        }
+    }, [])
+
+    useEffect(() => {
         editTaskToggel ? setEditTaskText("Cancel") : setEditTaskText("Edit")
         timeToReminder(task.date, task.time)
     }, [editTaskToggel, moreInfo])
@@ -31,6 +37,14 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const timeToReminder = (date, time) => {
         const reminder = new Date(date + " " + time)
         return moment(reminder).fromNow()
+    }
+
+    const cancel = () => {
+        if (task.freshTask) {
+            deleteTask()
+        } else {
+            setEditTaskToggel(false)
+        }
     }
 
 
@@ -78,7 +92,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         if (editTaskToggel) {
             return (
                 <div className="card">
-                    <TaskForm task={task} form={form} />
+                    <TaskForm task={task} form={form} _cancel={cancel} />
                 </div>
             )
         } else {

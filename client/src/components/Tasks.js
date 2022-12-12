@@ -1,6 +1,6 @@
 import Task from "./Task"
 
-const Tasks = ({ tasks, _updateTask, _deleteTask }) => {
+const Tasks = ({ tasks, _updateTask, _deleteTask, _cancel }) => {
     return (
         <div className="tasks">
             {tasks.map((task, index) => {

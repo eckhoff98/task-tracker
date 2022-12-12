@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import React from "react"
-
+import Alert from "react-bootstrap/Alert"
 
 // TODO: add hashing for passwords
 
@@ -11,6 +11,7 @@ const Login = ({ _loggedIn, pb }) => {
         email: "",
         password: "",
     })
+    const [loginVal, setLoginVal] = useState("")
     useEffect(() => {
         if (pb.authStore.isValid) {
             navigate("/")
@@ -22,8 +23,13 @@ const Login = ({ _loggedIn, pb }) => {
             await pb.collection('users').authWithPassword(loginData.email, loginData.password);
             _loggedIn()
             return navigate("/")
-        } catch (err) { console.log(err) }
+        } catch (err) {
+            console.log(err.data)
+            setLoginVal("Invalid email/password")
+        }
     }
+
+
 
     return (
         <section className="vh-100">
@@ -31,6 +37,7 @@ const Login = ({ _loggedIn, pb }) => {
                 <div className="row d-flex align-items-center justify-content-center h-100">
                     <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                         <form>
+                            {loginVal && <Alert variant="danger">{loginVal}</Alert>}
                             {/* <!-- Email input --> */}
                             <div className="form-outline mb-4">
                                 <input className="form-control form-control-lg" type="email" id="form1Example13" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />

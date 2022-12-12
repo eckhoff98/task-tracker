@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
 import { BiCalendarCheck } from "react-icons/bi"
 
-const TaskForm = ({ task, form }) => {
+const TaskForm = ({ task, form, _cancel }) => {
     const [taskData, setTaskData] = useState(task)
 
     const submit = () => {
-        console.log("sub " + taskData.date)
-        form(taskData)
+        form({ ...taskData, name: (taskData.name === "") && "New Task", freshTask: false })
     }
 
     const ReminderIcon = () => {
@@ -86,8 +85,9 @@ const TaskForm = ({ task, form }) => {
                 />
 
                 <label style={{ visibility: "hidden" }} htmlFor="discription">Save</label>
-                <div className="d-grid">
-                    <button type="submit" className="btn btn-success btn-lg" onClick={() => submit()}>Save</button>
+                <div className="d-grid saveAndCancel">
+                    <button type="submit" className="btn btn-success btn-lg" >Save</button>
+                    <button type="button" className="btn btn-danger btn-lg" onClick={() => _cancel()}>Cancel</button>
                 </div>
             </div>
         </form >
