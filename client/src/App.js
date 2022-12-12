@@ -1,8 +1,8 @@
 import './App.css';
-import axios from "axios"
 import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 
+import Home from "./components/Home"
 import Tasks from "./components/Tasks"
 import NavBar from './components/NavBar';
 import Login from "./components/Login"
@@ -11,10 +11,7 @@ import PocketBase from "pocketbase"
 
 
 function App() {
-  axios.defaults.withCredentials = true
   const pb = new PocketBase('http://127.0.0.1:8090');
-
-
 
   const [tasks, setTasks] = useState([])
   const [loggedInState, setLoggedInState] = useState()
@@ -59,7 +56,12 @@ function App() {
   const addTask = async (task) => {
     console.log(task)
     try {
-      const record = await pb.collection('tasks').create({ ...task, user_id: pb.authStore.model.id });
+      const record = await pb.collection('tasks').create({
+        ...task,
+        user_id: pb.authStore.model.id,
+        time: getCurrentTime(),
+        date: getCurrentDate()
+      });
       setTasks([...tasks, { ...record, freshTask: true }])
     } catch (err) { console.log(err) }
   }
@@ -91,27 +93,11 @@ function App() {
       <NavBar appName={"Task Tracker"} loggedIn={pb.authStore.isValid} logout={logout} />
 
       <Routes>
-        <Route path="/" element={
-          <>
-            <button className='btn btn-primary btn-lg' type="button" onClick={() => addTask({
-              name: "",
-              time: getCurrentTime(),
-              date: getCurrentDate(),
-              discription: "",
-              location: "",
-              reminder: false
-            })}>Add Task</button>
-            {/* <AddTask _addTask={addTask} /> */}
-            <Tasks tasks={tasks} _updateTask={updateTask} _deleteTask={deleteTask} />
-          </>
-        } />
-        <Route path="/about" element={
-          <>
-            about info
-          </>
-        } />
+        <Route path="/" element={<Home />} />
+        <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} />} />
+        <Route path="/about" element={<>about info</>} />
         <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
-        <Route path="/register" element={<Register pb={pb} _loggedIn={() => setLoggedInState(true)} />} />
+        <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />
       </Routes>
     </div>
   )

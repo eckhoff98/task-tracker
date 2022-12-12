@@ -18,7 +18,7 @@ const Register = ({ pb, _onLogin }) => {
 
     useEffect(() => {
         if (pb.authStore.isValid) {
-            navigate("/")
+            navigate("/tasks")
         }
     })
 
@@ -35,7 +35,7 @@ const Register = ({ pb, _onLogin }) => {
             // login and redirect to home
             await pb.collection('users').authWithPassword(registerData.email, registerData.password);
             _onLogin()
-            return navigate("/")
+            return navigate("/tasks")
         } catch (err) {
             errors(err)
         }

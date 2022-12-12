@@ -14,7 +14,7 @@ const Login = ({ _onLogin, pb }) => {
     const [loginVal, setLoginVal] = useState("")
     useEffect(() => {
         if (pb.authStore.isValid) {
-            navigate("/")
+            navigate("/tasks")
         }
     })
 
@@ -22,7 +22,7 @@ const Login = ({ _onLogin, pb }) => {
         try {
             await pb.collection('users').authWithPassword(loginData.email, loginData.password);
             _onLogin()
-            return navigate("/")
+            return navigate("/tasks")
         } catch (err) {
             console.log(err.data)
             setLoginVal("Invalid email/password")
