@@ -1,5 +1,16 @@
 import { Link } from "react-router-dom"
-const Home = () => {
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+
+
+const Home = ({ pb }) => {
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (pb.authStore.isValid) {
+            navigate("/tasks")
+        }
+    })
+
     return (
         <>
             <h1>Home page</h1>

@@ -52,7 +52,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         if (!moreInfo) {
             return (
                 <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}>
-                    <div className="card">
+                    <div className="card bg-dark">
                         <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
                             <h2 className="taskLessInfo">{timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon /></h2>
@@ -65,7 +65,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
 
         return (
             <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}>
-                <div className="card">
+                <div className="card bg-dark">
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
                         <h2 className="taskLessInfo">
@@ -81,8 +81,8 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                         <p className="card-text">location: {task.location}</p>
                         <p className="card-text">id: {task.id}</p>
                         <div className="taskEditButtons">
-                            <button className="btn btn-primary btn-lg" onClick={() => { setEditTaskToggel(!editTaskToggel) }}>{editTaskText}</button>
-                            <button className="btn btn-danger btn-lg" onClick={() => { deleteTask() }}>Delete task</button>
+                            <button className="btn btn-outline-primary btn-lg" onClick={() => { setEditTaskToggel(!editTaskToggel) }}><strong>{editTaskText}</strong></button>
+                            <button className="btn btn-outline-danger btn-lg" onClick={() => { deleteTask() }}><strong>Delete </strong></button>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const EditTaskForm = () => {
         if (editTaskToggel) {
             return (
-                <div className="card">
+                <div className="card bg-dark">
                     <TaskForm
                         task={task}
                         form={form}

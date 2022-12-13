@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react"
 import { IoIosAlarm } from "react-icons/io"
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 
 const TaskForm = ({ task, form, _cancel }) => {
     const [taskData, setTaskData] = useState(task)
@@ -15,79 +19,71 @@ const TaskForm = ({ task, form, _cancel }) => {
     return (
         <form onSubmit={submit}>
             <div className="taskForm">
-                <label htmlFor="name">Task name</label>
-                <input
-                    autoComplete="off"
-                    className="form-control"
-                    type="text"
-                    name="name"
-                    placeholder="task"
-                    value={taskData.name ? taskData.name : ""}
-                    onChange={(e) => setTaskData({ ...taskData, name: e.target.value })}
-                />
+                <FloatingLabel controlId="floatingInput" label="Task" >
+                    <Form.Control
+                        autoComplete="off"
+                        className="form-control name"
+                        type="text"
+                        name="name"
+                        placeholder="task"
+                        value={taskData.name ? taskData.name : ""}
+                        onChange={(e) => setTaskData({ ...taskData, name: e.target.value })}
+                    />
+                </FloatingLabel>
 
-                <label htmlFor="discription">Discription</label>
-                <input
-                    autoComplete="off"
-                    className="form-control"
-                    type="text"
-                    name="discription"
-                    placeholder="discription"
-                    value={taskData.discription ? taskData.discription : ""}
-                    onChange={(e) => setTaskData({ ...taskData, discription: e.target.value })}
-                />
+                <FloatingLabel controlId="floatingInput" label="Discription" >
+                    <Form.Control
+                        autoComplete="off"
+                        className="form-control"
+                        type="text"
+                        name="discription"
+                        placeholder="discription"
+                        value={taskData.discription ? taskData.discription : ""}
+                        onChange={(e) => setTaskData({ ...taskData, discription: e.target.value })}
+                    />
+                </FloatingLabel>
 
-                <label htmlFor="time">Date/Time</label>
                 <div className="taskFormTime">
-                    <input
-                        className="form-control"
-                        type="time"
-                        name="time"
-                        placeholder="time"
-                        value={taskData.time ? taskData.time : ""}
-                        onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
-                    />
-                    <input
-                        className="form-control"
-                        type="date"
-                        name="date"
-                        value={taskData.date ? taskData.date : ""}
-                        onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
-                    />
-                    <div className="d-grid" onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>
-                        <input type="checkbox"
-                            className="btn-check"
-                            autoComplete="off"
-                            checked={!taskData.reminder}
-                            value={taskData.reminder}
-                            readOnly
+                    <FloatingLabel controlId="floatingInput" label="Time" >
+                        <Form.Control
+                            className="form-control"
+                            type="time"
+                            name="time"
+                            placeholder="time"
+                            value={taskData.time ? taskData.time : ""}
+                            onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
                         />
+                    </FloatingLabel>
 
-                        <label className="btn btn-info " htmlFor="btn-check">
-                            <div className="reminder">
-                                Reminder
-                                <ReminderIcon />
-                            </div>
-                        </label>
-                    </div>
+                    <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
+                        <Form.Control
+                            className="form-control"
+                            type="date"
+                            name="date"
+                            value={taskData.date ? taskData.date : ""}
+                            onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
+                        />
+                    </FloatingLabel>
 
+                    <Button style={{ marginBottom: "1em" }} type="button" variant="outline-primary" onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder<ReminderIcon /></Button>
                 </div>
 
-                <label htmlFor="location">Location</label>
-                <input
-                    autoComplete="off"
-                    className="form-control"
-                    type="text"
-                    name="location"
-                    placeholder="location"
-                    value={taskData.location ? taskData.location : ""}
-                    onChange={(e) => setTaskData({ ...taskData, location: e.target.value })}
-                />
+                <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">
+                    <Form.Control
+                        autoComplete="off"
+                        className="form-control"
+                        type="text"
+                        name="location"
+                        placeholder="location"
+                        value={taskData.location ? taskData.location : ""}
+                        onChange={(e) => setTaskData({ ...taskData, location: e.target.value })}
+                    />
+                </FloatingLabel>
 
                 <label style={{ visibility: "hidden" }} htmlFor="discription">Save</label>
                 <div className="d-grid saveAndCancel">
-                    <button type="submit" className="btn btn-success btn-lg" >Save</button>
-                    <button type="button" className="btn btn-danger btn-lg" onClick={() => _cancel()}>Cancel</button>
+                    <Button variant="outline-success" type="submit"><strong>Save</strong></Button>
+                    <Button variant="outline-danger" type="button" onClick={() => _cancel()}><strong>Cancel</strong></Button>
                 </div>
             </div>
         </form >

@@ -15,6 +15,21 @@
     margin: 1em;
 }
 
+input[type] {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 4px;
+}
+
+input[type]:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+input[type] {
+    color-scheme: dark;
+}
+
 .saveAndCancel {
     display: grid;
     grid-template-columns: 1fr 1fr;
