@@ -65,11 +65,9 @@ function App() {
         time: getCurrentTime(),
         date: getCurrentDate()
       });
-      const newTask = { ...record, freshTask: true }
-      const newList = [newTask, ...tasks]
-      setTasks(newList)
       setTasks([...tasks, { ...record, freshTask: true }])
-      // setTasks([{ ...record, freshTask: true }, ...tasks])
+      // I absolutely cannot figure out why this doesnt work!
+      // setTasks([{ ...record, freshTask: true }, newTasks])
     } catch (err) { console.log(err) }
   }
 

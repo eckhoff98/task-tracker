@@ -5,14 +5,13 @@ import moment from "moment"
 
 
 const Task = ({ task, _updateTask, _deleteTask }) => {
-    const [moreInfo, setMoreInfo] = useState(false)
-    const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask ? true : false)
 
-    console.log(editTaskToggel)
+    const [moreInfo, setMoreInfo] = useState(false)
+    const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask)
+
     useEffect(() => {
         timeToReminder(task.date, task.time)
     }, [editTaskToggel, moreInfo])
-
 
     const ReminderIcon = () => {
         if (task.reminder) return (<IoIosAlarm size={25} />)
@@ -84,27 +83,18 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         )
     }
 
-
-    const EditTaskForm = () => {
-        if (editTaskToggel) {
-            return (
-                <div className="card bg-dark">
-                    <TaskForm
-                        task={task}
-                        form={form}
-                        _cancel={cancel} />
-                </div>
-            )
-        } else {
-            return (<TaskInfo />)
-        }
+    if (editTaskToggel) {
+        return (
+            <div className="card bg-dark">
+                <TaskForm
+                    task={task}
+                    form={form}
+                    _cancel={cancel} />
+            </div>
+        )
+    } else {
+        return (<TaskInfo />)
     }
-
-    return (
-        <EditTaskForm />
-        // <div className="btn btn-primary btn-lg btn-block" onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}  >
-        // </div>
-    )
 }
 
 export default Task
