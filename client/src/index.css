@@ -4,6 +4,13 @@
     gap: 2em;
 }
 
+.tasksHeader {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1em;
+    margin: 1em;
+}
+
 .taskForm {
     margin: 1em;
 }

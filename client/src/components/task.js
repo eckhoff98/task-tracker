@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
-import { BiCalendarCheck } from "react-icons/bi"
+import { IoIosAlarm } from "react-icons/io"
 import moment from "moment"
 
 
@@ -14,18 +14,18 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
             setEditTaskToggel(true)
         }
     }, [])
-
     useEffect(() => {
         editTaskToggel ? setEditTaskText("Cancel") : setEditTaskText("Edit")
         timeToReminder(task.date, task.time)
     }, [editTaskToggel, moreInfo])
 
+
     const ReminderIcon = () => {
-        if (task.reminder) return (<BiCalendarCheck size={25} />)
+        if (task.reminder) return (<IoIosAlarm size={25} />)
     }
 
-    const form = (taskData) => {
-        _updateTask(taskData)
+    const form = (task) => {
+        _updateTask(task)
         setEditTaskToggel(!editTaskToggel)
     }
 
@@ -68,10 +68,13 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                 <div className="card">
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
-                        <h2 className="taskLessInfo">{timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon /></h2>
+                        <h2 className="taskLessInfo">
+                            {timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon />
+                        </h2>
                     </div>
                     <div className="card-body">
-                        <p className="card-text">discription: {task.discription}</p>
+                        <h3 className="card-text">discription: {task.discription}</h3>
+
                         <p className="card-text">date: {task.date}</p>
                         <p className="card-text">time: {task.time}</p>
                         <p className="card-text">Reminder: {String(Boolean(task.reminder))}</p>
@@ -92,7 +95,10 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         if (editTaskToggel) {
             return (
                 <div className="card">
-                    <TaskForm task={task} form={form} _cancel={cancel} />
+                    <TaskForm
+                        task={task}
+                        form={form}
+                        _cancel={cancel} />
                 </div>
             )
         } else {

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import { BiCalendarCheck } from "react-icons/bi"
+import { IoIosAlarm } from "react-icons/io"
 
 const TaskForm = ({ task, form, _cancel }) => {
     const [taskData, setTaskData] = useState(task)
 
     const submit = () => {
-        form({ ...taskData, name: (taskData.name === "") && "New Task", freshTask: false })
+        form({ ...taskData, name: (taskData.name === "") ? "New Task" : taskData.name, freshTask: false })
     }
 
     const ReminderIcon = () => {
-        if (taskData.reminder) return (<BiCalendarCheck size={25} />)
+        if (taskData.reminder) return (<IoIosAlarm size={25} />)
     }
 
     return (
@@ -73,13 +73,13 @@ const TaskForm = ({ task, form, _cancel }) => {
 
                 </div>
 
-                <label htmlFor="discription">Location</label>
+                <label htmlFor="location">Location</label>
                 <input
                     autoComplete="off"
                     className="form-control"
                     type="text"
-                    name="discription"
-                    placeholder="discription"
+                    name="location"
+                    placeholder="location"
                     value={taskData.location ? taskData.location : ""}
                     onChange={(e) => setTaskData({ ...taskData, location: e.target.value })}
                 />

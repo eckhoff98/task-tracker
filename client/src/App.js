@@ -1,4 +1,5 @@
 import './App.css';
+import axios from "axios"
 import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 
@@ -11,6 +12,7 @@ import PocketBase from "pocketbase"
 
 
 function App() {
+  axios.defaults.withCredentials = true
   const pb = new PocketBase('http://127.0.0.1:8090');
 
   const [tasks, setTasks] = useState([])
