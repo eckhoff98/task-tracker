@@ -21,6 +21,7 @@ const TaskForm = ({ task, form, _cancel }) => {
             <div className="taskForm">
                 <FloatingLabel controlId="floatingInput" label="Task" className="mb-3">
                     <Form.Control
+                        autoFocus
                         autoComplete="off"
                         className="form-control name"
                         type="text"

@@ -23,8 +23,8 @@ const Register = ({ pb, _onLogin }) => {
     })
 
 
-    const addUser = async () => {
-        console.log("adding user")
+    const addUser = async (e) => {
+        e.preventDefault()
         try {
             await pb.collection('users').create({
                 email: registerData.email,
@@ -55,7 +55,7 @@ const Register = ({ pb, _onLogin }) => {
             <div className="container py-5 h-100">
                 <div className="row d-flex align-items-center justify-content-center h-100">
                     <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-                        <form>
+                        <form onSubmit={(e) => addUser(e)}>
                             {/* <!-- Username input --> */}
                             <div className="form-outline mb-4">
                                 <input className="form-control form-control-lg" type="text" id="form1Example13" onChange={e => setRegisterData({ ...registerData, username: e.target.value })} />
@@ -91,7 +91,7 @@ const Register = ({ pb, _onLogin }) => {
 
                             {/* <!-- Submit button --> */}
                             <div className="d-grid">
-                                <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => addUser()}>Register</button>
+                                <button type="submit" className="btn btn-primary btn-lg btn-block">Register</button>
 
                                 <div className="divider d-flex align-items-center my-4">
                                     <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>

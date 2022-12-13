@@ -99,7 +99,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home pb={pb} />} />
-        <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} />} />
+        <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} pb={pb} />} />
         <Route path="/about" element={<>about info</>} />
         <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
         <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />

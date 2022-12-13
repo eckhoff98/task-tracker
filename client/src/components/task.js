@@ -85,7 +85,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
 
     if (editTaskToggel) {
         return (
-            <div className="card bg-dark">
+            <div className="card bg-dark" >
                 <TaskForm
                     task={task}
                     form={form}

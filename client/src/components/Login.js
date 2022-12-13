@@ -18,7 +18,8 @@ const Login = ({ _onLogin, pb }) => {
         }
     })
 
-    const login = async () => {
+    const login = async (e) => {
+        e.preventDefault()
         try {
             await pb.collection('users').authWithPassword(loginData.email, loginData.password);
             _onLogin()
@@ -36,7 +37,7 @@ const Login = ({ _onLogin, pb }) => {
             <div className="container py-5 h-100">
                 <div className="row d-flex align-items-center justify-content-center h-100">
                     <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-                        <form>
+                        <form onSubmit={(e) => login(e)}>
                             {loginVal && <Alert variant="danger">{loginVal}</Alert>}
                             {/* <!-- Email input --> */}
                             <div className="form-outline mb-4">
@@ -61,7 +62,7 @@ const Login = ({ _onLogin, pb }) => {
 
                             {/* <!-- Submit button --> */}
                             <div className="d-grid">
-                                <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => login()}>Sign in</button>
+                                <button type="submit" className="btn btn-primary btn-lg btn-block" >Sign in</button>
 
                                 <div className="divider d-flex align-items-center my-4">
                                     <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
