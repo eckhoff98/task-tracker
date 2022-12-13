@@ -6,16 +6,10 @@ import moment from "moment"
 
 const Task = ({ task, _updateTask, _deleteTask }) => {
     const [moreInfo, setMoreInfo] = useState(false)
-    const [editTaskToggel, setEditTaskToggel] = useState(false)
-    const [editTaskText, setEditTaskText] = useState("Edit")
+    const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask ? true : false)
 
+    console.log(editTaskToggel)
     useEffect(() => {
-        if (task.freshTask) {
-            setEditTaskToggel(true)
-        }
-    }, [])
-    useEffect(() => {
-        editTaskToggel ? setEditTaskText("Cancel") : setEditTaskText("Edit")
         timeToReminder(task.date, task.time)
     }, [editTaskToggel, moreInfo])
 
@@ -26,7 +20,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
 
     const form = (task) => {
         _updateTask(task)
-        setEditTaskToggel(!editTaskToggel)
+        setEditTaskToggel(false)
     }
 
     const deleteTask = () => {
@@ -81,7 +75,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                         <p className="card-text">location: {task.location}</p>
                         <p className="card-text">id: {task.id}</p>
                         <div className="taskEditButtons">
-                            <button className="btn btn-outline-primary btn-lg" onClick={() => { setEditTaskToggel(!editTaskToggel) }}><strong>{editTaskText}</strong></button>
+                            <button className="btn btn-outline-primary btn-lg" onClick={() => { setEditTaskToggel(true) }}><strong>Edit</strong></button>
                             <button className="btn btn-outline-danger btn-lg" onClick={() => { deleteTask() }}><strong>Delete </strong></button>
                         </div>
                     </div>

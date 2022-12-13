@@ -26,6 +26,7 @@ function App() {
     }
   }, [loggedInState])
 
+
   // Helper Functions 
   const getCurrentDate = () => {
     // convert Javascript Date to HTML Input
@@ -64,7 +65,11 @@ function App() {
         time: getCurrentTime(),
         date: getCurrentDate()
       });
+      const newTask = { ...record, freshTask: true }
+      const newList = [newTask, ...tasks]
+      setTasks(newList)
       setTasks([...tasks, { ...record, freshTask: true }])
+      // setTasks([{ ...record, freshTask: true }, ...tasks])
     } catch (err) { console.log(err) }
   }
 

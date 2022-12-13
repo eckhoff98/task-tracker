@@ -19,7 +19,7 @@ const TaskForm = ({ task, form, _cancel }) => {
     return (
         <form onSubmit={submit}>
             <div className="taskForm">
-                <FloatingLabel controlId="floatingInput" label="Task" >
+                <FloatingLabel controlId="floatingInput" label="Task" className="mb-3">
                     <Form.Control
                         autoComplete="off"
                         className="form-control name"
@@ -31,7 +31,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                     />
                 </FloatingLabel>
 
-                <FloatingLabel controlId="floatingInput" label="Discription" >
+                <FloatingLabel controlId="floatingInput" label="Discription" className="mb-3">
                     <Form.Control
                         autoComplete="off"
                         className="form-control"
@@ -44,7 +44,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                 </FloatingLabel>
 
                 <div className="taskFormTime">
-                    <FloatingLabel controlId="floatingInput" label="Time" >
+                    <FloatingLabel controlId="floatingInput" label="Time" className="mb-3">
                         <Form.Control
                             className="form-control"
                             type="time"
@@ -65,7 +65,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                         />
                     </FloatingLabel>
 
-                    <Button style={{ marginBottom: "1em" }} type="button" variant="outline-primary" onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder<ReminderIcon /></Button>
+                    <Button className="mb-3" type="button" variant="outline-primary" onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder<ReminderIcon /></Button>
                 </div>
 
                 <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">
@@ -80,10 +80,9 @@ const TaskForm = ({ task, form, _cancel }) => {
                     />
                 </FloatingLabel>
 
-                <label style={{ visibility: "hidden" }} htmlFor="discription">Save</label>
                 <div className="d-grid saveAndCancel">
-                    <Button variant="outline-success" type="submit"><strong>Save</strong></Button>
-                    <Button variant="outline-danger" type="button" onClick={() => _cancel()}><strong>Cancel</strong></Button>
+                    <Button variant="outline-success" type="submit" size="lg"><strong>Save</strong></Button>
+                    <Button variant="outline-danger" type="button" size="lg" onClick={() => _cancel()}><strong>Cancel</strong></Button>
                 </div>
             </div>
         </form >
