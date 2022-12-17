@@ -9,13 +9,13 @@ function CollapsibleExample({ loggedIn, logout }) {
     const LoginRegister = () => {
         if (loggedIn) {
             return (
-                <Nav.Link as={Link} to="/" onClick={() => { logout() }}>Logout</Nav.Link>
+                <Nav.Link eventKey="0" as={Link} to="/" onClick={() => { logout() }}>Logout</Nav.Link>
             )
         } else {
             return (
                 <>
-                    <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                    <Nav.Link as={Link} to="/register">Register</Nav.Link>
+                    <Nav.Link eventKey="1" as={Link} to="/login">Login</Nav.Link>
+                    <Nav.Link eventKey="2" as={Link} to="/register">Register</Nav.Link>
                 </>
             )
         }
@@ -27,9 +27,9 @@ function CollapsibleExample({ loggedIn, logout }) {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/tasks">Tasks</Nav.Link>
-                        <Nav.Link as={Link} to="/about">About</Nav.Link>
-                        <Nav.Link as={Link} to="/more">More stuff</Nav.Link>
+                        <Nav.Link eventKey="3" as={Link} to="/tasks">Tasks</Nav.Link>
+                        <Nav.Link eventKey="4" as={Link} to="/about">About</Nav.Link>
+                        <Nav.Link eventKey="5" as={Link} to="/more">More stuff</Nav.Link>
                         <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">

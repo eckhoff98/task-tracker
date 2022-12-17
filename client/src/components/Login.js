@@ -2,6 +2,10 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import React from "react"
 import Alert from "react-bootstrap/Alert"
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 
 // TODO: add hashing for passwords
 
@@ -40,16 +44,14 @@ const Login = ({ _onLogin, pb }) => {
                         <form onSubmit={(e) => login(e)}>
                             {loginVal && <Alert variant="danger">{loginVal}</Alert>}
                             {/* <!-- Email input --> */}
-                            <div className="form-outline mb-4">
-                                <input className="form-control form-control-lg" type="email" id="form1Example13" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />
-                                <label className="form-label" htmlFor="form1Example13">Email address</label>
-                            </div>
+                            <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+                                <Form.Control type="email" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />
+                            </FloatingLabel>
 
                             {/* <!-- Password input --> */}
-                            <div className="form-outline mb-4">
-                                <input className="form-control form-control-lg" type="password" id="form1Example23" onChange={e => setLoginData({ ...loginData, password: e.target.value })} />
-                                <label className="form-label" htmlFor="form1Example23">Password</label>
-                            </div>
+                            <FloatingLabel controlId="floatingInput" label="Password" className="mb-3">
+                                <Form.Control type="password" onChange={e => setLoginData({ ...loginData, password: e.target.value })} />
+                            </FloatingLabel>
 
                             <div className="d-flex justify-content-around align-items-center mb-4">
                                 {/* <!-- Checkbox --> */}

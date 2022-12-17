@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Alert from "react-bootstrap/Alert"
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 
 const Register = ({ pb, _onLogin }) => {
@@ -57,29 +60,27 @@ const Register = ({ pb, _onLogin }) => {
                     <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                         <form onSubmit={(e) => addUser(e)}>
                             {/* <!-- Username input --> */}
-                            <div className="form-outline mb-4">
-                                <input className="form-control form-control-lg" type="text" id="form1Example13" onChange={e => setRegisterData({ ...registerData, username: e.target.value })} />
-                                <label className="form-label" htmlFor="form1Example13">Username</label>
-                            </div>
+                            <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+                                <Form.Control type="text" onChange={e => setRegisterData({ ...registerData, username: e.target.value })} />
+                            </FloatingLabel>
+
                             {/* <!-- Email input --> */}
                             {emailVal && <Alert variant="danger">{emailVal}</Alert>}
-                            <div className="form-outline mb-4">
-                                <input className="form-control form-control-lg" type="email" id="form1Example13" onChange={e => setRegisterData({ ...registerData, email: e.target.value })} />
-                                <label className="form-label" htmlFor="form1Example13">Email address</label>
-                            </div>
+                            <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+                                <Form.Control type="email" onChange={e => setRegisterData({ ...registerData, email: e.target.value })} />
+                            </FloatingLabel>
 
                             {/* <!-- Password input --> */}
                             {passwordVal && <Alert variant="danger">{passwordVal}</Alert>}
-                            <div className="form-outline mb-4">
-                                <input className="form-control form-control-lg" type="password" onChange={e => setRegisterData({ ...registerData, password: e.target.value })} />
-                                <label className="form-label" htmlFor="form1Example23">Password</label>
-                            </div>
+                            <FloatingLabel controlId="floatingInput" label="Password" className="mb-3">
+                                <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, password: e.target.value })} />
+                            </FloatingLabel>
+
                             {/* <!-- Password input --> */}
                             {passwordConfirmVal && <Alert variant="danger">{passwordConfirmVal}</Alert>}
-                            <div className="form-outline mb-4">
-                                <input className="form-control form-control-lg" type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirmation: e.target.value })} />
-                                <label className="form-label" htmlFor="form1Example23">Password confirmation</label>
-                            </div>
+                            <FloatingLabel controlId="floatingInput" label="Password Confirmation" className="mb-3">
+                                <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirmation: e.target.value })} />
+                            </FloatingLabel>
 
                             <div className="d-flex justify-content-around align-items-center mb-4">
                                 {/* <!-- Checkbox --> */}

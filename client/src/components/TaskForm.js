@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { IoIosAlarm } from "react-icons/io"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
@@ -65,8 +65,8 @@ const TaskForm = ({ task, form, _cancel }) => {
                             onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
                         />
                     </FloatingLabel>
-
-                    <Button className="mb-3" type="button" variant="outline-primary" onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder<ReminderIcon /></Button>
+                    {/* Reminder Button */}
+                    <Button className="mb-3" type="button" variant="outline-primary" style={{ padding: "0" }} onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder<ReminderIcon /></Button>
                 </div>
 
                 <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">

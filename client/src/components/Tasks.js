@@ -2,6 +2,8 @@ import Task from "./Task"
 import TasksHeader from "./TasksHeader"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import Container from 'react-bootstrap/Container';
+
 
 const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, pb }) => {
     const navigate = useNavigate()
@@ -15,12 +17,13 @@ const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, pb }) => {
 
     return (
         <>
-            <TasksHeader _addTask={_addTask} />
-            <div className="tasks">
+            <Container className="tasks">
+                <TasksHeader _addTask={_addTask} />
                 {tasks.map((task, index) => {
                     return <Task key={index} task={task} _updateTask={_updateTask} _deleteTask={_deleteTask} />
                 })}
-            </div>
+            </Container>
+
         </>
     )
 }

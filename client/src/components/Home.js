@@ -10,6 +10,7 @@ const Home = ({ pb }) => {
             navigate("/tasks")
         }
     })
+
     if (pb.authStore.isValid) return navigate('/tasks')
     return (
         <>
