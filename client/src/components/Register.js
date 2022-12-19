@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom"
 import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 
 
 const Register = ({ pb, _onLogin }) => {
