@@ -1,5 +1,8 @@
+.mainBody {
+    margin-top: 2em;
+}
+
 .tasks {
-    padding: 2em;
     display: grid;
     gap: 2em;
 }
@@ -8,7 +11,6 @@
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 1em;
-    /* margin: 1em; */
 }
 
 .taskForm {
@@ -86,7 +88,7 @@ input[type] {
     grid-template-columns: 1fr 1fr;
 }
 
-.task-expanded {
+/* .task-expanded {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     padding: 1em;
     cursor: pointer;
@@ -97,7 +99,7 @@ input[type] {
     border-radius: 1em;
     padding: 1em;
     cursor: pointer;
-}
+} */
 
 .hideLable {
     display: none;

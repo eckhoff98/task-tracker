@@ -2,13 +2,16 @@ import './App.css';
 import axios from "axios"
 import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
+import Container from 'react-bootstrap/Container';
+import PocketBase from "pocketbase"
 
+// Components
 import Home from "./components/Home"
 import Tasks from "./components/Tasks"
 import NavBar from './components/NavBar';
 import Login from "./components/Login"
 import Register from "./components/Register"
-import PocketBase from "pocketbase"
+import About from './components/About';
 
 
 function App() {
@@ -97,13 +100,16 @@ function App() {
 
       <NavBar appName={"Task Tracker"} loggedIn={pb.authStore.isValid} logout={logout} />
 
-      <Routes>
-        <Route path="/" element={<Home pb={pb} />} />
-        <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} pb={pb} />} />
-        <Route path="/about" element={<>about info</>} />
-        <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
-        <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />
-      </Routes>
+      <Container className='mainBody'>
+        <Routes>
+
+          <Route path="/" element={<Home pb={pb} />} />
+          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} pb={pb} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
+          <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />
+        </Routes>
+      </Container>
     </div>
   )
 }

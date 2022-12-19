@@ -17,12 +17,12 @@ const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, pb }) => {
 
     return (
         <>
-            <Container className="tasks">
+            <div className="tasks">
                 <TasksHeader _addTask={_addTask} />
                 {tasks.map((task, index) => {
                     return <Task key={index} task={task} _updateTask={_updateTask} _deleteTask={_deleteTask} />
                 })}
-            </Container>
+            </div>
 
         </>
     )
