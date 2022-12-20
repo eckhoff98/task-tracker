@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
-import { IoIosAlarm } from "react-icons/io"
+import { BsAlarmFill } from "react-icons/bs"
+import { BsPencilSquare } from "react-icons/bs"
+import { BsFillCalendarEventFill } from "react-icons/bs"
+import { BsFillPinMapFill } from "react-icons/bs"
 import moment from "moment"
 
 
@@ -14,7 +17,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     }, [editTaskToggel, moreInfo])
 
     const ReminderIcon = () => {
-        if (task.reminder) return (<IoIosAlarm size={25} />)
+        if (task.reminder) return (<BsAlarmFill size={25} />)
     }
 
     const form = (task) => {
@@ -66,13 +69,9 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                         </h2>
                     </div>
                     <div className="card-body">
-                        <h3 className="card-text">discription: {task.discription}</h3>
-
-                        <p className="card-text">date: {task.date}</p>
-                        <p className="card-text">time: {task.time}</p>
-                        <p className="card-text">Reminder: {String(Boolean(task.reminder))}</p>
-                        <p className="card-text">location: {task.location}</p>
-                        <p className="card-text">id: {task.id}</p>
+                        <p className="card-text"><BsPencilSquare /> {task.discription}</p>
+                        <p className="card-text"><BsFillCalendarEventFill /> {task.date} {task.time}</p>
+                        <p className="card-text"><BsFillPinMapFill /> {task.location}</p>
                         <div className="taskEditButtons">
                             <button className="btn btn-outline-primary btn-lg" onClick={() => { setEditTaskToggel(true) }}><strong>Edit</strong></button>
                             <button className="btn btn-outline-danger btn-lg" onClick={() => { deleteTask() }}><strong>Delete </strong></button>

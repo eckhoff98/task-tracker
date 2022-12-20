@@ -38,7 +38,7 @@ const Login = ({ _onLogin, pb }) => {
 
     return (
         <section className="vh-100">
-            <div className="container py-5 h-100">
+            <div className="container py-5 ">
                 <div className="row d-flex align-items-center justify-content-center h-100">
                     <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                         <form onSubmit={(e) => login(e)}>

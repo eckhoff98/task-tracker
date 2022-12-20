@@ -65,7 +65,7 @@ const Register = ({ pb, _onLogin }) => {
 
                             {/* <!-- Email input --> */}
                             {emailVal && <Alert variant="danger">{emailVal}</Alert>}
-                            <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+                            <FloatingLabel controlId="floatingInput" label="Email -This will never be shared" className="mb-3">
                                 <Form.Control type="email" onChange={e => setRegisterData({ ...registerData, email: e.target.value })} />
                             </FloatingLabel>
 
@@ -80,6 +80,8 @@ const Register = ({ pb, _onLogin }) => {
                             <FloatingLabel controlId="floatingInput" label="Password Confirmation" className="mb-3">
                                 <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirmation: e.target.value })} />
                             </FloatingLabel>
+
+
 
                             <div className="d-flex justify-content-around align-items-center mb-4">
                                 {/* <!-- Checkbox --> */}

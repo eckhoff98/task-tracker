@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { IoIosAlarm } from "react-icons/io"
+import { BsAlarmFill } from "react-icons/bs"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -13,7 +13,7 @@ const TaskForm = ({ task, form, _cancel }) => {
     }
 
     const ReminderIcon = () => {
-        if (taskData.reminder) return (<IoIosAlarm size={25} />)
+        if (taskData.reminder) return (<BsAlarmFill size={25} />)
     }
 
     return (

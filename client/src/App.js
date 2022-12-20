@@ -21,6 +21,7 @@ function App() {
   const [tasks, setTasks] = useState([])
   const [loggedInState, setLoggedInState] = useState()
 
+
   useEffect(() => {
     if (pb.authStore.isValid) {
       getTasks()
@@ -110,6 +111,7 @@ function App() {
           <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />
         </Routes>
       </Container>
+
     </div>
   )
 }
