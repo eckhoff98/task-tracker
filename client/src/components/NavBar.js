@@ -5,11 +5,16 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom';
 
 
-function CollapsibleExample({ loggedIn, logout }) {
+function NavBar({ logout, pb }) {
     const LoginRegister = () => {
-        if (loggedIn) {
+        if (pb.authStore.isValid) {
             return (
-                <Nav.Link eventKey="0" as={Link} to="/" onClick={() => { logout() }}>Logout</Nav.Link>
+                <><NavDropdown title={pb.authStore.model.name} id="collasible-nav-dropdown" >
+                    <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
+                </NavDropdown>
+                </>
             )
         } else {
             return (
@@ -51,4 +56,4 @@ function CollapsibleExample({ loggedIn, logout }) {
     );
 }
 
-export default CollapsibleExample;
+export default NavBar;

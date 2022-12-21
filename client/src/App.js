@@ -12,6 +12,8 @@ import NavBar from './components/NavBar';
 import Login from "./components/Login"
 import Register from "./components/Register"
 import About from './components/About';
+import ChangePassword from './components/ChangePassword';
+import Account from './components/Account';
 
 
 function App() {
@@ -97,8 +99,7 @@ function App() {
   return (
     <div className="App">
       <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" ></link>
-
-      <NavBar appName={"Task Tracker"} loggedIn={pb.authStore.isValid} logout={logout} />
+      <NavBar appName={"Task Tracker"} logout={logout} pb={pb} />
 
       <Container className='mainBody'>
         <Routes>
@@ -108,6 +109,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
           <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />
+          <Route path="/change-password" element={<ChangePassword pb={pb} />} />
+          <Route path="/account" element={<Account pb={pb} logout={logout} />} />
+
         </Routes>
       </Container>
     </div>
