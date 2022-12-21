@@ -23,6 +23,7 @@ function App() {
   const [tasks, setTasks] = useState([])
   const [loggedInState, setLoggedInState] = useState()
 
+
   useEffect(() => {
     if (pb.authStore.isValid) {
       getTasks()
@@ -114,6 +115,7 @@ function App() {
 
         </Routes>
       </Container>
+
     </div>
   )
 }
