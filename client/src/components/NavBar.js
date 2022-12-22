@@ -34,7 +34,9 @@ function NavBar({ logout, pb }) {
                     <Nav className="me-auto">
                         <Nav.Link eventKey="3" as={Link} to="/tasks">Tasks</Nav.Link>
                         <Nav.Link eventKey="4" as={Link} to="/about">About</Nav.Link>
-                        <Nav.Link eventKey="5" as={Link} to="/more">More stuff</Nav.Link>
+
+                        {/* Example code */}
+                        {/* <Nav.Link eventKey="5" as={Link} to="/more">More stuff</Nav.Link>
                         <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
@@ -45,7 +47,8 @@ function NavBar({ logout, pb }) {
                             <NavDropdown.Item href="#action/3.4">
                                 Separated link
                             </NavDropdown.Item>
-                        </NavDropdown>
+                        </NavDropdown> */}
+
                     </Nav>
                     <Nav>
                         <LoginRegister />

@@ -9,8 +9,8 @@ const TasksHeader = ({ _addTask }) => {
                 location: "",
                 reminder: false
             })}>Add Task</button>
-            <button className="btn btn-lg btn-secondary">Button</button>
-            <button className="btn btn-lg btn-secondary">Button</button>
+            <button className="btn btn-lg btn-outline-primary">Button</button>
+            <button className="btn btn-lg btn-outline-primary">Button</button>
         </div>
     )
 }

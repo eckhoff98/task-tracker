@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
 
-const Register = ({ pb, _onLogin }) => {
-    const navigate = useNavigate()
+const Register = ({ pb, _onLogin, nav }) => {
     const [registerData, setRegisterData] = useState({
         username: "",
         email: "",
@@ -20,7 +18,7 @@ const Register = ({ pb, _onLogin }) => {
 
     useEffect(() => {
         if (pb.authStore.isValid) {
-            navigate("/tasks")
+            nav("/tasks")
         }
     })
 
@@ -31,13 +29,13 @@ const Register = ({ pb, _onLogin }) => {
             await pb.collection('users').create({
                 email: registerData.email,
                 password: registerData.password,
-                passwordConfirm: registerData.passwordConfirmation,
-                name: registerData.username
+                passwordConfirm: registerData.passwordConfirm,
+                name: registerData.name
             });
             // login and redirect to home
             await pb.collection('users').authWithPassword(registerData.email, registerData.password);
             _onLogin()
-            return navigate("/tasks")
+            return nav("/tasks")
         } catch (err) {
             errors(err)
         }
@@ -57,27 +55,27 @@ const Register = ({ pb, _onLogin }) => {
             <div className="row d-flex align-items-center justify-content-center h-100">
                 <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                     <form onSubmit={(e) => addUser(e)}>
-                        {/* <!-- Username input --> */}
-                        <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
-                            <Form.Control type="text" onChange={e => setRegisterData({ ...registerData, username: e.target.value })} />
+                        {/* <!-- name input --> */}
+                        <FloatingLabel controlId="name" label="Name" className="mb-3">
+                            <Form.Control type="text" onChange={e => setRegisterData({ ...registerData, name: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Email input --> */}
                         {emailVal && <Alert variant="danger">{emailVal}</Alert>}
-                        <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+                        <FloatingLabel controlId="email" label="Email" className="mb-3">
                             <Form.Control type="email" onChange={e => setRegisterData({ ...registerData, email: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Password input --> */}
                         {passwordVal && <Alert variant="danger">{passwordVal}</Alert>}
-                        <FloatingLabel controlId="floatingInput" label="Password" className="mb-3">
+                        <FloatingLabel controlId="password" label="Password" className="mb-3">
                             <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, password: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Password input --> */}
                         {passwordConfirmVal && <Alert variant="danger">{passwordConfirmVal}</Alert>}
-                        <FloatingLabel controlId="floatingInput" label="Password Confirmation" className="mb-3">
-                            <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirmation: e.target.value })} />
+                        <FloatingLabel controlId="passwordConfirm" label="Password Confirmation" className="mb-3">
+                            <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirm: e.target.value })} />
                         </FloatingLabel>
 
                         <div className="d-flex justify-content-around align-items-center mb-4">

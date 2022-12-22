@@ -2,17 +2,15 @@ import React, { useState, useEffect } from "react"
 import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { useNavigate } from "react-router-dom"
 
-export default function ChangePassword({ pb }) {
-    const navigate = useNavigate();
+export default function ChangePassword({ pb, nav }) {
 
     const [changePasswordData, setChangePasswordData] = useState({ oldPassword: "", password: "", passwordConfirm: "" })
     const [errorData, setErrorData] = useState({})
 
     useEffect(() => {
         if (!pb.authStore.isValid) {
-            return navigate("/login")
+            return nav("/login")
         }
     })
 
@@ -55,7 +53,7 @@ export default function ChangePassword({ pb }) {
 
                         {/* <!-- Submit button --> */}
                         <div className="d-grid">
-                            <button type="submit" className="btn btn-primary btn-lg btn-block" >Change password</button>
+                            <button type="submit" className="btn btn-outline-primary btn-lg btn-block" >Change password</button>
                         </div>
                     </form>
                 </div>

@@ -1,19 +1,14 @@
 import Task from "./Task"
 import TasksHeader from "./TasksHeader"
-import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import Container from 'react-bootstrap/Container';
 
 
-const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, pb }) => {
-    const navigate = useNavigate()
+const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, pb, nav }) => {
     useEffect(() => {
         if (!pb.authStore.isValid) {
-            return navigate("/")
+            return nav("/")
         }
     })
-
-    if (!pb.authStore.isValid) return navigate("/")
 
     return (
         <>

@@ -2,6 +2,12 @@
     margin-top: 2em;
 }
 
+.btn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1em;
+}
+
 .tasks {
     display: grid;
     gap: 2em;
@@ -13,7 +19,11 @@
     gap: 1em;
 }
 
-.taskForm {
+/* .taskForm {
+    margin: 1em;
+} */
+
+.margin-1em {
     margin: 1em;
 }
 
@@ -32,11 +42,11 @@ input[type] {
     color-scheme: dark;
 }
 
-.saveAndCancel {
+/* .saveAndCancel {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1em;
-}
+} */
 
 .taskFormTime {
     display: grid;

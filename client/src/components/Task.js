@@ -72,7 +72,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                         <p className="card-text"><BsPencilSquare /> {task.discription}</p>
                         <p className="card-text"><BsFillCalendarEventFill /> {task.date} {task.time}</p>
                         <p className="card-text"><BsFillPinMapFill /> {task.location}</p>
-                        <div className="taskEditButtons">
+                        <div className="btn-grid">
                             <button className="btn btn-outline-primary btn-lg" onClick={() => { setEditTaskToggel(true) }}><strong>Edit</strong></button>
                             <button className="btn btn-outline-danger btn-lg" onClick={() => { deleteTask() }}><strong>Delete </strong></button>
                         </div>

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import Container from 'react-bootstrap/Container';
 import PocketBase from "pocketbase"
+import { useNavigate } from "react-router-dom"
+
 
 // Components
 import Home from "./components/Home"
@@ -14,10 +16,12 @@ import Register from "./components/Register"
 import About from './components/About';
 import ChangePassword from './components/ChangePassword';
 import Account from './components/Account';
+import ChangeUserInfo from './components/ChangeUserInfo';
 
 
 function App() {
   axios.defaults.withCredentials = true
+  const nav = useNavigate();
   const pb = new PocketBase('http://127.0.0.1:8090');
 
   const [tasks, setTasks] = useState([])
@@ -105,13 +109,14 @@ function App() {
       <Container className='mainBody'>
         <Routes>
 
-          <Route path="/" element={<Home pb={pb} />} />
-          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} pb={pb} />} />
+          <Route path="/" element={<Home pb={pb} nav={nav} />} />
+          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} pb={pb} nav={nav} />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} />} />
-          <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} />} />
-          <Route path="/change-password" element={<ChangePassword pb={pb} />} />
-          <Route path="/account" element={<Account pb={pb} logout={logout} />} />
+          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} nav={nav} />} />
+          <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} nav={nav} />} />
+          <Route path="/account" element={<Account pb={pb} logout={logout} nav={nav} />} />
+          <Route path="/change-password" element={<ChangePassword pb={pb} nav={nav} />} />
+          <Route path="/change-user-info" element={<ChangeUserInfo pb={pb} nav={nav} />} />
 
         </Routes>
       </Container>

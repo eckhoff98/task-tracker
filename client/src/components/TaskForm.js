@@ -18,7 +18,7 @@ const TaskForm = ({ task, form, _cancel }) => {
 
     return (
         <form onSubmit={submit}>
-            <div className="taskForm">
+            <div className="margin-1em">
                 <FloatingLabel controlId="floatingInput" label="Task" className="mb-3">
                     <Form.Control
                         autoFocus
@@ -81,7 +81,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                     />
                 </FloatingLabel>
 
-                <div className="d-grid saveAndCancel">
+                <div className="d-grid btn-grid">
                     <Button variant="outline-success" type="submit" size="lg"><strong>Save</strong></Button>
                     <Button variant="outline-danger" type="button" size="lg" onClick={() => _cancel()}><strong>Cancel</strong></Button>
                 </div>

@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import React from "react"
 import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import Container from "react-bootstrap/esm/Container";
 
 
 // TODO: add hashing for passwords
 
-const Login = ({ _onLogin, pb }) => {
-    const navigate = useNavigate();
+const Login = ({ _onLogin, pb, nav }) => {
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
@@ -18,7 +15,7 @@ const Login = ({ _onLogin, pb }) => {
     const [loginVal, setLoginVal] = useState("")
     useEffect(() => {
         if (pb.authStore.isValid) {
-            navigate("/tasks")
+            nav("/tasks")
         }
     })
 
@@ -27,7 +24,7 @@ const Login = ({ _onLogin, pb }) => {
         try {
             await pb.collection('users').authWithPassword(loginData.email, loginData.password);
             _onLogin()
-            return navigate("/tasks")
+            return nav("/tasks")
         } catch (err) {
             console.log(err.data)
             setLoginVal("Invalid email/password")
@@ -43,12 +40,12 @@ const Login = ({ _onLogin, pb }) => {
                     <form onSubmit={(e) => login(e)}>
                         {loginVal && <Alert variant="danger">{loginVal}</Alert>}
                         {/* <!-- Email input --> */}
-                        <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+                        <FloatingLabel controlId="email" label="Email" className="mb-3">
                             <Form.Control type="email" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Password input --> */}
-                        <FloatingLabel controlId="floatingInput" label="Password" className="mb-3">
+                        <FloatingLabel controlId="password" label="Password" className="mb-3">
                             <Form.Control type="password" onChange={e => setLoginData({ ...loginData, password: e.target.value })} />
                         </FloatingLabel>
 
