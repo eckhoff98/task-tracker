@@ -4,33 +4,42 @@ import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
+//Firebase
+import { signInWithEmailAndPassword, } from "firebase/auth";
+import { auth } from "../firebaseConfig"
 
 // TODO: add hashing for passwords
 
-const Login = ({ _onLogin, pb, nav }) => {
+const Login = ({ _onLogin, nav, user }) => {
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
     })
-    const [loginVal, setLoginVal] = useState("")
+    // const [loginVal, setLoginVal] = useState("")
+    const [loginErr, setLoginErr] = useState()
+
     useEffect(() => {
-        if (pb.authStore.isValid) {
+        // if (pb.authStore.isValid) {
+        //     nav("/tasks")
+        // }
+        if (user) {
             nav("/tasks")
         }
     })
 
     const login = async (e) => {
-        e.preventDefault()
-        try {
-            await pb.collection('users').authWithPassword(loginData.email, loginData.password);
-            _onLogin()
-            return nav("/tasks")
-        } catch (err) {
-            console.log(err.data)
-            setLoginVal("Invalid email/password")
+        if (loginData.email === "" || loginData.password === "") {
+            return setLoginErr("Please fill in all fields.")
         }
+        signInWithEmailAndPassword(auth, loginData.email, loginData.password)
+            .then()
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setLoginErr(errorMessage)
+            });
+        _onLogin()
     }
-
 
 
     return (
@@ -38,7 +47,8 @@ const Login = ({ _onLogin, pb, nav }) => {
             <div className="row d-flex align-items-center justify-content-center ">
                 <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                     <form onSubmit={(e) => login(e)}>
-                        {loginVal && <Alert variant="danger">{loginVal}</Alert>}
+                        {/* {loginVal && <Alert variant="danger">{loginVal}</Alert>} */}
+                        {loginErr && <Alert variant="danger">{loginErr}</Alert>}
                         {/* <!-- Email input --> */}
                         <FloatingLabel controlId="email" label="Email" className="mb-3">
                             <Form.Control type="email" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />

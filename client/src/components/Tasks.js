@@ -3,9 +3,9 @@ import TasksHeader from "./TasksHeader"
 import { useEffect } from "react"
 
 
-const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, pb, nav }) => {
+const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, nav, user }) => {
     useEffect(() => {
-        if (!pb.authStore.isValid) {
+        if (!user) {
             return nav("/")
         }
     })

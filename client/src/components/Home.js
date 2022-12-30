@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 import { useEffect } from "react"
 
-const Home = ({ pb, nav }) => {
+const Home = ({ nav, user }) => {
     useEffect(() => {
-        if (pb.authStore.isValid) {
+        if (user) {
             nav("/tasks")
         }
     })

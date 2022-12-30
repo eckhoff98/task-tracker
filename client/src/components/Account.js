@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
 
-export default function Account({ pb, nav }) {
+export default function Account({ pb, nav, user }) {
     useEffect(() => {
-        if (!pb.authStore.isValid) {
+        if (!user) {
             return nav("/login")
         }
     })
@@ -20,28 +20,20 @@ export default function Account({ pb, nav }) {
                     <Card.Header>Info</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            Name: {pb.authStore.model.name}
+                            Name: {user.extraInfo.name}
                         </Card.Text>
                         <Card.Text>
-                            Username: {pb.authStore.model.username}
-                        </Card.Text>
-                        <Card.Text>
-                            Email: {pb.authStore.model.email}
-                        </Card.Text>
-                        <Card.Text>
-                            Verified: {String(pb.authStore.model.verified)}
+                            Email: {user.email}
                         </Card.Text>
                         <div className="btn-grid">
-                            <Button variant="outline-primary" size="lg" as={Link} to="/change-user-info">Change info</Button>
+                            {/* <Button variant="outline-primary" size="lg" as={Link} to="/change-user-info">Change info</Button>
                             <Button variant="outline-primary" size="lg" as={Link} to="/change-password">Change password</Button>
-                            <Button variant="outline-danger" size="lg" as={Link} to="/change-password">Delete Account</Button>
+                            <Button variant="outline-danger" size="lg" as={Link} to="/change-password">Delete Account</Button> */}
                         </div>
                     </Card.Body>
                 </Card>
 
             </section>
-            {/* <div>{JSON.stringify(pb.authStore.model)}</div> */}
-            {/* <Button as={Link} to="/change-password">Change password</Button> */}
         </>
     )
 }
