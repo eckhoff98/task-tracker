@@ -10,7 +10,7 @@ import { auth, provider } from "../firebaseConfig"
 
 // TODO: add hashing for passwords
 
-const Login = ({ _onLogin, nav, user, addExtraUserInfo }) => {
+const Login = ({ nav, user, addExtraUserInfo }) => {
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
@@ -36,7 +36,6 @@ const Login = ({ _onLogin, nav, user, addExtraUserInfo }) => {
                 const errorMessage = error.message;
                 setLoginErr(errorMessage)
             });
-        _onLogin()
     }
 
     const GoogleSignin = () => {
@@ -53,7 +52,7 @@ const Login = ({ _onLogin, nav, user, addExtraUserInfo }) => {
                     name: user.displayName
                 }
                 addExtraUserInfo(newUser)
-                _onLogin()
+
             }).catch((error) => {
                 // Handle Errors here.
                 const errorCode = error.code;

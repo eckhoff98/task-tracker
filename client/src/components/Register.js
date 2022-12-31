@@ -9,7 +9,7 @@ import { auth, provider } from "../firebaseConfig"
 
 
 
-const Register = ({ _onLogin, nav, user, addExtraUserInfo }) => {
+const Register = ({ nav, user, addExtraUserInfo }) => {
     const [registerData, setRegisterData] = useState({
         email: "",
         password: "",
@@ -41,7 +41,6 @@ const Register = ({ _onLogin, nav, user, addExtraUserInfo }) => {
                     name: registerData.name,
                 }
                 addExtraUserInfo(newUser)
-                _onLogin()
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -65,7 +64,6 @@ const Register = ({ _onLogin, nav, user, addExtraUserInfo }) => {
                     name: user.displayName
                 }
                 addExtraUserInfo(newUser)
-                _onLogin()
             }).catch((error) => {
                 // Handle Errors here.
                 const errorCode = error.code;

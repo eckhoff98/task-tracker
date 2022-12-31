@@ -42,7 +42,7 @@ function App() {
 
 
   const [tasks, setTasks] = useState([])
-  const [loggedInState, setLoggedInState] = useState()
+  // const [loggedInState, setLoggedInState] = useState()
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -73,7 +73,7 @@ function App() {
     } else {
       setTasks([])
     }
-  }, [loggedInState, user])
+  }, [user])
 
 
   const addExtraUserInfo = async (info) => {
@@ -141,7 +141,7 @@ function App() {
   }
 
   const logout = () => {
-    setLoggedInState(false)
+    // setLoggedInState(false)
     auth.signOut()
   }
   // -------------------- End of (Helpers) --------------------
@@ -156,8 +156,8 @@ function App() {
           <Route path="/" element={<Home nav={nav} user={user} />} />
           <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
-          <Route path="/register" element={<Register _onLogin={() => setLoggedInState(true)} nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
+          <Route path="/login" element={<Login nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
+          <Route path="/register" element={<Register nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
           <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
           <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
           <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} />} />
