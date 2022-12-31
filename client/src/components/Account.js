@@ -20,10 +20,10 @@ export default function Account({ nav, user }) {
                     <Card.Header>Info</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            Name: {user.extraInfo.name}
+                            Name: {user ? user.extraInfo.name : "ERROR"}
                         </Card.Text>
                         <Card.Text>
-                            Email: {user.email}
+                            Email: {user ? user.email : "ERROR"}
                         </Card.Text>
                         <div className="btn-grid">
                             <Button variant="outline-primary" size="lg" as={Link} to="/change-user-info">Change info</Button>
