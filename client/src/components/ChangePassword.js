@@ -3,13 +3,13 @@ import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-export default function ChangePassword({ pb, nav }) {
+export default function ChangePassword({ user, nav }) {
 
     const [changePasswordData, setChangePasswordData] = useState({ oldPassword: "", password: "", passwordConfirm: "" })
     const [errorData, setErrorData] = useState({})
 
     useEffect(() => {
-        if (!pb.authStore.isValid) {
+        if (!user) {
             return nav("/login")
         }
     })
@@ -17,14 +17,14 @@ export default function ChangePassword({ pb, nav }) {
 
     const submit = async (e) => {
         e.preventDefault()
-        try {
-            const record = await pb.collection('users').update(pb.authStore.model.id, changePasswordData);
-            await pb.collection('users').authWithPassword(record.email, changePasswordData.password);
-            setErrorData("none")
-        } catch (err) {
-            setErrorData(err.data.data)
-            console.log(err.data.data)
-        }
+        // try {
+        //     const record = await pb.collection('users').update(pb.authStore.model.id, changePasswordData);
+        //     await pb.collection('users').authWithPassword(record.email, changePasswordData.password);
+        //     setErrorData("none")
+        // } catch (err) {
+        //     setErrorData(err.data.data)
+        //     console.log(err.data.data)
+        // }
     }
     return (
         <div className="container py-5 h-100">

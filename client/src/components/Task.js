@@ -69,7 +69,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                         </h2>
                     </div>
                     <div className="card-body">
-                        <p className="card-text"><BsPencilSquare /> {task.discription}</p>
+                        <p className="card-text"><BsPencilSquare /> {task.description}</p>
                         <p className="card-text"><BsFillCalendarEventFill /> {task.date} {task.time}</p>
                         <p className="card-text"><BsFillPinMapFill /> {task.location}</p>
                         <div className="btn-grid">

@@ -4,16 +4,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom';
 
-
-function NavBar({ logout, pb }) {
+function NavBar({ logout, user }) {
     const LoginRegister = () => {
-        if (pb.authStore.isValid) {
+        if (user) {
             return (
-                <><NavDropdown title={pb.authStore.model.name} id="collasible-nav-dropdown" >
-                    <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
-                </NavDropdown>
+                <>
+                    <NavDropdown title={user.extraInfo ? user.extraInfo.name : user.email} id="collasible-nav-dropdown" >
+                        <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
+                    </NavDropdown>
                 </>
             )
         } else {

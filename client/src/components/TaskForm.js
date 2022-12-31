@@ -32,15 +32,15 @@ const TaskForm = ({ task, form, _cancel }) => {
                     />
                 </FloatingLabel>
 
-                <FloatingLabel controlId="floatingInput" label="Discription" className="mb-3">
+                <FloatingLabel controlId="floatingInput" label="Description" className="mb-3">
                     <Form.Control
                         autoComplete="off"
                         className="form-control"
                         type="text"
-                        name="discription"
-                        placeholder="discription"
-                        value={taskData.discription ? taskData.discription : ""}
-                        onChange={(e) => setTaskData({ ...taskData, discription: e.target.value })}
+                        name="description"
+                        placeholder="description"
+                        value={taskData.description ? taskData.description : ""}
+                        onChange={(e) => setTaskData({ ...taskData, description: e.target.value })}
                     />
                 </FloatingLabel>
 

@@ -2,78 +2,79 @@ import { useEffect, useState } from "react"
 import Alert from "react-bootstrap/Alert"
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import GoogleSignin from "./GoogleSignin";
+
+//Firebase
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig"
 
 
-const Register = ({ pb, _onLogin, nav }) => {
+
+const Register = ({ nav, user, addExtraUserInfo }) => {
     const [registerData, setRegisterData] = useState({
-        username: "",
         email: "",
         password: "",
-        passwordConfirmation: "",
+        passwordConfirm: "",
     })
 
-    const [emailVal, setEmailVal] = useState("")
-    const [passwordVal, setPasswordVal] = useState("")
-    const [passwordConfirmVal, setPasswordConfirmVal] = useState("")
+    const [registerErr, setRegisterErr] = useState()
 
     useEffect(() => {
-        if (pb.authStore.isValid) {
+        if (user) {
             nav("/tasks")
         }
     })
 
-
     const addUser = async (e) => {
         e.preventDefault()
-        try {
-            await pb.collection('users').create({
-                email: registerData.email,
-                password: registerData.password,
-                passwordConfirm: registerData.passwordConfirm,
-                name: registerData.name
-            });
-            // login and redirect to home
-            await pb.collection('users').authWithPassword(registerData.email, registerData.password);
-            _onLogin()
-            return nav("/tasks")
-        } catch (err) {
-            errors(err)
+        if (registerData.name === "" || registerData.email === "" || registerData.password === "" || registerData.passwordConfirm === "") {
+            return setRegisterErr("Please fill in all fields.")
         }
-    }
+        if (registerData.password != registerData.passwordConfirm) {
+            return setRegisterErr("Password confirmation does not match.")
+        }
 
-    const errors = (err) => {
-        console.log(err.data)
-        if (!err.data.data) return
-        err.data.data.email ? setEmailVal(err.data.data.email.message) : setEmailVal("")
-        err.data.data.password ? setPasswordVal(err.data.data.password.message) : setPasswordVal("")
-        err.data.data.passwordConfirm ? setPasswordConfirmVal(err.data.data.passwordConfirm.message) : setPasswordConfirmVal("")
+        createUserWithEmailAndPassword(auth, registerData.email, registerData.password)
+            .then((userCredential) => {
+                // Signed in 
+                const newUser = {
+                    uid: userCredential.user.uid,
+                    name: registerData.name,
+                }
+                addExtraUserInfo(newUser)
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(error)
+                setRegisterErr(errorMessage)
+            })
     }
-
 
     return (
         <div className="container py-5 h-100">
             <div className="row d-flex align-items-center justify-content-center h-100">
                 <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                    <h1 className="mb-5 text-center">Register</h1>
                     <form onSubmit={(e) => addUser(e)}>
+                        {registerErr && <Alert variant="danger">{registerErr}</Alert>}
+
                         {/* <!-- name input --> */}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
-                            <Form.Control type="text" onChange={e => setRegisterData({ ...registerData, name: e.target.value })} />
+                            <Form.Control type="text" autoFocus onChange={e => setRegisterData({ ...registerData, name: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Email input --> */}
-                        {emailVal && <Alert variant="danger">{emailVal}</Alert>}
                         <FloatingLabel controlId="email" label="Email" className="mb-3">
                             <Form.Control type="email" onChange={e => setRegisterData({ ...registerData, email: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Password input --> */}
-                        {passwordVal && <Alert variant="danger">{passwordVal}</Alert>}
                         <FloatingLabel controlId="password" label="Password" className="mb-3">
                             <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, password: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Password input --> */}
-                        {passwordConfirmVal && <Alert variant="danger">{passwordConfirmVal}</Alert>}
                         <FloatingLabel controlId="passwordConfirm" label="Password Confirmation" className="mb-3">
                             <Form.Control type="password" onChange={e => setRegisterData({ ...registerData, passwordConfirm: e.target.value })} />
                         </FloatingLabel>
@@ -86,23 +87,16 @@ const Register = ({ pb, _onLogin, nav }) => {
                             </div>
                         </div>
 
-                        {/* <!-- Submit button --> */}
                         <div className="d-grid">
                             <button type="submit" className="btn btn-primary btn-lg btn-block">Register</button>
-
-                            <div className="divider d-flex align-items-center my-4">
-                                <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
-                            </div>
-
-                            <a className="btn btn-primary btn-lg" style={{ backgroundColor: "#3b5998" }} href="#!"
-                                role="button">
-                                <i className="fab fa-facebook-f me-2"></i>Continue with Facebook
-                            </a>
-                            <a className="btn btn-primary btn-lg " style={{ backgroundColor: "#55acee" }} href="#!"
-                                role="button">
-                                <i className="fab fa-twitter me-2"></i>Continue with Twitter</a>
                         </div>
                     </form>
+                    <div className="d-grid">
+                        <div className="divider align-items-center my-4">
+                            <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                        </div>
+                        <GoogleSignin addExtraUserInfo={addExtraUserInfo} setErrMsg={setRegisterErr} />
+                    </div>
                     <div className="d-flex justify-content-around align-items-center my-4">
                         Already have an account? &nbsp;
                         <a href="/login">Login</a>

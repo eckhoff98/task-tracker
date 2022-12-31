@@ -5,7 +5,7 @@ const TasksHeader = ({ _addTask }) => {
         <div className="tasksHeader">
             <button className='btn btn-primary btn-lg' type="button" onClick={() => _addTask({
                 name: "",
-                discription: "",
+                description: "",
                 location: "",
                 reminder: false
             })}>Add Task</button>

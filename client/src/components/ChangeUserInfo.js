@@ -4,31 +4,28 @@ import Form from "react-bootstrap/Form"
 import Alert from "react-bootstrap/Alert"
 
 
-export default function ChangeUserInfo({ pb, nav }) {
+export default function ChangeUserInfo({ user, nav }) {
 
     const [userInfo, setUserInfo] = useState({
-        name: pb.authStore.model.name,
-        username: pb.authStore.model.username,
-        // email: pb.authStore.model.email
+        name: user.extraInfo.name
     })
     const [errorData, setErrorData] = useState({})
 
     useEffect(() => {
-        if (!pb.authStore.isValid) {
+        if (!user) {
             return nav("/login")
         }
     })
 
     const submit = async (e) => {
         e.preventDefault()
-        try {
-            const record = await pb.collection('users').update(pb.authStore.model.id, userInfo);
-            // await pb.collection('users').authWithPassword(record.email, changePasswordData.password);
-            setErrorData("none")
-        } catch (err) {
-            setErrorData(err.data.data)
-            console.log(err.data.data)
-        }
+        // try {
+        //     const record = await pb.collection('users').update(pb.authStore.model.id, userInfo);
+        //     setErrorData("none")
+        // } catch (err) {
+        //     setErrorData(err.data.data)
+        //     console.log(err.data.data)
+        // }
     }
 
     return (
