@@ -37,6 +37,8 @@ export default function GoogleSignin({ addExtraUserInfo, setErrMsg }) {
 
 
     return (
-        <button className="btn btn-secondary btn-lg" onClick={() => signin()}>Google</button>
+        <>
+            <button className="btn btn-secondary btn-lg" style={{ backgroundColor: "White", color: "black" }} onClick={() => signin()}>Google</button>
+        </>
     )
 }

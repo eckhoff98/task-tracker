@@ -7,6 +7,9 @@ import { useEffect } from "react";
 
 export default function Account({ nav, user }) {
     useEffect(() => {
+        console.log(user)
+    })
+    useEffect(() => {
         if (!user) {
             return nav("/login")
         }
