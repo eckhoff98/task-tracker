@@ -8,11 +8,12 @@ function NavBar({ logout, user }) {
     const LoginRegister = () => {
         if (user) {
             return (
-                <><NavDropdown title={user.email} id="collasible-nav-dropdown" >
-                    <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
-                </NavDropdown>
+                <>
+                    <NavDropdown title={user.extraInfo ? user.extraInfo.name : user.email} id="collasible-nav-dropdown" >
+                        <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
+                    </NavDropdown>
                 </>
             )
         } else {

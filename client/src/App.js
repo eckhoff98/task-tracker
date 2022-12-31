@@ -57,34 +57,15 @@ function App() {
         getExtra()
         setUser(user)
         // setExtraUserInfo(getDoc())
-        getTasks()
+        // getTasks()
 
       } else {
         setUser(null)
-        setTasks([])
-
+        // setTasks([])
       }
     })
-
-
+    console.log(user)
   }, [])
-
-  useEffect(() => {
-    // Test
-    // const getSubTasks = async () => {
-    //   // console.log(user)
-    //   try {
-    //     if (!user) return
-    //     const userDoc = doc(db, "users", user.uid)
-    //     const tasksSubCollection = collection(userDoc, "tasks")
-    //     const data = await getDocs(tasksSubCollection)
-    //     setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // }
-    // getSubTasks()
-  }, [user])
 
   useEffect(() => {
     if (user) {
@@ -123,14 +104,15 @@ function App() {
   }
 
   const addTask = async (task) => {
-
-    if (!user) return
-    const userDoc = doc(db, "users", user.uid)
-    const tasksSubCollection = collection(userDoc, "tasks")
-    const record = await addDoc(tasksSubCollection, { ...task, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() })
-    setTasks([...tasks, { ...task, freshTask: true, id: record.id, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() }])
-
-
+    try {
+      if (!user) return
+      const userDoc = doc(db, "users", user.uid)
+      const tasksSubCollection = collection(userDoc, "tasks")
+      const record = await addDoc(tasksSubCollection, { ...task, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() })
+      setTasks([...tasks, { ...task, freshTask: true, id: record.id, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() }])
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const updateTask = async (task) => {
@@ -160,23 +142,21 @@ function App() {
 
   const logout = () => {
     setLoggedInState(false)
-    // pb.authStore.clear();
     auth.signOut()
   }
   // -------------------- End of (Helpers) --------------------
 
   return (
     <div className="App">
-      <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" ></link>
+
       <NavBar appName={"Task Tracker"} logout={logout} user={user} />
 
       <Container className='mainBody'>
         <Routes>
-
           <Route path="/" element={<Home nav={nav} user={user} />} />
           <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} nav={nav} user={user} />} />
+          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
           <Route path="/register" element={<Register _onLogin={() => setLoggedInState(true)} nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
           <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
           <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />

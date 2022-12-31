@@ -5,12 +5,12 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
 //Firebase
-import { signInWithEmailAndPassword, } from "firebase/auth";
-import { auth } from "../firebaseConfig"
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth, provider } from "../firebaseConfig"
 
 // TODO: add hashing for passwords
 
-const Login = ({ _onLogin, nav, user }) => {
+const Login = ({ _onLogin, nav, user, addExtraUserInfo }) => {
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
@@ -37,6 +37,33 @@ const Login = ({ _onLogin, nav, user }) => {
                 setLoginErr(errorMessage)
             });
         _onLogin()
+    }
+
+    const GoogleSignin = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                console.log(user.displayName)
+                const newUser = {
+                    uid: user.uid,
+                    name: user.displayName
+                }
+                addExtraUserInfo(newUser)
+                _onLogin()
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                // ...
+            });
     }
 
 
@@ -74,13 +101,8 @@ const Login = ({ _onLogin, nav, user }) => {
                                 <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                             </div>
 
-                            <a className="btn btn-primary btn-lg" style={{ backgroundColor: "#3b5998" }} href="#!"
-                                role="button">
-                                <i className="fab fa-facebook-f me-2"></i>Continue with Facebook
-                            </a>
-                            <a className="btn btn-primary btn-lg " style={{ backgroundColor: "#55acee" }} href="#!"
-                                role="button">
-                                <i className="fab fa-twitter me-2"></i>Continue with Twitter</a>
+                            <button className="btn btn-secondary" onClick={() => GoogleSignin()}>Google</button>
+
                         </div>
                         <div className="d-flex justify-content-around align-items-center my-4">
                             Don't have an account yet? &nbsp;
