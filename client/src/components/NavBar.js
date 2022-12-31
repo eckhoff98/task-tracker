@@ -4,16 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom';
 
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "../firebaseConfig"
-import { useState } from 'react';
-
-
-
-
-
-
-function NavBar({ logout, pb, user }) {
+function NavBar({ logout, user }) {
     const LoginRegister = () => {
         if (user) {
             return (

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
 
-export default function Account({ pb, nav, user }) {
+export default function Account({ nav, user }) {
     useEffect(() => {
         if (!user) {
             return nav("/login")
@@ -26,9 +26,9 @@ export default function Account({ pb, nav, user }) {
                             Email: {user.email}
                         </Card.Text>
                         <div className="btn-grid">
-                            {/* <Button variant="outline-primary" size="lg" as={Link} to="/change-user-info">Change info</Button>
+                            <Button variant="outline-primary" size="lg" as={Link} to="/change-user-info">Change info</Button>
                             <Button variant="outline-primary" size="lg" as={Link} to="/change-password">Change password</Button>
-                            <Button variant="outline-danger" size="lg" as={Link} to="/change-password">Delete Account</Button> */}
+                            <Button variant="outline-danger" size="lg" as={Link} to="/">Delete Account</Button>
                         </div>
                     </Card.Body>
                 </Card>

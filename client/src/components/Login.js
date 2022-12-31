@@ -19,15 +19,13 @@ const Login = ({ _onLogin, nav, user }) => {
     const [loginErr, setLoginErr] = useState()
 
     useEffect(() => {
-        // if (pb.authStore.isValid) {
-        //     nav("/tasks")
-        // }
         if (user) {
             nav("/tasks")
         }
     })
 
     const login = async (e) => {
+        e.preventDefault()
         if (loginData.email === "" || loginData.password === "") {
             return setLoginErr("Please fill in all fields.")
         }

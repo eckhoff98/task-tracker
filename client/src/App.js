@@ -3,8 +3,10 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import Container from 'react-bootstrap/Container';
-import PocketBase from "pocketbase"
+// import PocketBase from "pocketbase"
 import { useNavigate } from "react-router-dom"
+
+import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
 import { db } from "./firebaseConfig"
@@ -28,14 +30,15 @@ import ChangeUserInfo from './components/ChangeUserInfo';
 function App() {
   axios.defaults.withCredentials = true
   const nav = useNavigate();
-  const pb = new PocketBase('http://127.0.0.1:8090');
+  // const pb = new PocketBase('http://127.0.0.1:8090');
 
   // Firebase
-  const tasksCollection = collection(db, "tasks")
+  // const tasksSubCollection = db.collection('users').doc(user.uid).collection('tasks').doc('message1');
   const userCollection = collection(db, "users")
+  const tasksCollection = collection(db, "tasks")
 
   const [user, setUser] = useState(null)
-
+  const [tasksSubCollection, setTasksSubCollection] = useState([])
 
 
   const [tasks, setTasks] = useState([])
@@ -48,17 +51,40 @@ function App() {
           const docRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(docRef)
 
-          console.log(docSnap.data())
+          // console.log(docSnap.data())
           user.extraInfo = docSnap.data()
         }
         getExtra()
         setUser(user)
         // setExtraUserInfo(getDoc())
+        getTasks()
+
       } else {
         setUser(null)
+        setTasks([])
+
       }
     })
+
+
   }, [])
+
+  useEffect(() => {
+    // Test
+    // const getSubTasks = async () => {
+    //   // console.log(user)
+    //   try {
+    //     if (!user) return
+    //     const userDoc = doc(db, "users", user.uid)
+    //     const tasksSubCollection = collection(userDoc, "tasks")
+    //     const data = await getDocs(tasksSubCollection)
+    //     setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // }
+    // getSubTasks()
+  }, [user])
 
   useEffect(() => {
     if (user) {
@@ -66,7 +92,7 @@ function App() {
     } else {
       setTasks([])
     }
-  }, [loggedInState])
+  }, [loggedInState, user])
 
 
   const addExtraUserInfo = async (info) => {
@@ -74,79 +100,62 @@ function App() {
       name: info.name
     })
   }
-  // Helper Functions 
-  const getCurrentDate = () => {
-    // convert Javascript Date to HTML Input
-    const now = new Date();
-    const day = ("0" + now.getDate()).slice(-2);
-    const month = ("0" + (now.getMonth() + 1)).slice(-2);
-    const hour = ("0" + (now.getHours())).slice(-2);
-    const min = ("0" + (now.getMinutes())).slice(-2);
-    const today = now.getFullYear() + "-" + month + "-" + day
-    console.log("today " + today)
-    return today
-  }
-
-  const getCurrentTime = () => {
-    // convert Javascript Date to HTML Input
-    const now = new Date();
-    const hour = ("0" + (now.getHours())).slice(-2);
-    const min = ("0" + (now.getMinutes())).slice(-2);
-    const time = `${hour}:${min}`
-    return time
-  }
 
   const getTasks = async () => {
-    // try {
-    //   const list = await pb.collection('tasks').getList(1, 100);
-    //   setTasks([...list.items])
-    // } catch (err) { console.log(err) }
-    // Firebase
-    const data = await getDocs(tasksCollection)
-    const tasksList = data.docs.map((item) => ({ ...item.data(), id: item.id }))
-    setTasks(tasksList)
-    // console.log(tasksList)
+    try {
+      if (!user) return
+      console.log("DID THING")
+      const userDoc = doc(db, "users", user.uid)
+      const tasksSubCollection = collection(userDoc, "tasks")
+      const data = await getDocs(tasksSubCollection)
+      setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
+
+      //testing security 
+      const userDoc2 = doc(db, "users", "UlEw0lHqVuTvIJoYN1STyXxt3qC2")
+      const tasksSubCollection2 = collection(userDoc2, "tasks")
+      const data2 = await getDocs(tasksSubCollection2)
+      console.log(data2.docs.map((item) => ({ ...item.data(), id: item.id })))
+
+
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const addTask = async (task) => {
-    // try {
-    //   const record = await pb.collection('tasks').create({
-    //     ...task,
-    //     user_id: pb.authStore.model.id,
-    //     time: getCurrentTime(),
-    //     date: getCurrentDate()
-    //   });
-    //   setTasks([...tasks, { ...record, freshTask: true }])
-    //   // I absolutely cannot figure out why this doesnt work!
-    //   // setTasks([{ ...record, freshTask: true }, newTasks])
-    // } catch (err) { console.log(err) }
 
-    // Firebase
-    const record = await addDoc(tasksCollection, { ...task, time: getCurrentTime(), date: getCurrentDate() })
-    console.log(record)
-    setTasks([...tasks, { ...task, freshTask: true, id: record.id, time: getCurrentTime(), date: getCurrentDate() }])
+    if (!user) return
+    const userDoc = doc(db, "users", user.uid)
+    const tasksSubCollection = collection(userDoc, "tasks")
+    const record = await addDoc(tasksSubCollection, { ...task, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() })
+    setTasks([...tasks, { ...task, freshTask: true, id: record.id, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() }])
+
+
   }
 
   const updateTask = async (task) => {
-    // try {
-    //   const record = await pb.collection('tasks').update(task.id, task);
-    //   setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
-    // } catch (err) { console.log(err) }
-    // Firebase
-    const tasksDoc = doc(db, "tasks", task.id)
-    setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
-    await updateDoc(tasksDoc, task)
+    if (task.name === "") task.name = "New Task"
+    try {
+      if (!user) return
+      const userDoc = doc(db, "users", user.uid)
+      const taskDoc = doc(userDoc, "tasks", task.id)
+      setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+      await updateDoc(taskDoc, task)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const deleteTask = async (task) => {
-    // try {
-    //   const record = await pb.collection('tasks').delete(task.id);
-    //   setTasks([...tasks.filter((t) => t.id != task.id)])
-    // } catch (err) { console.log(err) }
-    // Firebase
-    const tasksDoc = doc(db, "tasks", task.id)
-    setTasks([...tasks.filter((t) => t.id != task.id)])
-    await deleteDoc(tasksDoc, task.id)
+    try {
+      if (!user) return
+      const userDoc = doc(db, "users", user.uid)
+      const taskDoc = doc(userDoc, "tasks", task.id)
+      setTasks([...tasks.filter((t) => t.id != task.id)])
+      await deleteDoc(taskDoc, task.id)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const logout = () => {
@@ -159,19 +168,19 @@ function App() {
   return (
     <div className="App">
       <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" ></link>
-      <NavBar appName={"Task Tracker"} logout={logout} pb={pb} user={user} />
+      <NavBar appName={"Task Tracker"} logout={logout} user={user} />
 
       <Container className='mainBody'>
         <Routes>
 
-          <Route path="/" element={<Home pb={pb} nav={nav} user={user} />} />
-          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} pb={pb} nav={nav} user={user} />} />
+          <Route path="/" element={<Home nav={nav} user={user} />} />
+          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} pb={pb} nav={nav} user={user} />} />
-          <Route path="/register" element={<Register pb={pb} _onLogin={() => setLoggedInState(true)} nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
-          <Route path="/account" element={<Account pb={pb} logout={logout} nav={nav} user={user} />} />
-          <Route path="/change-password" element={<ChangePassword pb={pb} nav={nav} />} />
-          <Route path="/change-user-info" element={<ChangeUserInfo pb={pb} nav={nav} />} />
+          <Route path="/login" element={<Login _onLogin={() => setLoggedInState(true)} nav={nav} user={user} />} />
+          <Route path="/register" element={<Register _onLogin={() => setLoggedInState(true)} nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
+          <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
+          <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
+          <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} />} />
 
         </Routes>
       </Container>
