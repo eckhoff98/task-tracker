@@ -50,21 +50,15 @@ function App() {
         const getExtra = async () => {
           const docRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(docRef)
-
-          // console.log(docSnap.data())
           user.extraInfo = docSnap.data()
         }
         getExtra()
         setUser(user)
-        // setExtraUserInfo(getDoc())
-        // getTasks()
 
       } else {
         setUser(null)
-        // setTasks([])
       }
     })
-    console.log(user)
   }, [])
 
   useEffect(() => {
@@ -85,19 +79,10 @@ function App() {
   const getTasks = async () => {
     try {
       if (!user) return
-      console.log("DID THING")
       const userDoc = doc(db, "users", user.uid)
       const tasksSubCollection = collection(userDoc, "tasks")
       const data = await getDocs(tasksSubCollection)
       setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
-
-      //testing security 
-      const userDoc2 = doc(db, "users", "UlEw0lHqVuTvIJoYN1STyXxt3qC2")
-      const tasksSubCollection2 = collection(userDoc2, "tasks")
-      const data2 = await getDocs(tasksSubCollection2)
-      console.log(data2.docs.map((item) => ({ ...item.data(), id: item.id })))
-
-
     } catch (err) {
       console.log(err)
     }
