@@ -66,7 +66,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                         />
                     </FloatingLabel>
                     {/* Reminder Button */}
-                    <Button className="mb-3" type="button" variant="outline-primary" style={{ padding: "0" }} onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder<ReminderIcon /></Button>
+                    <Button className="mb-3" type="button" variant="outline-primary" style={{ padding: "0" }} onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}>Reminder(NOT YET IMPLIMENTED)<ReminderIcon /></Button>
                 </div>
 
                 <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">
