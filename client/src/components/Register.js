@@ -61,7 +61,7 @@ const Register = ({ nav, user, addExtraUserInfo }) => {
 
                         {/* <!-- name input --> */}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
-                            <Form.Control type="text" autoFocus onChange={e => setRegisterData({ ...registerData, name: e.target.value })} />
+                            <Form.Control type="text" onChange={e => setRegisterData({ ...registerData, name: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Email input --> */}

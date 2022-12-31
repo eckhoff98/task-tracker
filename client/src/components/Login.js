@@ -51,7 +51,7 @@ const Login = ({ nav, user, addExtraUserInfo }) => {
                         {loginErr && <Alert variant="danger">{loginErr}</Alert>}
                         {/* <!-- Email input --> */}
                         <FloatingLabel controlId="email" label="Email" className="mb-3">
-                            <Form.Control type="email" autoFocus onChange={e => setLoginData({ ...loginData, email: e.target.value })} />
+                            <Form.Control type="email" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />
                         </FloatingLabel>
 
                         {/* <!-- Password input --> */}
