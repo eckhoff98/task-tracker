@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore"
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 
 // Store this information in an env file
@@ -16,11 +16,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-
 export const provider = new GoogleAuthProvider();
 
 export const auth = getAuth(app);
 
 export const db = getFirestore(app)
+
 
 

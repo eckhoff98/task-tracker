@@ -30,7 +30,7 @@ const Register = ({ nav, user, addExtraUserInfo }) => {
         if (registerData.name === "" || registerData.email === "" || registerData.password === "" || registerData.passwordConfirm === "") {
             return setRegisterErr("Please fill in all fields.")
         }
-        if (registerData.password != registerData.passwordConfirm) {
+        if (registerData.password !== registerData.passwordConfirm) {
             return setRegisterErr("Password confirmation does not match.")
         }
 

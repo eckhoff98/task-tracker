@@ -30,7 +30,6 @@ import ChangeUserInfo from './components/ChangeUserInfo';
 function App() {
   axios.defaults.withCredentials = true
   const nav = useNavigate();
-  // const pb = new PocketBase('http://127.0.0.1:8090');
 
   // Firebase
   // const tasksSubCollection = db.collection('users').doc(user.uid).collection('tasks').doc('message1');
@@ -118,7 +117,7 @@ function App() {
       if (!user) return
       const userDoc = doc(db, "users", user.uid)
       const taskDoc = doc(userDoc, "tasks", task.id)
-      setTasks([...tasks.filter((t) => t.id != task.id)])
+      setTasks([...tasks.filter((t) => t.id !== task.id)])
       await deleteDoc(taskDoc, task.id)
     } catch (err) {
       console.log(err)

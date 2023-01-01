@@ -28,7 +28,9 @@ function NavBar({ logout, user }) {
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand eventKey="10" as={Link} to="/">Task Tracker</Navbar.Brand>
+                <Navbar.Brand >
+                    <Nav.Link eventKey="10" as={Link} to="/">Task Tracker</Nav.Link>
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
