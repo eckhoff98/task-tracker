@@ -12,7 +12,7 @@ import { getCurrentDate, getCurrentTime } from './time';
 import { db } from "./firebaseConfig"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "./firebaseConfig"
+import { auth, requestPermission } from "./firebaseConfig"
 
 
 // Components
@@ -53,7 +53,7 @@ function App() {
         }
         getExtra()
         setUser(user)
-
+        requestPermission()
       } else {
         setUser(null)
       }

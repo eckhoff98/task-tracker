@@ -1,4 +1,4 @@
-
+import { requestPermission } from "../firebaseConfig"
 
 const TasksHeader = ({ _addTask }) => {
     return (
@@ -9,7 +9,7 @@ const TasksHeader = ({ _addTask }) => {
                 location: "",
                 reminder: false
             })}>Add Task</button>
-            <button className="btn btn-lg btn-outline-primary">Button</button>
+            <button className="btn btn-lg btn-outline-primary" onClick={() => requestPermission()}>Notification</button>
             <button className="btn btn-lg btn-outline-primary">Button</button>
         </div>
     )
