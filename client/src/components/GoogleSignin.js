@@ -1,6 +1,6 @@
 import { signInWithRedirect, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { auth, provider } from "../firebaseConfig"
+import { auth, provider } from "../firebase-config"
 
 
 

@@ -6,7 +6,7 @@ import GoogleSignin from "./GoogleSignin";
 
 //Firebase
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig"
+import { auth } from "../firebase-config"
 
 
 

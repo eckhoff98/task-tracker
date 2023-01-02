@@ -9,10 +9,10 @@ import { useNavigate } from "react-router-dom"
 import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
-import { db } from "./firebaseConfig"
+import { db } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-import { auth, requestPermission } from "./firebaseConfig"
+import { auth, requestPermission } from "./firebase-config"
 
 
 // Components

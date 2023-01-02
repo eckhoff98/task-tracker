@@ -1,4 +1,4 @@
-import { requestPermission } from "../firebaseConfig"
+import { requestPermission } from "../firebase-config"
 
 const TasksHeader = ({ _addTask }) => {
     return (

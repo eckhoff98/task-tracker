@@ -7,7 +7,7 @@ import GoogleSignin from "./GoogleSignin";
 
 //Firebase
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig"
+import { auth } from "../firebase-config"
 
 // TODO: add hashing for passwords
 
