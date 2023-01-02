@@ -1,5 +1,5 @@
 import './App.css';
-import axios from "axios"
+// import axios from "axios"
 import { useState, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import Container from 'react-bootstrap/esm/Container';
@@ -9,10 +9,9 @@ import { useNavigate } from "react-router-dom"
 import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
-import { db } from "./firebase-config"
+import { db, auth, requestPermission } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-import { auth, requestPermission } from "./firebase-config"
 
 
 // Components
@@ -28,16 +27,16 @@ import ChangeUserInfo from './components/ChangeUserInfo';
 
 
 function App() {
-  axios.defaults.withCredentials = true
+  // axios.defaults.withCredentials = true
   const nav = useNavigate();
 
   // Firebase
   // const tasksSubCollection = db.collection('users').doc(user.uid).collection('tasks').doc('message1');
-  const userCollection = collection(db, "users")
-  const tasksCollection = collection(db, "tasks")
+  // const userCollection = collection(db, "users")
+  // const tasksCollection = collection(db, "tasks")
 
   const [user, setUser] = useState(null)
-  const [tasksSubCollection, setTasksSubCollection] = useState([])
+  // const [tasksSubCollection, setTasksSubCollection] = useState([])
 
 
   const [tasks, setTasks] = useState([])
