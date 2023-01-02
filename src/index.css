@@ -1,0 +1,110 @@
+.mainBody {
+    margin-top: 2em;
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1em;
+}
+
+.tasks {
+    display: grid;
+    gap: 2em;
+}
+
+.tasksHeader {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1em;
+}
+
+/* .taskForm {
+    margin: 1em;
+} */
+
+.margin-1em {
+    margin: 1em;
+}
+
+input[type] {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 4px;
+}
+
+input[type]:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+input[type] {
+    color-scheme: dark;
+}
+
+.taskFormTime {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+}
+
+.addTaskForm {
+    margin-top: 1em;
+}
+
+.addTask {
+    padding: 1em;
+}
+
+.reminder {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+
+}
+
+.addTaskButtons {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.task {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 1em;
+    padding: 1em;
+    gap: 1em;
+    cursor: pointer;
+}
+
+.taskLess {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.taskLessInfo {
+    text-align: right;
+}
+
+.taskEditButtons {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* .task-expanded {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.task-edit {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 1em;
+    padding: 1em;
+    cursor: pointer;
+} */
+
+.hideLable {
+    display: none;
+}
