@@ -1,6 +1,6 @@
 # TaskTracker
 My first react app for tracking tasks.
-Link to test out the app: https://eckhoff98.github.io/task-tracker
+Link to test out the app: https://fireshiptutorial-71e6c.web.app
 ## Frontend
 The frontend is a simple React project created in Node with create-react-app.
 ## Backend
