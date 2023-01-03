@@ -2,12 +2,18 @@ import { Link } from "react-router-dom"
 import { useEffect } from "react"
 import Button from "react-bootstrap/esm/Button"
 
-const Home = ({ nav, user }) => {
+// Firebase
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase-config"
+
+const Home = ({ nav }) => {
+
     useEffect(() => {
-        if (user) {
-            nav("/tasks")
-        }
-    })
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (user) return nav("/tasks")
+        })
+    }, [])
 
     return (
         <>
