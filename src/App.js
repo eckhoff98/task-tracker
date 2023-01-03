@@ -120,7 +120,7 @@ function App() {
       <NavBar appName={"Task Tracker"} logout={logout} />
 
       <Container className='mainBody'>
-        <Suspense>
+        <Suspense fallback={<h1>LOADING...</h1>}>
           <Routes>
             <Route path="/" element={<Home nav={nav} />} />
 
