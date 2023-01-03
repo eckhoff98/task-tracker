@@ -27,27 +27,17 @@ import ChangeUserInfo from './components/ChangeUserInfo';
 
 
 function App() {
-  const nav = useNavigate();
-
-  const [user, setUser] = useState(null)
-
   const [tasks, setTasks] = useState([])
 
-
+  const [user, setUser] = useState(null)
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const getExtra = async () => {
-          const docRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(docRef)
-          user.extraInfo = docSnap.data()
-        }
-        getExtra()
-        setUser(user)
-        requestPermission()
-      } else {
-        setUser(null)
-      }
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return setUser(null)
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef)
+      user.extraInfo = docSnap.data()
+      setUser(user)
+      requestPermission()
     })
   }, [])
 
@@ -59,6 +49,7 @@ function App() {
     }
   }, [user])
 
+  const nav = useNavigate();
 
   const addExtraUserInfo = async (info) => {
     if (user.extraInfo.name) return
@@ -133,12 +124,14 @@ function App() {
 
       <Container className='mainBody'>
         <Routes>
-          <Route path="/" element={<Home nav={nav} user={user} />} />
-          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
+          <Route path="/" element={<Home nav={nav} />} />
+          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
-          <Route path="/register" element={<Register nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
-          <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
+
+          {/* Account Info */}
+          <Route path="/login" element={<Login nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
+          <Route path="/register" element={<Register nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
+          <Route path="/account" element={<Account logout={logout} nav={nav} />} />
           <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
           <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} />} />
         </Routes>

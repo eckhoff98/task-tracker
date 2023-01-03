@@ -2,18 +2,26 @@ import ChangePassword from "./ChangePassword"
 import Button from 'react-bootstrap/esm/Button';
 import Card from 'react-bootstrap/esm/Card';
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
+// Firebase
+import { doc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase-config"
 
 
-export default function Account({ nav, user }) {
+export default function Account({ nav }) {
+    const [user, setUser] = useState(null)
     useEffect(() => {
-        console.log(user)
-    })
-    useEffect(() => {
-        if (!user) {
-            return nav("/login")
-        }
-    })
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (!user) return nav("/login")
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef)
+            user.extraInfo = docSnap.data()
+            setUser(user)
+        })
+    }, [])
 
     return (
         <>
@@ -23,10 +31,10 @@ export default function Account({ nav, user }) {
                     <Card.Header>Info</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            Name: {user ? user.extraInfo.name : "ERROR"}
+                            Name: {user ? user.extraInfo.name : ""}
                         </Card.Text>
                         <Card.Text>
-                            Email: {user ? user.email : "ERROR"}
+                            Email: {user ? user.email : ""}
                         </Card.Text>
                         <div className="btn-grid">
                             <Button variant="outline-primary" size="lg" as={Link} to="/change-user-info">Change info</Button>

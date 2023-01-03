@@ -1,14 +1,31 @@
 import Task from "./Task"
 import TasksHeader from "./TasksHeader"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+
+// Firebase
+import { doc, setDoc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase-config"
 
 
-const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, nav, user }) => {
+const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, nav }) => {
+    const [user, setUser] = useState(null)
     useEffect(() => {
-        if (!user) {
-            return nav("/")
-        }
-    })
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (!user) return nav("/")
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef)
+            user.extraInfo = docSnap.data()
+            setUser(user)
+        })
+    }, [])
+
+    // useEffect(() => {
+    //     if (!user) {
+    //         return nav("/")
+    //     }
+    // })
 
     return (
         <>

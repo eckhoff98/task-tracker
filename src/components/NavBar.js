@@ -16,7 +16,7 @@ function NavBar({ logout }) {
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             console.log("onAuthStateChanged")
-            if (!user) return
+            if (!user) return setUser(null)
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef)
             user.extraInfo = docSnap.data()

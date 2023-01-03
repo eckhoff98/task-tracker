@@ -3,17 +3,26 @@ import Alert from "react-bootstrap/esm/Alert"
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Form from 'react-bootstrap/esm/Form';
 
-export default function ChangePassword({ user, nav }) {
+// Firebase
+import { doc, setDoc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase-config"
+
+export default function ChangePassword({ nav }) {
+    const [user, setUser] = useState(null)
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (!user) return nav("/login")
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef)
+            user.extraInfo = docSnap.data()
+            setUser(user)
+        })
+    }, [])
 
     const [changePasswordData, setChangePasswordData] = useState({ oldPassword: "", password: "", passwordConfirm: "" })
     const [errorData, setErrorData] = useState({})
-
-    useEffect(() => {
-        if (!user) {
-            return nav("/login")
-        }
-    })
-
 
     const submit = async (e) => {
         e.preventDefault()

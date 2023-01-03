@@ -11,10 +11,10 @@ import { db, auth } from "../firebase-config"
 
 export default function ChangeUserInfo({ nav }) {
     // const [userInfo, setUserInfo] = useState({})
-    const [user, setUser] = useState(null)
     const [name, setName] = useState("")
 
 
+    const [user, setUser] = useState(null)
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             console.log("onAuthStateChanged")

@@ -4,13 +4,20 @@ import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Form from 'react-bootstrap/esm/Form';
 import GoogleSignin from "./GoogleSignin";
 
-//Firebase
-import { createUserWithEmailAndPassword } from "firebase/auth";
+
+// Firebase
+import { onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase-config"
 
 
+const Register = ({ nav, addExtraUserInfo }) => {
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (user) return nav("/tasks")
+        })
+    }, [])
 
-const Register = ({ nav, user, addExtraUserInfo }) => {
     const [registerData, setRegisterData] = useState({
         email: "",
         password: "",
@@ -19,11 +26,6 @@ const Register = ({ nav, user, addExtraUserInfo }) => {
 
     const [registerErr, setRegisterErr] = useState()
 
-    useEffect(() => {
-        if (user) {
-            nav("/tasks")
-        }
-    })
 
     const addUser = async (e) => {
         e.preventDefault()
