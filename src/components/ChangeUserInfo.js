@@ -8,11 +8,8 @@ import { doc, setDoc, getDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "../firebase-config"
 
-
 export default function ChangeUserInfo({ nav }) {
-    // const [userInfo, setUserInfo] = useState({})
     const [name, setName] = useState("")
-
 
     const [user, setUser] = useState(null)
     useEffect(() => {
@@ -27,9 +24,7 @@ export default function ChangeUserInfo({ nav }) {
         })
     }, [])
 
-
     const [errorData, setErrorData] = useState({})
-
 
     const submit = async (e) => {
         try {
@@ -52,23 +47,11 @@ export default function ChangeUserInfo({ nav }) {
                         {/* {loginVal && <Alert variant="danger">{loginVal}</Alert>} */}
                         {(errorData === "none") && <Alert variant="success">Info changed</Alert>}
 
-                        {/* Have to use a request and token to change email. */}
-                        {/* <!-- Email input --> */}
-                        {/* {errorData && (errorData.email && <Alert variant="danger">{errorData.email.message}</Alert>)}
-                        <FloatingLabel controlId="email" label="Email" className="mb-3">
-                            <Form.Control type="email" value={userInfo.email} onChange={e => setUserInfo({ ...userInfo, email: e.target.value })} />
-                        </FloatingLabel> */}
-
                         {/* <!-- Name input --> */}
                         {errorData && (errorData.name && <Alert variant="danger">{errorData.name.message}</Alert>)}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
                             <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
                         </FloatingLabel>
-                        {/* <!-- Username input --> */}
-                        {/* {errorData && (errorData.username && <Alert variant="danger">{errorData.username.message}</Alert>)}
-                        <FloatingLabel controlId="username" label="Name" className="mb-3">
-                            <Form.Control type="text" value={userInfo.username} onChange={e => setUserInfo({ ...userInfo, username: e.target.value })} />
-                        </FloatingLabel> */}
 
                         {/* <!-- Submit button --> */}
                         <div className="d-grid">
