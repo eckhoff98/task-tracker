@@ -1,9 +1,7 @@
 import './App.css';
-// import axios from "axios"
-import { useState, useEffect } from "react"
+import { useState, useEffect, lazy, Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
 import Container from 'react-bootstrap/esm/Container';
-// import PocketBase from "pocketbase"
 import { useNavigate } from "react-router-dom"
 
 import { getCurrentDate, getCurrentTime } from './time';
@@ -15,16 +13,15 @@ import { onAuthStateChanged } from "firebase/auth"
 
 
 // Components
-import Home from "./components/Home"
-import Tasks from "./components/Tasks"
-import NavBar from './components/NavBar';
-import Login from "./components/Login"
-import Register from "./components/Register"
-import About from './components/About';
-import ChangePassword from './components/ChangePassword';
-import Account from './components/Account';
-import ChangeUserInfo from './components/ChangeUserInfo';
-
+const Home = lazy(() => import("./components/Home"))
+const Tasks = lazy(() => import("./components/Tasks"))
+const NavBar = lazy(() => import("./components/NavBar"))
+const Login = lazy(() => import("./components/Login"))
+const Register = lazy(() => import("./components/Register"))
+const About = lazy(() => import("./components/About"))
+const ChangePassword = lazy(() => import("./components/ChangePassword"))
+const Account = lazy(() => import("./components/Account"))
+const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 
 function App() {
   const [tasks, setTasks] = useState([])
@@ -123,18 +120,21 @@ function App() {
       <NavBar appName={"Task Tracker"} logout={logout} />
 
       <Container className='mainBody'>
-        <Routes>
-          <Route path="/" element={<Home nav={nav} />} />
-          <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
-          <Route path="/about" element={<About />} />
+        <Suspense>
+          <Routes>
+            <Route path="/" element={<Home nav={nav} />} />
 
-          {/* Account Info */}
-          <Route path="/login" element={<Login nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
-          <Route path="/register" element={<Register nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
-          <Route path="/account" element={<Account logout={logout} nav={nav} />} />
-          <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
-          <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} />} />
-        </Routes>
+            <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
+            <Route path="/about" element={<About />} />
+
+            {/* Account Info */}
+            <Route path="/login" element={<Login nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
+            <Route path="/register" element={<Register nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
+            <Route path="/account" element={<Account logout={logout} nav={nav} />} />
+            <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
+            <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} />} />
+          </Routes>
+        </Suspense>
       </Container>
 
     </div>
