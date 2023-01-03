@@ -50,66 +50,50 @@ function App() {
 
   const addExtraUserInfo = async (info) => {
     if (user.extraInfo.name) return
-    try {
-      await setDoc(doc(db, "users", info.uid), {
-        name: info.name
-      })
-    } catch (err) {
-      console.log(err)
-    }
+    await setDoc(doc(db, "users", info.uid), {
+      name: info.name
+    }).catch(err => console.log(err))
   }
 
   const getTasks = async () => {
-    try {
-      if (!user) return
-      const userDoc = doc(db, "users", user.uid)
-      const tasksSubCollection = collection(userDoc, "tasks")
-      const data = await getDocs(tasksSubCollection)
-      setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
-    } catch (err) {
-      console.log(err)
-    }
+    if (!user) return
+    const userDoc = doc(db, "users", user.uid)
+    const tasksSubCollection = collection(userDoc, "tasks")
+    const data = await getDocs(tasksSubCollection).catch(err => console.log(err))
+    setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
   }
 
   const addTask = async (task) => {
-    try {
-      if (!user) return
-      const userDoc = doc(db, "users", user.uid)
-      const tasksSubCollection = collection(userDoc, "tasks")
-      const record = await addDoc(tasksSubCollection, { ...task, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() })
-      setTasks([...tasks, { ...task, freshTask: true, id: record.id, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() }])
-    } catch (err) {
-      console.log(err)
-    }
+    if (!user) return
+    const userDoc = doc(db, "users", user.uid)
+    const tasksSubCollection = collection(userDoc, "tasks")
+    const record = await addDoc(tasksSubCollection, {
+      ...task,
+      uid: user.uid,
+      time: getCurrentTime(),
+      date: getCurrentDate()
+    }).catch(err => console.log(err))
+    setTasks([...tasks, { ...task, freshTask: true, id: record.id, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() }])
   }
 
   const updateTask = async (task) => {
     if (task.name === "") task.name = "New Task"
-    try {
-      if (!user) return
-      const userDoc = doc(db, "users", user.uid)
-      const taskDoc = doc(userDoc, "tasks", task.id)
-      setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
-      await updateDoc(taskDoc, task)
-    } catch (err) {
-      console.log(err)
-    }
+    if (!user) return
+    const userDoc = doc(db, "users", user.uid)
+    const taskDoc = doc(userDoc, "tasks", task.id)
+    setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+    await updateDoc(taskDoc, task).catch(err => console.log(err))
   }
 
   const deleteTask = async (task) => {
-    try {
-      if (!user) return
-      const userDoc = doc(db, "users", user.uid)
-      const taskDoc = doc(userDoc, "tasks", task.id)
-      setTasks([...tasks.filter((t) => t.id !== task.id)])
-      await deleteDoc(taskDoc, task.id)
-    } catch (err) {
-      console.log(err)
-    }
+    if (!user) return
+    const userDoc = doc(db, "users", user.uid)
+    const taskDoc = doc(userDoc, "tasks", task.id)
+    setTasks([...tasks.filter((t) => t.id !== task.id)])
+    await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
   }
 
   const logout = () => {
-    // setLoggedInState(false)
     auth.signOut()
   }
   // -------------------- End of (Helpers) --------------------
