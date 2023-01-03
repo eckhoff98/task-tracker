@@ -5,13 +5,22 @@ import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Form from 'react-bootstrap/esm/Form';
 import GoogleSignin from "./GoogleSignin";
 
-//Firebase
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase-config"
+// Firebase
+import { doc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { db, auth } from "../firebase-config"
 
 // TODO: add hashing for passwords
 
-const Login = ({ nav, user, addExtraUserInfo }) => {
+const Login = ({ nav, addExtraUserInfo }) => {
+    // const [user, setUser] = useState({})
+
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) return nav("/tasks")
+        })
+    }, [])
+
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
@@ -19,11 +28,11 @@ const Login = ({ nav, user, addExtraUserInfo }) => {
     // const [loginVal, setLoginVal] = useState("")
     const [loginErr, setLoginErr] = useState()
 
-    useEffect(() => {
-        if (user) {
-            nav("/tasks")
-        }
-    })
+    // useEffect(() => {
+    //     if (user) {
+    //         nav("/tasks")
+    //     }
+    // })
 
     const login = async (e) => {
         e.preventDefault()

@@ -27,20 +27,12 @@ import ChangeUserInfo from './components/ChangeUserInfo';
 
 
 function App() {
-  // axios.defaults.withCredentials = true
   const nav = useNavigate();
 
-  // Firebase
-  // const tasksSubCollection = db.collection('users').doc(user.uid).collection('tasks').doc('message1');
-  // const userCollection = collection(db, "users")
-  // const tasksCollection = collection(db, "tasks")
-
   const [user, setUser] = useState(null)
-  // const [tasksSubCollection, setTasksSubCollection] = useState([])
-
 
   const [tasks, setTasks] = useState([])
-  // const [loggedInState, setLoggedInState] = useState()
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -69,9 +61,14 @@ function App() {
 
 
   const addExtraUserInfo = async (info) => {
-    await setDoc(doc(db, "users", info.uid), {
-      name: info.name
-    })
+    if (user.extraInfo.name) return
+    try {
+      await setDoc(doc(db, "users", info.uid), {
+        name: info.name
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const getTasks = async () => {
@@ -132,7 +129,7 @@ function App() {
   return (
     <div className="App">
 
-      <NavBar appName={"Task Tracker"} logout={logout} user={user} />
+      <NavBar appName={"Task Tracker"} logout={logout} />
 
       <Container className='mainBody'>
         <Routes>
@@ -143,8 +140,7 @@ function App() {
           <Route path="/register" element={<Register nav={nav} user={user} addExtraUserInfo={addExtraUserInfo} />} />
           <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
           <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
-          <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} />} />
-
+          <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} />} />
         </Routes>
       </Container>
 

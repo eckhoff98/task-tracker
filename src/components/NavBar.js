@@ -3,8 +3,27 @@ import Nav from 'react-bootstrap/esm/Nav';
 import Navbar from 'react-bootstrap/esm/Navbar';
 import NavDropdown from 'react-bootstrap/esm/NavDropdown';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-function NavBar({ logout, user }) {
+// Firebase
+import { doc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase-config"
+
+function NavBar({ logout }) {
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (!user) return
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef)
+            user.extraInfo = docSnap.data()
+            setUser(user)
+        })
+    }, [])
+
     const LoginRegister = () => {
         if (user) {
             return (

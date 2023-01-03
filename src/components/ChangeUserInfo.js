@@ -3,29 +3,45 @@ import FloatingLabel from "react-bootstrap/esm/FloatingLabel";
 import Form from "react-bootstrap/esm/Form"
 import Alert from "react-bootstrap/esm/Alert"
 
+// Firebase
+import { doc, setDoc, getDoc } from "firebase/firestore"
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase-config"
 
-export default function ChangeUserInfo({ user, nav }) {
 
-    const [userInfo, setUserInfo] = useState({
-        name: user.extraInfo.name
-    })
-    const [errorData, setErrorData] = useState({})
+export default function ChangeUserInfo({ nav }) {
+    // const [userInfo, setUserInfo] = useState({})
+    const [user, setUser] = useState(null)
+    const [name, setName] = useState("")
+
 
     useEffect(() => {
-        if (!user) {
-            return nav("/login")
-        }
-    })
+        onAuthStateChanged(auth, async (user) => {
+            console.log("onAuthStateChanged")
+            if (!user) return nav("/login")
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef)
+            user.extraInfo = docSnap.data()
+            setUser(user)
+            setName(user.extraInfo.name)
+        })
+    }, [])
+
+
+    const [errorData, setErrorData] = useState({})
+
 
     const submit = async (e) => {
-        e.preventDefault()
-        // try {
-        //     const record = await pb.collection('users').update(pb.authStore.model.id, userInfo);
-        //     setErrorData("none")
-        // } catch (err) {
-        //     setErrorData(err.data.data)
-        //     console.log(err.data.data)
-        // }
+        try {
+            console.log("Changing name")
+            await setDoc(doc(db, "users", user.uid), {
+                name: name
+            })
+            window.location.reload(false);
+        } catch (err) {
+            console.log(err)
+            setErrorData(err)
+        }
     }
 
     return (
@@ -46,13 +62,13 @@ export default function ChangeUserInfo({ user, nav }) {
                         {/* <!-- Name input --> */}
                         {errorData && (errorData.name && <Alert variant="danger">{errorData.name.message}</Alert>)}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
-                            <Form.Control type="text" value={userInfo.name} onChange={e => setUserInfo({ ...userInfo, name: e.target.value })} />
+                            <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
                         </FloatingLabel>
                         {/* <!-- Username input --> */}
-                        {errorData && (errorData.username && <Alert variant="danger">{errorData.username.message}</Alert>)}
+                        {/* {errorData && (errorData.username && <Alert variant="danger">{errorData.username.message}</Alert>)}
                         <FloatingLabel controlId="username" label="Name" className="mb-3">
                             <Form.Control type="text" value={userInfo.username} onChange={e => setUserInfo({ ...userInfo, username: e.target.value })} />
-                        </FloatingLabel>
+                        </FloatingLabel> */}
 
                         {/* <!-- Submit button --> */}
                         <div className="d-grid">
