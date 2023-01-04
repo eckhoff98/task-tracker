@@ -12,6 +12,7 @@ import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc 
 import { onAuthStateChanged } from "firebase/auth"
 import { onMessage, getToken } from "firebase/messaging";
 
+
 // Components
 const Home = lazy(() => import("./components/Home"))
 const Tasks = lazy(() => import("./components/Tasks"))
@@ -58,7 +59,6 @@ function App() {
       requestPermission()
     })
   }, [])
-
   useEffect(() => {
     if (user) {
       getTasks()
