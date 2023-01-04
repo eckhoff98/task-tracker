@@ -44,40 +44,38 @@ const TaskForm = ({ task, form, _cancel }) => {
                     />
                 </FloatingLabel>
 
-                <div className="btn-grid">
-                    <div className="taskFormTime">
-                        <FloatingLabel controlId="floatingInput" label="Time" className="mb-3">
-                            <Form.Control
-                                className="form-control"
-                                type="time"
-                                name="time"
-                                placeholder="time"
-                                value={taskData.time ? taskData.time : ""}
-                                onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
-                            />
-                        </FloatingLabel>
+                <div className="taskFormTime">
+                    <FloatingLabel controlId="floatingInput" label="Time" className="mb-3">
+                        <Form.Control
+                            className="form-control"
+                            type="time"
+                            name="time"
+                            placeholder="time"
+                            value={taskData.time ? taskData.time : ""}
+                            onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
+                        />
+                    </FloatingLabel>
 
-                        <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                            <Form.Control
-                                className="form-control"
-                                type="date"
-                                name="date"
-                                value={taskData.date ? taskData.date : ""}
-                                onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
-                            />
-                        </FloatingLabel>
+                    <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
+                        <Form.Control
+                            className="form-control"
+                            type="date"
+                            name="date"
+                            value={taskData.date ? taskData.date : ""}
+                            onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
+                        />
+                    </FloatingLabel>
 
-                    </div>
+                </div>
 
-                    {/* Reminder Button */}
-                    <Button className="mb-3"
+                {/* Reminder Button */}
+                {/* <Button className="mb-3"
                         type="button"
                         variant="outline-primary"
                         size="lg"
                         style={{ padding: "0" }}
                         onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}
-                    >Reminder(NOT YET IMPLIMENTED)<ReminderIcon /></Button>
-                </div>
+                    >Reminder(NOT YET IMPLIMENTED)<ReminderIcon /></Button> */}
 
                 <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">
                     <Form.Control
