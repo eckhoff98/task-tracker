@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom"
 import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
-import { db, auth, requestPermission } from "./firebase-config"
+import { db, auth, requestPermission, messaging } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-
+import { onMessage, getToken } from "firebase/messaging";
 
 // Components
 const Home = lazy(() => import("./components/Home"))
@@ -25,9 +25,30 @@ const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 
 function App() {
   const [tasks, setTasks] = useState([])
+  const [debugToken, setDebugToken] = useState("")
 
   const [user, setUser] = useState(null)
   useEffect(() => {
+    getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' }).then((currentToken) => {
+      if (currentToken) {
+        // Send the token to your server and update the UI if necessary
+        console.log(currentToken)
+        setDebugToken(currentToken)
+        // ...
+      } else {
+        // Show permission request UI
+        console.log('No registration token available. Request permission to generate one.');
+        // ...
+      }
+    }).catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+      // ...
+    });
+
+    onMessage(messaging, (payload) => {
+      console.log('Message received. ', payload);
+      // ...
+    });
     onAuthStateChanged(auth, async (user) => {
       if (!user) return setUser(null)
       const docRef = doc(db, "users", user.uid);
@@ -104,6 +125,7 @@ function App() {
       <NavBar appName={"Task Tracker"} logout={logout} />
 
       <Container className='mainBody'>
+        <p>{debugToken}</p>
         <Suspense fallback={<h1>LOADING...</h1>}>
           <Routes>
             <Route path="/" element={<Home nav={nav} />} />
