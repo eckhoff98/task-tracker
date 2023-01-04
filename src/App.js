@@ -46,7 +46,7 @@ function App() {
     });
 
     onMessage(messaging, (payload) => {
-      console.log('Message received. ', payload);
+      console.log('Message received. (With onMessage)', payload);
       // ...
     });
     onAuthStateChanged(auth, async (user) => {
