@@ -76,7 +76,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                         size="lg"
                         style={{ padding: "0" }}
                         onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}
-                    >Reminder(NOT YET IMPLIMENTED)<ReminderIcon /></Button>
+                    >Reminder ( ! )<ReminderIcon /></Button>
                 </div>
 
                 <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">

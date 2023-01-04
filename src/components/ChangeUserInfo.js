@@ -28,7 +28,6 @@ export default function ChangeUserInfo({ nav }) {
 
     const submit = async (e) => {
         try {
-            console.log("Changing name")
             await setDoc(doc(db, "users", user.uid), {
                 name: name
             })
@@ -50,7 +49,7 @@ export default function ChangeUserInfo({ nav }) {
                         {/* <!-- Name input --> */}
                         {errorData && (errorData.name && <Alert variant="danger">{errorData.name.message}</Alert>)}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
-                            <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
+                            <Form.Control type="text" autoComplete="off" value={name} onChange={e => setName(e.target.value)} />
                         </FloatingLabel>
 
                         {/* <!-- Submit button --> */}
