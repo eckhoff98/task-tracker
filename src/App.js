@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom"
 import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
-import { db, auth, requestPermission, messaging } from "./firebase-config"
+import { db, auth, requestPermission, messaging, functions } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import { onMessage, getToken } from "firebase/messaging";
-
+import { httpsCallable } from "firebase/functions";
 
 // Components
 const Home = lazy(() => import("./components/Home"))
@@ -30,6 +30,16 @@ function App() {
 
   const [user, setUser] = useState(null)
   useEffect(() => {
+    // Testing functions
+    const testFunction = httpsCallable(functions, 'testFunction');
+    console.log("CALLING testFunction")
+    testFunction({ text: "testing" })
+      .then((result) => {
+        console.log("got result")
+        // console.log({ testFunctionResult: result })
+      }).catch((err) => console.log(err))
+
+
     getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' }).then((currentToken) => {
       if (currentToken) {
         // Send the token to your server and update the UI if necessary

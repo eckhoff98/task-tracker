@@ -22,3 +22,7 @@ exports.addMessage = functions.https.onRequest(async (req, res) => {
     // Send back a message that we've successfully written the message
     res.json({ result: `Message with ID: ${writeResult.id} added.` });
 });
+exports.testFunction = functions.https.onRequest(async (req, res) => {
+    console.log("Some text")
+    res.json({ result: "It worked" })
+});

@@ -5,6 +5,12 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/testFunction",
+        "function": "testFunction"
+      }
     ]
   },
   "firestore": {
