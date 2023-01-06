@@ -30,7 +30,8 @@ export const provider = new GoogleAuthProvider();
 
 export const messaging = getMessaging(app);
 
-export const functions = getFunctions(app)
+export const functions = getFunctions(app, 'us-central1')
+// export const functions = firebase.app().functions('us-central1');
 
 export const auth = getAuth(app);
 

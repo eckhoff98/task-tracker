@@ -3,26 +3,37 @@ const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require('firebase-admin');
-admin.initializeApp();
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
 
-// Take the text parameter passed to this HTTP endpoint and insert it into 
-// Firestore under the path /messages/:documentId/original
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-    // Grab the text parameter.
-    const original = req.query.text;
-    // Push the new message into Firestore using the Firebase Admin SDK.
-    const writeResult = await admin.firestore().collection('messages').add({ original: original });
-    // Send back a message that we've successfully written the message
-    res.json({ result: `Message with ID: ${writeResult.id} added.` });
+admin.initializeApp();
+
+exports.test = functions.region('us-central1').https.onCall(async (req, res) => {
+    console.log("Some text");
+    // res.json({ result: "It worked" });
+    return ({ result: "some info" })
 });
-exports.testFunction = functions.https.onRequest(async (req, res) => {
-    console.log("Some text")
-    res.json({ result: "It worked" })
+
+exports.testNotification = functions.region('us-central1').https.onCall(async (data, context) => {
+    console.log(data.token);
+    console.log(context.auth.uid)
+
+    const payload = {
+        notification: {
+            title: `test notification`,
+            body: "test body"
+        }
+    };
+
+    if (data.token) {
+        try {
+            const response = await admin.messaging().sendToDevice(data.token, payload);
+            return ({ message: "notification set up" })
+        } catch (err) {
+            return ({ error: err })
+        }
+    }
+    else {
+        return ({ message: "didnt recieve a token" })
+    }
+
+
 });
