@@ -4,12 +4,10 @@ import { Route, Routes } from "react-router-dom"
 import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
-
 // FIREBASE
 import { db, auth } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-
 
 // Components
 const Home = lazy(() => import("./components/Home"))
