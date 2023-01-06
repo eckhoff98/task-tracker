@@ -28,24 +28,9 @@ const appCheck = initializeAppCheck(app, {
 
 export const provider = new GoogleAuthProvider();
 
-export const messaging = getMessaging(app);
-
-export const functions = getFunctions(app, 'us-central1')
-// export const functions = firebase.app().functions('us-central1');
-
 export const auth = getAuth(app);
 
 export const db = getFirestore(app)
 
-export function requestPermission() {
-    console.log('Requesting permission...');
-    Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-            console.log('Notification permission granted.');
-        }
-    }).then(() => {
-
-    })
-}
 
 

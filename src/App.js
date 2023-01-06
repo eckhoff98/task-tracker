@@ -7,11 +7,9 @@ import { useNavigate } from "react-router-dom"
 import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
-import { db, auth, requestPermission, messaging, functions } from "./firebase-config"
+import { db, auth } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-import { onMessage, getToken } from "firebase/messaging";
-import { httpsCallable } from "firebase/functions";
 
 
 // Components
@@ -30,54 +28,15 @@ function App() {
 
   const [user, setUser] = useState(null)
   useEffect(() => {
-    // Testing functions
-    // const testFunction = httpsCallable(functions, 'test');
-    // testFunction({ text: "testing" })
-    //   .then((result) => {
-    //     console.log("got result")
-    //     console.log({ testFunctionResult: result })
-    //   }).catch((err) => console.log(err))
-    const testNotification = httpsCallable(functions, 'testNotification');
-
-
-
-    onMessage(messaging, (payload) => {
-      console.log('Message received. ', payload);
-      // ...
-    });
-
     onAuthStateChanged(auth, async (user) => {
       if (!user) return setUser(null)
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef)
       user.extraInfo = docSnap.data()
       setUser(user)
-      requestPermission()
-
-      getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' }).then((currentToken) => {
-        if (currentToken) {
-          // Send the token to your server and update the UI if necessary
-          console.log(currentToken)
-          testNotification({ token: currentToken })
-            .then((result) => {
-              console.log("got result")
-              console.log(result)
-            }).catch((err) => console.log(err))
-          // ...
-        } else {
-          // Show permission request UI
-          console.log('No registration token available. Request permission to generate one.');
-          // ...
-        }
-      })
-        .catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
-          // ...
-        });
-
-
     })
   }, [])
+
   useEffect(() => {
     if (user) {
       getTasks()
