@@ -3,10 +3,24 @@ import { BsAlarmFill } from "react-icons/bs"
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Form from 'react-bootstrap/esm/Form';
 import Button from 'react-bootstrap/esm/Button';
+import { convertToDate, convertToTime } from "../time"
+import { useEffect } from "react";
 
 
 const TaskForm = ({ task, form, _cancel }) => {
     const [taskData, setTaskData] = useState(task)
+    const [datetime, setdatetime] = useState()
+
+    const stringToHtmlDatetime = (string) => {
+        const dt = new Date(string)
+        dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+        return dt.toISOString().slice(0, 16)
+    }
+
+
+    useEffect(() => {
+        setdatetime(stringToHtmlDatetime(task.datetime))
+    }, [])
 
     const submit = () => {
         form({ ...taskData, name: (taskData.name === "") ? "New Task" : taskData.name, freshTask: false })
@@ -27,7 +41,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                         type="text"
                         name="name"
                         placeholder="task"
-                        value={taskData.name ? taskData.name : ""}
+                        defaultValue={taskData.name ? taskData.name : ""}
                         onChange={(e) => setTaskData({ ...taskData, name: e.target.value })}
                     />
                 </FloatingLabel>
@@ -39,25 +53,57 @@ const TaskForm = ({ task, form, _cancel }) => {
                         type="text"
                         name="description"
                         placeholder="description"
-                        value={taskData.description ? taskData.description : ""}
+                        defaultValue={taskData.description ? taskData.description : ""}
                         onChange={(e) => setTaskData({ ...taskData, description: e.target.value })}
                     />
                 </FloatingLabel>
 
+                {/* datetime */}
+                <FloatingLabel controlId="floatingInput" label="datetime" className="mb-3">
+                    <Form.Control
+                        className="form-control"
+                        type="datetime-local"
+                        name="datetime"
+                        placeholder="date time"
+                        defaultValue={datetime}
+                        onChange={(e) => {
+                            setdatetime(e.target.value)
+                            setTaskData({ ...taskData, datetime: e.target.value })
+                        }}
+                    />
+                </FloatingLabel>
+
+                {/* Time And Date */}
                 <div className="btn-grid">
                     <div className="taskFormTime">
-                        <FloatingLabel controlId="floatingInput" label="Time" className="mb-3">
+                        {/* datetime */}
+                        {/* <FloatingLabel controlId="floatingInput" label="datetime" className="mb-3">
+                            <Form.Control
+                                className="form-control"
+                                type="datetime-local"
+                                name="datetime"
+                                placeholder="date time"
+                                // value={taskData.time ? taskData.time : ""}
+                                value={taskData.dateTime}
+                                onChange={(e) => setTaskData({ ...taskData, dateTime: e.target.value })}
+                            />
+                        </FloatingLabel> */}
+
+                        {/* Time */}
+                        {/* <FloatingLabel controlId="floatingInput" label="Time" className="mb-3">
                             <Form.Control
                                 className="form-control"
                                 type="time"
                                 name="time"
                                 placeholder="time"
+                                // value={taskData.time ? taskData.time : ""}
                                 value={taskData.time ? taskData.time : ""}
                                 onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
                             />
-                        </FloatingLabel>
+                        </FloatingLabel> */}
 
-                        <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
+                        {/* Date */}
+                        {/* <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
                             <Form.Control
                                 className="form-control"
                                 type="date"
@@ -65,7 +111,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                                 value={taskData.date ? taskData.date : ""}
                                 onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
                             />
-                        </FloatingLabel>
+                        </FloatingLabel> */}
 
                     </div>
 
@@ -86,7 +132,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                         type="text"
                         name="location"
                         placeholder="location"
-                        value={taskData.location ? taskData.location : ""}
+                        defaultValue={taskData.location ? taskData.location : ""}
                         onChange={(e) => setTaskData({ ...taskData, location: e.target.value })}
                     />
                 </FloatingLabel>

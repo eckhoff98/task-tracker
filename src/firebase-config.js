@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore"
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getMessaging, getToken } from "firebase/messaging";
-import { getFunctions } from 'firebase/functions';
 
 const { initializeAppCheck, ReCaptchaV3Provider } = require("firebase/app-check");
 
@@ -18,6 +16,7 @@ const firebaseConfig = {
 };
 export const app = initializeApp(firebaseConfig);
 
+
 const appCheck = initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider('6Ley4s8jAAAAABPyFDSYhW2oE5obqJu7LjXSH0qi'),
 
@@ -31,6 +30,7 @@ export const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);
 
 export const db = getFirestore(app)
+
 
 
 

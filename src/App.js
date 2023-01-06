@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom"
 import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
-import { getCurrentDate, getCurrentTime } from './time';
 
 // FIREBASE
 import { db, auth } from "./firebase-config"
@@ -27,7 +26,9 @@ function App() {
   const [tasks, setTasks] = useState([])
 
   const [user, setUser] = useState(null)
+
   useEffect(() => {
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) return setUser(null)
       const docRef = doc(db, "users", user.uid);
@@ -69,10 +70,15 @@ function App() {
     const record = await addDoc(tasksSubCollection, {
       ...task,
       uid: user.uid,
-      time: getCurrentTime(),
-      date: getCurrentDate()
+      datetime: new Date()
     }).catch(err => console.log(err))
-    setTasks([...tasks, { ...task, freshTask: true, id: record.id, uid: user.uid, time: getCurrentTime(), date: getCurrentDate() }])
+    setTasks([...tasks, {
+      ...task,
+      freshTask: true,
+      id: record.id,
+      uid: user.uid,
+      datetime: new Date()
+    }])
   }
 
   const updateTask = async (task) => {

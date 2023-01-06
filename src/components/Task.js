@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react"
 import TaskForm from "./TaskForm"
-import { BsAlarmFill } from "react-icons/bs"
-import { BsPencilSquare } from "react-icons/bs"
-import { BsFillCalendarEventFill } from "react-icons/bs"
-import { BsFillPinMapFill } from "react-icons/bs"
+
+// Icons
+import {
+    BsFillPinMapFill,
+    BsFillClockFill,
+    BsFillCalendarEventFill,
+    BsPencilSquare,
+    BsAlarmFill
+} from "react-icons/bs"
+
+
 import moment from "moment"
+import { convertToDate, convertToTime } from "../time"
 
 
 const Task = ({ task, _updateTask, _deleteTask }) => {
@@ -30,8 +38,9 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
         setMoreInfo(false)
     }
 
-    const timeToReminder = (date, time) => {
-        const reminder = new Date(date + " " + time)
+    const timeToReminder = (datetimeString) => {
+        // const reminder = new Date(date + " " + time)
+        const reminder = new Date(datetimeString)
         return moment(reminder).fromNow()
     }
 
@@ -51,7 +60,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className="card bg-dark">
                         <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
-                            <h2 className="taskLessInfo">{timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon /></h2>
+                            <h2 className="taskLessInfo">{timeToReminder(task.datetime)} &nbsp; <ReminderIcon /></h2>
                         </div>
                     </div>
                     {/* <div className="time">{task.time}</div> */}
@@ -65,12 +74,13 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
                         <h2 className="taskLessInfo">
-                            {timeToReminder(task.date, task.time)} &nbsp; <ReminderIcon />
+                            {timeToReminder(task.datetime)} &nbsp; <ReminderIcon />
                         </h2>
                     </div>
                     <div className="card-body">
                         <p className="card-text"><BsPencilSquare /> {task.description}</p>
-                        <p className="card-text"><BsFillCalendarEventFill /> {task.date} {task.time}</p>
+                        <p className="card-text"><BsFillCalendarEventFill /> {convertToDate(new Date(task.datetime))}</p>
+                        <p className="card-text"><BsFillClockFill /> {new Date(task.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         <p className="card-text"><BsFillPinMapFill /> {task.location}</p>
                         <div className="btn-grid">
                             <button className="btn btn-outline-primary btn-lg" onClick={() => { setEditTaskToggel(true) }}><strong>Edit</strong></button>
@@ -86,10 +96,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     if (editTaskToggel) {
         return (
             <div className="card bg-dark" >
-                <TaskForm
-                    task={task}
-                    form={form}
-                    _cancel={cancel} />
+                <TaskForm task={task} form={form} _cancel={cancel} />
             </div>
         )
     } else {
