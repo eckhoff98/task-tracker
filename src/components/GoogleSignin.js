@@ -24,7 +24,8 @@ export default function GoogleSignin({ addExtraUserInfo, setErrMsg }) {
             }
             addExtraUserInfo(newUser)
 
-        }).catch((error) => {
+        })
+        .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage)

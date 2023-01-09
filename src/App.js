@@ -25,13 +25,16 @@ function App() {
 
   const [user, setUser] = useState(null)
 
+  const [firestoreUser, setFirestoreUser] = useState(null)
+
   useEffect(() => {
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) return setUser(null)
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef)
-      user.extraInfo = docSnap.data()
+      // user.extraInfo = docSnap.data()
+      setFirestoreUser(docSnap.data())
       setUser(user)
     })
   }, [])
@@ -47,9 +50,12 @@ function App() {
   const nav = useNavigate();
 
   const addExtraUserInfo = async (info) => {
-    if (user.extraInfo.name) return
+    console.log("ADDING EXTRA")
+    // if (user.extraInfo.name) return
+    // TODO check if there is already a user in the firestore users
+
     await setDoc(doc(db, "users", info.uid), {
-      name: info.name
+      name: firestoreUser ? firestoreUser.name : info.name
     }).catch(err => console.log(err))
   }
 
