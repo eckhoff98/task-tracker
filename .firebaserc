@@ -1,5 +1,11 @@
 {
   "projects": {
     "default": "fireshiptutorial-71e6c"
-  }
+  },
+  "targets": {
+    "fireshiptutorial-71e6c": {
+      "hosting": {}
+    }
+  },
+  "etags": {}
 }

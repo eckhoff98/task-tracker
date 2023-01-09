@@ -3,7 +3,6 @@ import { BsAlarmFill } from "react-icons/bs"
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Form from 'react-bootstrap/esm/Form';
 import Button from 'react-bootstrap/esm/Button';
-import { convertToDate, convertToTime } from "../time"
 import { useEffect } from "react";
 
 
@@ -75,46 +74,6 @@ const TaskForm = ({ task, form, _cancel }) => {
 
                 {/* Time And Date */}
                 <div className="btn-grid">
-                    <div className="taskFormTime">
-                        {/* datetime */}
-                        {/* <FloatingLabel controlId="floatingInput" label="datetime" className="mb-3">
-                            <Form.Control
-                                className="form-control"
-                                type="datetime-local"
-                                name="datetime"
-                                placeholder="date time"
-                                // value={taskData.time ? taskData.time : ""}
-                                value={taskData.dateTime}
-                                onChange={(e) => setTaskData({ ...taskData, dateTime: e.target.value })}
-                            />
-                        </FloatingLabel> */}
-
-                        {/* Time */}
-                        {/* <FloatingLabel controlId="floatingInput" label="Time" className="mb-3">
-                            <Form.Control
-                                className="form-control"
-                                type="time"
-                                name="time"
-                                placeholder="time"
-                                // value={taskData.time ? taskData.time : ""}
-                                value={taskData.time ? taskData.time : ""}
-                                onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
-                            />
-                        </FloatingLabel> */}
-
-                        {/* Date */}
-                        {/* <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                            <Form.Control
-                                className="form-control"
-                                type="date"
-                                name="date"
-                                value={taskData.date ? taskData.date : ""}
-                                onChange={(e) => { setTaskData({ ...taskData, date: e.target.value }) }}
-                            />
-                        </FloatingLabel> */}
-
-                    </div>
-
                     {/* Reminder Button */}
                     <Button className="mb-3"
                         type="button"

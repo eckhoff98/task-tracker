@@ -4,7 +4,7 @@ import { auth, provider } from "../firebase-config"
 
 
 
-export default function GoogleSignin({ addExtraUserInfo, setErrMsg }) {
+export default function GoogleSignin({ addFirestoreUser, setErrMsg }) {
 
     const signin = () => {
         signInWithRedirect(auth, provider);
@@ -18,11 +18,10 @@ export default function GoogleSignin({ addExtraUserInfo, setErrMsg }) {
             const token = credential.accessToken;
             // The signed-in user info.
             const user = result.user;
-            const newUser = {
-                uid: user.uid,
+            const extraInfo = {
                 name: user.displayName
             }
-            addExtraUserInfo(newUser)
+            addFirestoreUser(user, extraInfo)
 
         }).catch((error) => {
             const errorCode = error.code;

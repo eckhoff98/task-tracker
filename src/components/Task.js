@@ -20,6 +20,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const [moreInfo, setMoreInfo] = useState(false)
     const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask)
 
+
     useEffect(() => {
         timeToReminder(task.date, task.time)
     }, [editTaskToggel, moreInfo])
@@ -60,7 +61,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className="card bg-dark">
                         <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
-                            <h2 className="taskLessInfo">{timeToReminder(task.datetime)} &nbsp; <ReminderIcon /></h2>
+                            <h2 className="taskLessInfo">{timeToReminder(Date(task.datetime))} &nbsp; <ReminderIcon /></h2>
                         </div>
                     </div>
                     {/* <div className="time">{task.time}</div> */}
@@ -74,12 +75,12 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
                         <h2 className="taskLessInfo">
-                            {timeToReminder(task.datetime)} &nbsp; <ReminderIcon />
+                            {timeToReminder(Date(task.datetime))} &nbsp; <ReminderIcon />
                         </h2>
                     </div>
                     <div className="card-body">
                         <p className="card-text"><BsPencilSquare /> {task.description}</p>
-                        <p className="card-text"><BsFillCalendarEventFill /> {convertToDate(new Date(task.datetime))}</p>
+                        <p className="card-text"><BsFillCalendarEventFill /> {convertToDate(task.datetime)}</p>
                         <p className="card-text"><BsFillClockFill /> {new Date(task.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         <p className="card-text"><BsFillPinMapFill /> {task.location}</p>
                         <div className="btn-grid">

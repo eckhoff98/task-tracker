@@ -10,7 +10,7 @@ import { onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/aut
 import { auth } from "../firebase-config"
 
 
-const Register = ({ nav, addExtraUserInfo }) => {
+const Register = ({ nav, addFirestoreUser }) => {
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             console.log("onAuthStateChanged")
@@ -39,11 +39,10 @@ const Register = ({ nav, addExtraUserInfo }) => {
         createUserWithEmailAndPassword(auth, registerData.email, registerData.password)
             .then((userCredential) => {
                 // Signed in 
-                const newUser = {
-                    uid: userCredential.user.uid,
-                    name: registerData.name,
+                const extraInfo = {
+                    name: registerData.name
                 }
-                addExtraUserInfo(newUser)
+                addFirestoreUser(userCredential.user, extraInfo)
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -97,7 +96,7 @@ const Register = ({ nav, addExtraUserInfo }) => {
                         <div className="divider align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                         </div>
-                        <GoogleSignin addExtraUserInfo={addExtraUserInfo} setErrMsg={setRegisterErr} />
+                        <GoogleSignin addFirestoreUser={addFirestoreUser} setErrMsg={setRegisterErr} />
                     </div>
                     <div className="d-flex justify-content-around align-items-center my-4">
                         Already have an account? &nbsp;

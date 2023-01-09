@@ -7,7 +7,8 @@ const TasksHeader = ({ _addTask }) => {
                 name: "",
                 description: "",
                 location: "",
-                reminder: false
+                reminder: false,
+                datetime: new Date()
             })}>Add Task</button>
             <button className="btn btn-lg btn-outline-primary" >Button</button>
             <button className="btn btn-lg btn-outline-primary">Button</button>

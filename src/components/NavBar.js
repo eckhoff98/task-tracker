@@ -12,6 +12,8 @@ import { db, auth } from "../firebase-config"
 
 function NavBar({ logout }) {
     const [user, setUser] = useState(null)
+    const [firestoreUser, setFirestoreUser] = useState(null)
+
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -19,7 +21,8 @@ function NavBar({ logout }) {
             if (!user) return setUser(null)
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef)
-            user.extraInfo = docSnap.data()
+            // user.extraInfo = docSnap.data()
+            setFirestoreUser(docSnap.data())
             setUser(user)
         })
     }, [])
@@ -28,7 +31,7 @@ function NavBar({ logout }) {
         if (user) {
             return (
                 <>
-                    <NavDropdown title={user.extraInfo ? user.extraInfo.name : user.email} id="collasible-nav-dropdown" >
+                    <NavDropdown title={firestoreUser ? firestoreUser.name : user.email} id="collasible-nav-dropdown" >
                         <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>

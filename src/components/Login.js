@@ -12,7 +12,7 @@ import { db, auth } from "../firebase-config"
 
 // TODO: add hashing for passwords
 
-const Login = ({ nav, addExtraUserInfo }) => {
+const Login = ({ nav, addFirestoreUser }) => {
     // const [user, setUser] = useState({})
 
     useEffect(() => {
@@ -85,7 +85,7 @@ const Login = ({ nav, addExtraUserInfo }) => {
                         <div className="divider align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0 text-muted ">OR</p>
                         </div>
-                        <GoogleSignin addExtraUserInfo={addExtraUserInfo} setErrMsg={setLoginErr} />
+                        <GoogleSignin addFirestoreUser={addFirestoreUser} setErrMsg={setLoginErr} />
                     </div>
                     <div className="d-flex justify-content-around align-items-center my-4">
                         Don't have an account yet? &nbsp;

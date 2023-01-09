@@ -22,8 +22,8 @@ const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 
 function App() {
   const [tasks, setTasks] = useState([])
-
   const [user, setUser] = useState(null)
+  const [firestoreUser, setFirestoreUser] = useState(null)
 
   useEffect(() => {
 
@@ -31,8 +31,9 @@ function App() {
       if (!user) return setUser(null)
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef)
-      user.extraInfo = docSnap.data()
+      // user.extraInfo = docSnap.data()
       setUser(user)
+      setFirestoreUser(docSnap.data())
     })
   }, [])
 
@@ -46,10 +47,16 @@ function App() {
 
   const nav = useNavigate();
 
-  const addExtraUserInfo = async (info) => {
-    if (user.extraInfo.name) return
-    await setDoc(doc(db, "users", info.uid), {
-      name: info.name
+  const addFirestoreUser = async (_user, extraInfo) => {
+    // if (user.extraInfo.name) return
+
+    const userDocRef = doc(db, "users", _user.uid);
+    const docSnap = await getDoc(userDocRef).catch((err) => console.log(err));
+
+    if (docSnap.exists()) return
+
+    await setDoc(doc(db, "users", _user.uid), {
+      name: extraInfo.name
     }).catch(err => console.log(err))
   }
 
@@ -68,14 +75,15 @@ function App() {
     const record = await addDoc(tasksSubCollection, {
       ...task,
       uid: user.uid,
-      datetime: new Date()
+      datetime: String(new Date())
     }).catch(err => console.log(err))
+
     setTasks([...tasks, {
       ...task,
       freshTask: true,
       id: record.id,
       uid: user.uid,
-      datetime: new Date()
+      datetime: String(new Date())
     }])
   }
 
@@ -115,8 +123,8 @@ function App() {
             <Route path="/about" element={<About />} />
 
             {/* Account Info */}
-            <Route path="/login" element={<Login nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
-            <Route path="/register" element={<Register nav={nav} addExtraUserInfo={addExtraUserInfo} />} />
+            <Route path="/login" element={<Login nav={nav} addFirestoreUser={addFirestoreUser} />} />
+            <Route path="/register" element={<Register nav={nav} addFirestoreUser={addFirestoreUser} />} />
             <Route path="/account" element={<Account logout={logout} nav={nav} />} />
             <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
             <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} />} />

@@ -20,12 +20,11 @@ export const getCurrentTime = () => {
     return time
 }
 
-export const convertToDate = (date) => {
-    const now = date
+export const convertToDate = (dateString) => {
+    const now = new Date(dateString)
     const day = ("0" + now.getDate()).slice(-2);
     const month = ("0" + (now.getMonth() + 1)).slice(-2);
     const today = now.getFullYear() + "-" + month + "-" + day
-    console.log("today " + today)
     return today
 }
 

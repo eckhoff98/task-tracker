@@ -21,12 +21,6 @@ const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, nav }) => {
         })
     }, [])
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         return nav("/")
-    //     }
-    // })
-
     return (
         <>
             <div className="tasks">
