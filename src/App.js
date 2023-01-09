@@ -23,7 +23,6 @@ const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 function App() {
   const [tasks, setTasks] = useState([])
   const [user, setUser] = useState(null)
-  const [firestoreUser, setFirestoreUser] = useState(null)
 
   useEffect(() => {
 
@@ -31,7 +30,7 @@ function App() {
       if (!user) return setUser(null)
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef)
-      // user.extraInfo = docSnap.data()
+      user.extraInfo = docSnap.data()
       setUser(user)
       setFirestoreUser(docSnap.data())
     })
@@ -47,16 +46,10 @@ function App() {
 
   const nav = useNavigate();
 
-  const addFirestoreUser = async (_user, extraInfo) => {
-    // if (user.extraInfo.name) return
-
-    const userDocRef = doc(db, "users", _user.uid);
-    const docSnap = await getDoc(userDocRef).catch((err) => console.log(err));
-
-    if (docSnap.exists()) return
-
-    await setDoc(doc(db, "users", _user.uid), {
-      name: extraInfo.name
+  const addExtraUserInfo = async (info) => {
+    if (user.extraInfo.name) return
+    await setDoc(doc(db, "users", info.uid), {
+      name: info.name
     }).catch(err => console.log(err))
   }
 

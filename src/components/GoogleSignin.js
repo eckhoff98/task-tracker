@@ -23,7 +23,8 @@ export default function GoogleSignin({ addFirestoreUser, setErrMsg }) {
             }
             addFirestoreUser(user, extraInfo)
 
-        }).catch((error) => {
+        })
+        .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage)
