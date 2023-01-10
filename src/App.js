@@ -5,9 +5,10 @@ import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
 // FIREBASE
-import { db, auth } from "./firebase-config"
-import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
+import { db, auth, messaging } from "./firebase-config"
+import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
+import { getToken } from "firebase/messaging";
 
 // Components
 const Home = lazy(() => import("./components/Home"))
@@ -34,6 +35,7 @@ function App() {
       user.extraInfo = docSnap.data()
       setUser(user)
       setFirestoreUser(docSnap.data())
+      addFcmToken(user)
     })
   }, [])
 
@@ -58,6 +60,27 @@ function App() {
     await setDoc(doc(db, "users", _user.uid), {
       name: extraInfo.name
     }).catch(err => console.log(err))
+  }
+
+  const addFcmToken = async (_user) => {
+    const currentToken = await getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' })
+    console.log(currentToken)
+    await updateDoc(doc(db, "users", _user.uid), {
+      fcmTokens: arrayUnion(currentToken)
+    });
+    // await setDoc(doc(db, "users", _user.uid), {
+    //   fcmToken: currentToken
+    // }, { merge: true }).catch(err => console.log(err))
+    // getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' })
+    // .then((currentToken) => {
+    //   if (currentToken) {
+    //     console.log(currentToken)
+    //     return currentToken
+    //   } else {
+    //     console.log('No registration token available. Request permission to generate one.');
+    //   }
+    // })
+    // .catch((err) => console.log(err))
   }
 
   const getTasks = async () => {
