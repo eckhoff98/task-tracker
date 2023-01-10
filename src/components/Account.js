@@ -12,13 +12,16 @@ import { db, auth } from "../firebase-config"
 
 export default function Account({ nav }) {
     const [user, setUser] = useState(null)
+    const [firestoreUser, setFirestoreUser] = useState(null)
+
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             console.log("onAuthStateChanged")
             if (!user) return nav("/login")
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef)
-            user.extraInfo = docSnap.data()
+            // user.extraInfo = docSnap.data()
+            setFirestoreUser(docSnap.data())
             setUser(user)
         })
     }, [])
@@ -31,7 +34,7 @@ export default function Account({ nav }) {
                     <Card.Header>Info</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            Name: {user ? user.extraInfo.name : ""}
+                            Name: {firestoreUser ? firestoreUser.name : ""}
                         </Card.Text>
                         <Card.Text>
                             Email: {user ? user.email : ""}
