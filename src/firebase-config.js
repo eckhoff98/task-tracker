@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore"
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getMessaging, getToken } from "firebase/messaging";
+
 
 const { initializeAppCheck, ReCaptchaV3Provider } = require("firebase/app-check");
 
@@ -26,6 +28,24 @@ const appCheck = initializeAppCheck(app, {
 });
 
 export const provider = new GoogleAuthProvider();
+
+export const messaging = getMessaging(app);
+export async function requestPermission() {
+    console.log('Requesting permission...');
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
+            getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' }).then((currentToken) => {
+                if (currentToken) {
+                    console.log(currentToken)
+                    return currentToken
+                } else {
+                    console.log('No registration token available. Request permission to generate one.');
+                }
+            }).catch((err) => console.log(err))
+        }
+    })
+}
 
 export const auth = getAuth(app);
 
