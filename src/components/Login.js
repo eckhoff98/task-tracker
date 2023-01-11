@@ -16,19 +16,21 @@ const Login = ({ addFirestoreUser }) => {
         password: "",
     })
 
-    const [loginErr, setLoginErr] = useState()
+    // const [loginErr, setLoginErr] = useState()
+    const [alert, setAlert] = useState()
 
     const login = async (e) => {
         e.preventDefault()
         if (loginData.email === "" || loginData.password === "") {
-            return setLoginErr("Please fill in all fields.")
+            return setAlert({ message: "Please fill in all fields.", variant: "danger" })
         }
         signInWithEmailAndPassword(auth, loginData.email, loginData.password)
             .then()
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                setLoginErr(errorMessage)
+                // setLoginErr(errorMessage)
+                setAlert({ message: errorMessage, variant: "danger" })
             });
     }
 
@@ -39,7 +41,8 @@ const Login = ({ addFirestoreUser }) => {
                     <h1 className="mb-5 text-center">Login</h1>
                     <form onSubmit={(e) => login(e)}>
                         {/* {loginVal && <Alert variant="danger">{loginVal}</Alert>} */}
-                        {loginErr && <Alert variant="danger">{loginErr}</Alert>}
+                        {alert && <Alert variant={alert.variant}>{alert.message}</Alert>}
+                        {/* {loginErr && <Alert variant="danger">{loginErr}</Alert>} */}
                         {/* <!-- Email input --> */}
                         <FloatingLabel controlId="email" label="Email" className="mb-3">
                             <Form.Control type="email" onChange={e => setLoginData({ ...loginData, email: e.target.value })} />
@@ -67,7 +70,7 @@ const Login = ({ addFirestoreUser }) => {
                         <div className="divider align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0 text-muted ">OR</p>
                         </div>
-                        <GoogleSignin addFirestoreUser={addFirestoreUser} setErrMsg={setLoginErr} />
+                        <GoogleSignin addFirestoreUser={addFirestoreUser} setAlert={setAlert} />
                     </div>
                     <div className="d-flex justify-content-around align-items-center my-4">
                         Don't have an account yet? &nbsp;

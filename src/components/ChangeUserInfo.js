@@ -28,20 +28,19 @@ export default function ChangeUserInfo({ nav, user, changeName }) {
     //     })
     // }, [])
 
-    const [errorData, setErrorData] = useState({})
+    // const [errorData, setErrorData] = useState({})
 
     const submit = async (e) => {
         e.preventDefault()
+        if (name === "") return setAlert({ message: "Name cannot be blank.", varient: "danger" })
         try {
-            await setDoc(doc(db, "users", user.uid), {
-                name: name
-            })
+            await setDoc(doc(db, "users", user.uid), { name: name })
             changeName(name)
             setAlert({ message: "Info changed successfully. ", varient: "success" })
-            // window.location.reload(false);
         } catch (err) {
             console.log(err)
-            setErrorData(err)
+            // setErrorData(err)
+            setAlert({ message: err.message, varient: "danger" })
         }
     }
 
@@ -53,7 +52,7 @@ export default function ChangeUserInfo({ nav, user, changeName }) {
                         {(alert) && <Alert variant={alert.varient}>{alert.message}</Alert>}
 
                         {/* <!-- Name input --> */}
-                        {errorData && (errorData.name && <Alert variant="danger">{errorData.name.message}</Alert>)}
+                        {/* {errorData && (errorData.name && <Alert variant="danger">{errorData.name.message}</Alert>)} */}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
                             <Form.Control type="text" autoComplete="off" value={name} onChange={e => setName(e.target.value)} />
                         </FloatingLabel>

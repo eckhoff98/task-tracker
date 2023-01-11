@@ -4,7 +4,7 @@ import { auth, provider } from "../firebase-config"
 
 
 
-export default function GoogleSignin({ addFirestoreUser, setErrMsg }) {
+export default function GoogleSignin({ addFirestoreUser, setAlert }) {
 
     const signin = () => {
         signInWithRedirect(auth, provider);
@@ -28,7 +28,8 @@ export default function GoogleSignin({ addFirestoreUser, setErrMsg }) {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage)
-            setErrMsg(errorMessage)
+            setAlert({ message: errorMessage, variant: "danger" })
+            // setErrMsg(errorMessage)
             const credential = GoogleAuthProvider.credentialFromError(error);
         });
     useEffect(() => {
