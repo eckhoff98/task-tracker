@@ -10,6 +10,8 @@ import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc,
 import { onAuthStateChanged } from "firebase/auth"
 import { getToken } from "firebase/messaging";
 
+import PrivateRoutes from './PrivateRoutes';
+
 // Components
 const Home = lazy(() => import("./components/Home"))
 const Tasks = lazy(() => import("./components/Tasks"))
@@ -23,29 +25,31 @@ const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 
 function App() {
   const [tasks, setTasks] = useState([])
-  const [user, setUser] = useState(null)
-  const [firestoreUser, setFirestoreUser] = useState(null)
+  const [user, setUser] = useState()
+  // const [firestoreUser, setFirestoreUser] = useState(null)
 
   useEffect(() => {
-
     onAuthStateChanged(auth, async (user) => {
       if (!user) return setUser(null)
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef)
-      user.extraInfo = docSnap.data()
+      // const docRef = doc(db, "users", user.uid);
+      // const docSnap = await getDoc(docRef)
+      // user.extraInfo = docSnap.data()
+      user.firestoreUser = await getFirestoreUser(user)
       setUser(user)
-      setFirestoreUser(docSnap.data())
+      // setFirestoreUser(docSnap.data())
       addFcmToken(user)
     })
   }, [])
 
   useEffect(() => {
-    if (user) {
-      getTasks()
-    } else {
-      setTasks([])
-    }
+    user ? getTasks() : setTasks([])
   }, [user])
+
+  const getFirestoreUser = async (user) => {
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef)
+    return docSnap.data()
+  }
 
   const nav = useNavigate();
 
@@ -81,6 +85,10 @@ function App() {
     //   }
     // })
     // .catch((err) => console.log(err))
+  }
+
+  const changeName = (name) => {
+    user.firestoreUser.name = name
   }
 
   const getTasks = async () => {
@@ -133,24 +141,30 @@ function App() {
   // -------------------- End of (Helpers) --------------------
 
   return (
+
     <div className="App">
 
-      <NavBar appName={"Task Tracker"} logout={logout} />
+      <NavBar appName={"Task Tracker"} logout={logout} user={user} />
 
       <Container className='mainBody'>
         <Suspense fallback={<h1>LOADING...</h1>}>
           <Routes>
-            <Route path="/" element={<Home nav={nav} />} />
+            {/* If there is a user go to tasks */}
+            <Route element={<PrivateRoutes user={user} navLocation={"/tasks"} reverse={true} />}>
+              <Route path="/" element={<Home nav={nav} />} />
+              <Route path="/login" element={<Login nav={nav} addFirestoreUser={addFirestoreUser} />} />
+              <Route path="/register" element={<Register nav={nav} addFirestoreUser={addFirestoreUser} />} />
+            </Route>
 
-            <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
             <Route path="/about" element={<About />} />
 
-            {/* Account Info */}
-            <Route path="/login" element={<Login nav={nav} addFirestoreUser={addFirestoreUser} />} />
-            <Route path="/register" element={<Register nav={nav} addFirestoreUser={addFirestoreUser} />} />
-            <Route path="/account" element={<Account logout={logout} nav={nav} />} />
-            <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
-            <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} />} />
+            <Route element={<PrivateRoutes user={user} navLocation={"/login"} />}>
+              <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
+              <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
+              <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
+              <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} changeName={changeName} />} />
+            </Route>
+
           </Routes>
         </Suspense>
       </Container>

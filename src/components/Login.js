@@ -6,33 +6,17 @@ import Form from 'react-bootstrap/esm/Form';
 import GoogleSignin from "./GoogleSignin";
 
 // Firebase
-import { doc, getDoc } from "firebase/firestore"
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import { db, auth } from "../firebase-config"
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase-config"
 
-// TODO: add hashing for passwords
-
-const Login = ({ nav, addFirestoreUser }) => {
-    // const [user, setUser] = useState({})
-
-    useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) return nav("/tasks")
-        })
-    }, [])
+const Login = ({ addFirestoreUser }) => {
 
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
     })
-    // const [loginVal, setLoginVal] = useState("")
-    const [loginErr, setLoginErr] = useState()
 
-    // useEffect(() => {
-    //     if (user) {
-    //         nav("/tasks")
-    //     }
-    // })
+    const [loginErr, setLoginErr] = useState()
 
     const login = async (e) => {
         e.preventDefault()
@@ -47,8 +31,6 @@ const Login = ({ nav, addFirestoreUser }) => {
                 setLoginErr(errorMessage)
             });
     }
-
-
 
     return (
         <div className="container py-5 ">

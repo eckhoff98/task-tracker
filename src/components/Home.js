@@ -6,14 +6,7 @@ import Button from "react-bootstrap/esm/Button"
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase-config"
 
-const Home = ({ nav }) => {
-
-    useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            console.log("onAuthStateChanged")
-            if (user) return nav("/tasks")
-        })
-    }, [])
+const Home = ({ }) => {
 
     return (
         <>

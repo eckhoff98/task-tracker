@@ -8,30 +8,37 @@ import { doc, setDoc, getDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "../firebase-config"
 
-export default function ChangeUserInfo({ nav }) {
+export default function ChangeUserInfo({ nav, user, changeName }) {
     const [name, setName] = useState("")
-
-    const [user, setUser] = useState(null)
+    const [alert, setAlert] = useState()
     useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            console.log("onAuthStateChanged")
-            if (!user) return nav("/login")
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef)
-            user.extraInfo = docSnap.data()
-            setUser(user)
-            setName(user.extraInfo.name)
-        })
-    }, [])
+        setName(user.firestoreUser.name)
+    }, [user])
+
+    // const [user, setUser] = useState(null)
+    // useEffect(() => {
+    //     onAuthStateChanged(auth, async (user) => {
+    //         console.log("onAuthStateChanged")
+    //         if (!user) return nav("/login")
+    //         const docRef = doc(db, "users", user.uid);
+    //         const docSnap = await getDoc(docRef)
+    //         user.extraInfo = docSnap.data()
+    //         setUser(user)
+    //         setName(user.extraInfo.name)
+    //     })
+    // }, [])
 
     const [errorData, setErrorData] = useState({})
 
     const submit = async (e) => {
+        e.preventDefault()
         try {
             await setDoc(doc(db, "users", user.uid), {
                 name: name
             })
-            window.location.reload(false);
+            changeName(name)
+            setAlert({ message: "Info changed successfully. ", varient: "success" })
+            // window.location.reload(false);
         } catch (err) {
             console.log(err)
             setErrorData(err)
@@ -43,8 +50,7 @@ export default function ChangeUserInfo({ nav }) {
             <div className="row d-flex align-items-center justify-content-center ">
                 <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                     <form onSubmit={(e) => submit(e)}>
-                        {/* {loginVal && <Alert variant="danger">{loginVal}</Alert>} */}
-                        {(errorData === "none") && <Alert variant="success">Info changed</Alert>}
+                        {(alert) && <Alert variant={alert.varient}>{alert.message}</Alert>}
 
                         {/* <!-- Name input --> */}
                         {errorData && (errorData.name && <Alert variant="danger">{errorData.name.message}</Alert>)}

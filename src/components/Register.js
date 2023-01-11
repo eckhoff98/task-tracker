@@ -6,17 +6,11 @@ import GoogleSignin from "./GoogleSignin";
 
 
 // Firebase
-import { onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase-config"
 
 
-const Register = ({ nav, addFirestoreUser }) => {
-    useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            console.log("onAuthStateChanged")
-            if (user) return nav("/tasks")
-        })
-    }, [])
+const Register = ({ addFirestoreUser }) => {
 
     const [registerData, setRegisterData] = useState({
         email: "",
@@ -25,7 +19,6 @@ const Register = ({ nav, addFirestoreUser }) => {
     })
 
     const [registerErr, setRegisterErr] = useState()
-
 
     const addUser = async (e) => {
         e.preventDefault()

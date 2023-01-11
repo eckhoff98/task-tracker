@@ -1,37 +1,16 @@
+import { useEffect } from 'react';
 import Container from 'react-bootstrap/esm/Container';
 import Nav from 'react-bootstrap/esm/Nav';
 import Navbar from 'react-bootstrap/esm/Navbar';
 import NavDropdown from 'react-bootstrap/esm/NavDropdown';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
-// Firebase
-import { doc, getDoc } from "firebase/firestore"
-import { onAuthStateChanged } from "firebase/auth";
-import { db, auth } from "../firebase-config"
-
-function NavBar({ logout }) {
-    const [user, setUser] = useState(null)
-    const [firestoreUser, setFirestoreUser] = useState(null)
-
-
-    useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            console.log("onAuthStateChanged")
-            if (!user) return setUser(null)
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef)
-            // user.extraInfo = docSnap.data()
-            setFirestoreUser(docSnap.data())
-            setUser(user)
-        })
-    }, [])
-
+function NavBar({ logout, user }) {
     const LoginRegister = () => {
         if (user) {
             return (
                 <>
-                    <NavDropdown title={firestoreUser ? firestoreUser.name : user.email} id="collasible-nav-dropdown" >
+                    <NavDropdown title={user ? user.firestoreUser.name : "user"} id="collasible-nav-dropdown" >
                         <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
