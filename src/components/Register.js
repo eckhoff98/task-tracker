@@ -6,7 +6,7 @@ import GoogleSignin from "./GoogleSignin";
 
 
 // Firebase
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase-config"
 
 
@@ -18,31 +18,53 @@ const Register = ({ addFirestoreUser }) => {
         passwordConfirm: "",
     })
 
-    const [registerErr, setRegisterErr] = useState()
+    // const [registerErr, setRegisterErr] = useState()
+    const [alert, setAlert] = useState()
 
     const addUser = async (e) => {
         e.preventDefault()
         if (registerData.name === "" || registerData.email === "" || registerData.password === "" || registerData.passwordConfirm === "") {
-            return setRegisterErr("Please fill in all fields.")
+            return setAlert({ message: "Please fill in all fields.", variant: "danger" })
+            // return setRegisterErr("Please fill in all fields.")
         }
         if (registerData.password !== registerData.passwordConfirm) {
-            return setRegisterErr("Password confirmation does not match.")
+            return setAlert({ message: "Password confirmation does not match.", variant: "danger" })
+            // return setRegisterErr("Password confirmation does not match.")
         }
-
-        createUserWithEmailAndPassword(auth, registerData.email, registerData.password)
-            .then((userCredential) => {
-                // Signed in 
+        const create = async () => {
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, registerData.email, registerData.password)
                 const extraInfo = {
                     name: registerData.name
                 }
-                addFirestoreUser(userCredential.user, extraInfo)
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(error)
-                setRegisterErr(errorMessage)
-            })
+                await addFirestoreUser(userCredential.user, extraInfo)
+                await signOut(auth)
+                await signInWithEmailAndPassword(auth, registerData.email, registerData.password)
+            } catch (err) {
+                const errorCode = err.code;
+                const errorMessage = err.message;
+                console.log(err)
+                return setAlert({ message: errorMessage, variant: "danger" })
+            }
+        }
+        create()
+
+        // createUserWithEmailAndPassword(auth, registerData.email, registerData.password)
+        //     .then((userCredential) => {
+        //         // Signed in 
+        //         const extraInfo = {
+        //             name: registerData.name
+        //         }
+        //         addFirestoreUser(userCredential.user, extraInfo)
+
+        //     })
+        //     .catch((error) => {
+        //         const errorCode = error.code;
+        //         const errorMessage = error.message;
+        //         console.log(error)
+        //         return setAlert({ message: errorMessage, variant: "danger" })
+        //         // setRegisterErr(errorMessage)
+        //     })
     }
 
     return (
@@ -51,7 +73,7 @@ const Register = ({ addFirestoreUser }) => {
                 <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                     <h1 className="mb-5 text-center">Register</h1>
                     <form onSubmit={(e) => addUser(e)}>
-                        {registerErr && <Alert variant="danger">{registerErr}</Alert>}
+                        {alert && <Alert variant={alert.variant}>{alert.message}</Alert>}
 
                         {/* <!-- name input --> */}
                         <FloatingLabel controlId="name" label="Name" className="mb-3">
@@ -89,7 +111,7 @@ const Register = ({ addFirestoreUser }) => {
                         <div className="divider align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                         </div>
-                        <GoogleSignin addFirestoreUser={addFirestoreUser} setErrMsg={setRegisterErr} />
+                        <GoogleSignin addFirestoreUser={addFirestoreUser} setAlert={setAlert} />
                     </div>
                     <div className="d-flex justify-content-around align-items-center my-4">
                         Already have an account? &nbsp;

@@ -25,18 +25,15 @@ const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 
 function App() {
   const [tasks, setTasks] = useState([])
-  const [user, setUser] = useState()
+  const [user, setUser] = useState(null)
   // const [firestoreUser, setFirestoreUser] = useState(null)
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
+      console.log("auth change")
       if (!user) return setUser(null)
-      // const docRef = doc(db, "users", user.uid);
-      // const docSnap = await getDoc(docRef)
-      // user.extraInfo = docSnap.data()
       user.firestoreUser = await getFirestoreUser(user)
       setUser(user)
-      // setFirestoreUser(docSnap.data())
       addFcmToken(user)
     })
   }, [])
@@ -46,24 +43,28 @@ function App() {
   }, [user])
 
   const getFirestoreUser = async (user) => {
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef)
-    return docSnap.data()
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef)
+      return docSnap.data()
+    } catch (err) {
+      console.log(err)
+      return null
+    }
   }
 
   const nav = useNavigate();
 
   const addFirestoreUser = async (_user, extraInfo) => {
-    // if (user.extraInfo.name) return
-
     const docRef = doc(db, "users", _user.uid);
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists()) return
 
-    await setDoc(doc(db, "users", _user.uid), {
+    const result = await setDoc(doc(db, "users", _user.uid), {
       name: extraInfo.name
     }).catch(err => console.log(err))
+    return result
   }
 
   const addFcmToken = async (_user) => {
@@ -153,7 +154,7 @@ function App() {
             <Route element={<PrivateRoutes user={user} navLocation={"/tasks"} reverse={true} />}>
               <Route path="/" element={<Home nav={nav} />} />
               <Route path="/login" element={<Login nav={nav} addFirestoreUser={addFirestoreUser} />} />
-              <Route path="/register" element={<Register nav={nav} addFirestoreUser={addFirestoreUser} />} />
+              <Route path="/register" element={<Register nav={nav} addFirestoreUser={addFirestoreUser} getFirestoreUser={getFirestoreUser} />} />
             </Route>
 
             <Route path="/about" element={<About />} />

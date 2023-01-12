@@ -10,7 +10,7 @@ function NavBar({ logout, user }) {
         if (user) {
             return (
                 <>
-                    <NavDropdown title={user ? user.firestoreUser.name : "user"} id="collasible-nav-dropdown" >
+                    <NavDropdown title={user.firestoreUser ? user.firestoreUser.name : user.displayName} id="collasible-nav-dropdown" >
                         <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>
