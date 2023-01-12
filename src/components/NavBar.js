@@ -5,12 +5,12 @@ import Navbar from 'react-bootstrap/esm/Navbar';
 import NavDropdown from 'react-bootstrap/esm/NavDropdown';
 import { Link } from 'react-router-dom';
 
-function NavBar({ logout, user }) {
+function NavBar({ logout, user, firestoreUser }) {
     const LoginRegister = () => {
         if (user) {
             return (
                 <>
-                    <NavDropdown title={user.firestoreUser ? user.firestoreUser.name : user.displayName} id="collasible-nav-dropdown" >
+                    <NavDropdown title={firestoreUser ? firestoreUser.name : user.displayName} id="collasible-nav-dropdown" >
                         <NavDropdown.Item eventKey="6" as={Link} to="/account">Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item eventKey="7" as={Link} to="/" onClick={() => { logout() }}>Logout</NavDropdown.Item>

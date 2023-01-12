@@ -11,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth"
 import { getToken } from "firebase/messaging";
 
 import PrivateRoutes from './PrivateRoutes';
+import { async } from '@firebase/util';
 
 // Components
 const Home = lazy(() => import("./components/Home"))
@@ -26,30 +27,54 @@ const ChangeUserInfo = lazy(() => import("./components/ChangeUserInfo"))
 function App() {
   const [tasks, setTasks] = useState([])
   const [user, setUser] = useState(null)
+  const [firestoreUser, setFirestoreUser] = useState(null)
   // const [firestoreUser, setFirestoreUser] = useState(null)
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       console.log("auth change")
       if (!user) return setUser(null)
-      user.firestoreUser = await getFirestoreUser(user)
       setUser(user)
-      addFcmToken(user)
+      setFirestoreUser(await getFirestoreUser(user))
     })
   }, [])
+
+  useEffect(() => {
+    if (!user) return
+    if (firestoreUser != null) return
+    firestore()
+  })
+
+  const firestore = async () => {
+    const result = await getFirestoreUser(user)
+    if (result != null) setFirestoreUser(result)
+    // setFirestoreUser(await getFirestoreUser(user))
+  }
+  // useEffect(() => {
+  //   console.log("stuff")
+  //   if (!user) return
+  //   if (user.firestoreUser == null) {
+  //     getFirestoreUser(user)
+  //   }
+  // })
+
 
   useEffect(() => {
     user ? getTasks() : setTasks([])
   }, [user])
 
+
   const getFirestoreUser = async (user) => {
+    console.log("getting firestore user")
     try {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef)
-      return docSnap.data()
+      if (docSnap.exists()) {
+        return docSnap.data()
+      }
     } catch (err) {
       console.log(err)
-      return null
+      return false
     }
   }
 
@@ -59,37 +84,22 @@ function App() {
     const docRef = doc(db, "users", _user.uid);
     const docSnap = await getDoc(docRef)
 
-    if (docSnap.exists()) return
+    if (docSnap.exists()) return null
+
+    const currentToken = await getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' })
+    console.log(currentToken)
 
     const result = await setDoc(doc(db, "users", _user.uid), {
-      name: extraInfo.name
-    }).catch(err => console.log(err))
+      name: extraInfo.name,
+      fcmTokens: arrayUnion(currentToken)
+    })
+      .catch(err => console.log(err))
+
     return result
   }
 
-  const addFcmToken = async (_user) => {
-    const currentToken = await getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' })
-    console.log(currentToken)
-    await updateDoc(doc(db, "users", _user.uid), {
-      fcmTokens: arrayUnion(currentToken)
-    });
-    // await setDoc(doc(db, "users", _user.uid), {
-    //   fcmToken: currentToken
-    // }, { merge: true }).catch(err => console.log(err))
-    // getToken(messaging, { vapidKey: 'BJje9NpOzGlOceheK6J7-c8UsFlyzQmV-XUpqJDLqg6UkbEeoLbH-2aaYNGyIstVMSpcJnTiQFjumJyj3psmBPI' })
-    // .then((currentToken) => {
-    //   if (currentToken) {
-    //     console.log(currentToken)
-    //     return currentToken
-    //   } else {
-    //     console.log('No registration token available. Request permission to generate one.');
-    //   }
-    // })
-    // .catch((err) => console.log(err))
-  }
-
   const changeName = (name) => {
-    user.firestoreUser.name = name
+    firestoreUser.name = name
   }
 
   const getTasks = async () => {
@@ -145,7 +155,7 @@ function App() {
 
     <div className="App">
 
-      <NavBar appName={"Task Tracker"} logout={logout} user={user} />
+      <NavBar appName={"Task Tracker"} logout={logout} user={user} firestoreUser={firestoreUser} />
 
       <Container className='mainBody'>
         <Suspense fallback={<h1>LOADING...</h1>}>
@@ -161,9 +171,9 @@ function App() {
 
             <Route element={<PrivateRoutes user={user} navLocation={"/login"} />}>
               <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
-              <Route path="/account" element={<Account logout={logout} nav={nav} user={user} />} />
+              <Route path="/account" element={<Account logout={logout} nav={nav} user={user} firestoreUser={firestoreUser} />} />
               <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
-              <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} changeName={changeName} />} />
+              <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} changeName={changeName} firestoreUser={firestoreUser} />} />
             </Route>
 
           </Routes>

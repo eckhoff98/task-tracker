@@ -1,4 +1,5 @@
-import { signInWithRedirect, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
+import { getSuggestedQuery } from "@testing-library/react";
+import { signInWithRedirect, GoogleAuthProvider, getRedirectResult, signOut, signInWithCustomToken } from "firebase/auth";
 import { auth, provider } from "../firebase-config"
 
 
@@ -19,7 +20,8 @@ export default function GoogleSignin({ addFirestoreUser, setAlert }) {
             const extraInfo = {
                 name: user.displayName
             }
-            await addFirestoreUser(user, extraInfo)
+            const firestoreUser = await addFirestoreUser(user, extraInfo)
+            // if (firestoreUser !== null) signOut(auth)
         } catch (err) {
             const errorCode = err.code;
             const errorMessage = err.message;

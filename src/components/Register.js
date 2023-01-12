@@ -10,7 +10,7 @@ import { createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } f
 import { auth } from "../firebase-config"
 
 
-const Register = ({ addFirestoreUser }) => {
+const Register = ({ addFirestoreUser, setFirestoreUserLocal }) => {
 
     const [registerData, setRegisterData] = useState({
         email: "",

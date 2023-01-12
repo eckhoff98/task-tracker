@@ -8,27 +8,13 @@ import { doc, setDoc, getDoc } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth";
 import { db, auth } from "../firebase-config"
 
-export default function ChangeUserInfo({ nav, user, changeName }) {
+export default function ChangeUserInfo({ firestoreUser, user, changeName }) {
     const [name, setName] = useState("")
     const [alert, setAlert] = useState()
     useEffect(() => {
-        setName(user.firestoreUser.name)
-    }, [user])
+        setName(firestoreUser.name)
+    }, [firestoreUser, user])
 
-    // const [user, setUser] = useState(null)
-    // useEffect(() => {
-    //     onAuthStateChanged(auth, async (user) => {
-    //         console.log("onAuthStateChanged")
-    //         if (!user) return nav("/login")
-    //         const docRef = doc(db, "users", user.uid);
-    //         const docSnap = await getDoc(docRef)
-    //         user.extraInfo = docSnap.data()
-    //         setUser(user)
-    //         setName(user.extraInfo.name)
-    //     })
-    // }, [])
-
-    // const [errorData, setErrorData] = useState({})
 
     const submit = async (e) => {
         e.preventDefault()

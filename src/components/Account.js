@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/esm/Card';
 import { Link } from "react-router-dom";
 
 
-export default function Account({ user }) {
+export default function Account({ user, firestoreUser }) {
 
     return (
         <>
@@ -13,7 +13,7 @@ export default function Account({ user }) {
                     <Card.Header>Info</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            Name: {user ? user.firestoreUser.name : ""}
+                            Name: {firestoreUser ? firestoreUser.name : (user && user.displayName)}
                         </Card.Text>
                         <Card.Text>
                             Email: {user ? user.email : ""}
