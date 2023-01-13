@@ -21,9 +21,9 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask)
 
 
-    useEffect(() => {
-        timeToReminder(task.date, task.time)
-    }, [editTaskToggel, moreInfo])
+    // useEffect(() => {
+    //     timeToReminder(task.date, task.time)
+    // }, [editTaskToggel, moreInfo])
 
     const ReminderIcon = () => {
         if (task.reminder) return (<BsAlarmFill size={25} />)
@@ -40,17 +40,13 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     }
 
     const timeToReminder = (datetimeString) => {
-        // const reminder = new Date(date + " " + time)
         const reminder = new Date(datetimeString)
         return moment(reminder).fromNow()
     }
 
     const cancel = () => {
-        if (task.freshTask) {
-            deleteTask()
-        } else {
-            setEditTaskToggel(false)
-        }
+        if (task.freshTask) return deleteTask()
+        return setEditTaskToggel(false)
     }
 
 
@@ -61,10 +57,9 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className="card bg-dark">
                         <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
-                            <h2 className="taskLessInfo">{timeToReminder(Date(task.datetime))} &nbsp; <ReminderIcon /></h2>
+                            <h2 className="taskLessInfo">{timeToReminder(task.datetime)} &nbsp; <ReminderIcon /></h2>
                         </div>
                     </div>
-                    {/* <div className="time">{task.time}</div> */}
                 </div>
             )
         }
@@ -75,7 +70,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
                         <h2 className="taskLessInfo">
-                            {timeToReminder(Date(task.datetime))} &nbsp; <ReminderIcon />
+                            {timeToReminder(task.datetime)} &nbsp; <ReminderIcon />
                         </h2>
                     </div>
                     <div className="card-body">
