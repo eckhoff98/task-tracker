@@ -136,6 +136,10 @@ function App() {
       setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
       await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
     } else {
+      if (task.taskRunnerTaskId) {
+        await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
+        delete task.taskRunnerTaskId
+      } else { }
       await updateDoc(taskDoc, task).catch(err => console.log(err))
       setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
     }
