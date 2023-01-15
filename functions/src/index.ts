@@ -28,7 +28,7 @@ exports.addFcmToken = functions.https.onCall(async (data, context) => {
 exports.removeNotificationTask = functions.https.onCall(async (data, context) => {
     if (!context.auth) return
     console.log(data.taskRunnerTaskId)
-    const result = await db.collection("tasks").doc(data.taskRunnerTaskId).delete()
+    const result = (await db.collection("tasks").doc(data.taskRunnerTaskId).get()).exists && await db.collection("tasks").doc(data.taskRunnerTaskId).delete()
     return result
 })
 exports.addNotificationTask = functions.https.onCall(async (data, context) => {
@@ -58,7 +58,7 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
         }
     }
     if (data.taskRunnerTaskId) {
-        await db.collection("tasks").doc(data.taskRunnerTaskId).update(task)
+        (await db.collection("tasks").doc(data.taskRunnerTaskId).get()).exists && db.collection("tasks").doc(data.taskRunnerTaskId).update(task)
         return ({ taskRunnerTaskId: data.taskRunnerTaskId })
     } else {
         const result = await db.collection("tasks").add(task)
