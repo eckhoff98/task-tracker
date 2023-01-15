@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
 // FIREBASE
-import { db, auth, messaging, requestPermission, addNotificationTask } from "./firebase-config"
+import { db, auth, messaging, requestPermission, addNotificationTask, removeNotificationTask } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion, Timestamp } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import { getToken } from "firebase/messaging";
@@ -99,6 +99,7 @@ function App() {
     const tasksSubCollection = collection(userDoc, "tasks")
     const data = await getDocs(tasksSubCollection).catch(err => console.log(err))
     // converting firebase timestamp to js date here aswell
+
     setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id, datetime: item.data().datetime.toDate() })))
   }
 
@@ -129,9 +130,10 @@ function App() {
     const userDoc = doc(db, "users", user.uid)
     const taskDoc = doc(userDoc, "tasks", task.id)
     setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
-    await updateDoc(taskDoc, task).catch(err => console.log(err))
+    const result = await addNotificationTask(task).catch(err => console.log(err))
+    const taskRunnerTaskId = result.data.taskRunnerTaskId
+    await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
 
-    await addNotificationTask(task).catch(err => console.log(err))
   }
 
   const deleteTask = async (task) => {
@@ -140,6 +142,8 @@ function App() {
     const taskDoc = doc(userDoc, "tasks", task.id)
     setTasks([...tasks.filter((t) => t.id !== task.id)])
     await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
+    console.log(task)
+    await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
   }
 
   const logout = () => {

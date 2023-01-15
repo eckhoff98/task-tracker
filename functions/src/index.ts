@@ -23,6 +23,12 @@ exports.addFcmToken = functions.https.onCall(async (data, context) => {
     return ({ msg: "recieved data", data: data })
 });
 
+exports.removeNotificationTask = functions.https.onCall(async (data, context) => {
+    if (!context.auth) return
+    console.log(data.taskRunnerTaskId)
+    const result = await db.collection("tasks").doc(data.taskRunnerTaskId).delete()
+    return result
+})
 exports.addNotificationTask = functions.https.onCall(async (data, context) => {
     if (!context.auth) return
     const query = db.collection("users").doc(context.auth.uid).collection("fcmTokens")
@@ -34,9 +40,6 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
         justTokens.push(snapshot.data().token)
     });
 
-    // Create and add a notification task for task runner
-    // const now = admin.firestore.Timestamp.now()
-    // console.log(data.datetime)
     console.log(admin.firestore.Timestamp.fromDate(new Date(data.datetime)))
     const task = {
         performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
@@ -49,9 +52,9 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
             tokens: justTokens
         }
     }
-    db.collection("tasks").add(task)
+    const result = await db.collection("tasks").add(task)
 
-    return ({ tokens: justTokens })
+    return ({ taskRunnerTaskId: result.id })
 });
 
 export const taskRunner = functions.runWith({ memory: '2GB' }).pubsub

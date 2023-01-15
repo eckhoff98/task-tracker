@@ -54,6 +54,7 @@ export async function requestPermission(user) {
 
 const addFcmToken = httpsCallable(functions, 'addFcmToken');
 export const addNotificationTask = httpsCallable(functions, 'addNotificationTask');
+export const removeNotificationTask = httpsCallable(functions, 'removeNotificationTask');
 // const addFcmToken = async (user, token) => {
     
     // const docsnap = await getDoc(doc(db, "users", user.uid))
