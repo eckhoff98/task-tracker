@@ -105,6 +105,7 @@ function App() {
 
   const addTask = async (task) => {
     if (!user) return
+
     const userDoc = doc(db, "users", user.uid)
     const tasksSubCollection = collection(userDoc, "tasks")
     const record = await addDoc(tasksSubCollection, {
@@ -124,15 +125,21 @@ function App() {
   }
 
   const updateTask = async (task) => {
-    console.log(task)
     if (task.name === "") task.name = "New Task"
     if (!user) return
     const userDoc = doc(db, "users", user.uid)
     const taskDoc = doc(userDoc, "tasks", task.id)
-    setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
-    const result = await addNotificationTask(task).catch(err => console.log(err))
-    const taskRunnerTaskId = result.data.taskRunnerTaskId
-    await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
+
+    if (task.reminder) {
+      const result = await addNotificationTask(task).catch(err => console.log(err))
+      const taskRunnerTaskId = result.data.taskRunnerTaskId
+      setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
+      await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
+    } else {
+      await updateDoc(taskDoc, task).catch(err => console.log(err))
+      setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+    }
+
 
   }
 

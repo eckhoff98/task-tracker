@@ -46,7 +46,7 @@ export async function requestPermission(user) {
 
         if (!token) return console.log('No registration token available. Request permission to generate one.');
         console.log(token)
-        const result = await addFcmToken({token: token})
+        const result = await addFcmToken({ token: token })
         console.log(result)
         return token
     } catch (err) { console.log(err) }
@@ -55,30 +55,7 @@ export async function requestPermission(user) {
 const addFcmToken = httpsCallable(functions, 'addFcmToken');
 export const addNotificationTask = httpsCallable(functions, 'addNotificationTask');
 export const removeNotificationTask = httpsCallable(functions, 'removeNotificationTask');
-// const addFcmToken = async (user, token) => {
-    
-    // const docsnap = await getDoc(doc(db, "users", user.uid))
 
-    // if (docsnap.exists()) {
-    //     const tokens = docsnap.data().fcmTokens
-    //     if (tokens && tokens.length > 0) {
-    //         for (const i in tokens) {
-    //             if (tokens[i].token === token) {
-    //                 console.log("matching token")
-    //                 await setDoc(doc(db, "users", user.uid), {
-    //                     fcmTokens: arrayRemove(tokens[i])
-    //                 }, { merge: true })
-    //                     .catch(err => console.log(err))
-    //             }
-    //         }
-    //     }
-    // }
-    // console.log("adding token")
-    // await setDoc(doc(db, "users", user.uid), {
-    //     fcmTokens: arrayUnion({ token: token, timestamp: Timestamp.now() })
-    // }, { merge: true })
-    //     .catch(err => console.log(err))
-// }
 
 
 

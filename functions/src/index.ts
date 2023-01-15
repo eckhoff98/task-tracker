@@ -3,23 +3,25 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 const db = admin.firestore();
 
+// User tasks
+
 exports.addFcmToken = functions.https.onCall(async (data, context) => {
-    if (context.auth) {
-        const query = db.collection('users').doc(context.auth.uid).collection("fcmTokens").where('token', '==', data.token)
-        const tokens = await query.get()
-        if (tokens) {
-            // Delete all duplicate tokens
-            tokens.forEach(snapshot => {
-                context.auth && db.collection("users").doc(context.auth.uid).collection("fcmTokens").doc(snapshot.id).delete()
-            })
-        }
-        // Add token to user's firestore with timstamp
-        const now = admin.firestore.Timestamp.now()
-        db.collection("users").doc(context.auth.uid).collection("fcmTokens").add({
-            token: data.token,
-            timestamp: now
+    if (!context.auth) return
+    const query = db.collection('users').doc(context.auth.uid).collection("fcmTokens").where('token', '==', data.token)
+    const tokens = await query.get()
+    if (tokens) {
+        // Delete all duplicate tokens
+        tokens.forEach(snapshot => {
+            context.auth && db.collection("users").doc(context.auth.uid).collection("fcmTokens").doc(snapshot.id).delete()
         })
     }
+    // Add token to user's firestore with timstamp
+    const now = admin.firestore.Timestamp.now()
+    db.collection("users").doc(context.auth.uid).collection("fcmTokens").add({
+        token: data.token,
+        timestamp: now
+    })
+
     return ({ msg: "recieved data", data: data })
 });
 
@@ -40,6 +42,9 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
         justTokens.push(snapshot.data().token)
     });
 
+    // Check if task already exists
+
+
     console.log(admin.firestore.Timestamp.fromDate(new Date(data.datetime)))
     const task = {
         performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
@@ -52,9 +57,14 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
             tokens: justTokens
         }
     }
-    const result = await db.collection("tasks").add(task)
+    if (data.taskRunnerTaskId) {
+        await db.collection("tasks").doc(data.taskRunnerTaskId).update(task)
+        return ({ taskRunnerTaskId: data.taskRunnerTaskId })
+    } else {
+        const result = await db.collection("tasks").add(task)
+        return ({ taskRunnerTaskId: result.id })
+    }
 
-    return ({ taskRunnerTaskId: result.id })
 });
 
 export const taskRunner = functions.runWith({ memory: '2GB' }).pubsub
