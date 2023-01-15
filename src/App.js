@@ -5,13 +5,12 @@ import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
 // FIREBASE
-import { db, auth, messaging } from "./firebase-config"
-import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion } from "firebase/firestore"
+import { db, auth, messaging, requestPermission } from "./firebase-config"
+import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion, Timestamp } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import { getToken } from "firebase/messaging";
 
 import PrivateRoutes from './PrivateRoutes';
-import { async } from '@firebase/util';
 
 // Components
 const Home = lazy(() => import("./components/Home"))
@@ -36,6 +35,7 @@ function App() {
       if (!user) return setUser(null)
       setUser(user)
       setFirestoreUser(await getFirestoreUser(user))
+      requestPermission(user)
     })
   }, [])
 
@@ -50,19 +50,10 @@ function App() {
     if (result != null) setFirestoreUser(result)
     // setFirestoreUser(await getFirestoreUser(user))
   }
-  // useEffect(() => {
-  //   console.log("stuff")
-  //   if (!user) return
-  //   if (user.firestoreUser == null) {
-  //     getFirestoreUser(user)
-  //   }
-  // })
-
 
   useEffect(() => {
     user ? getTasks() : setTasks([])
   }, [user])
-
 
   const getFirestoreUser = async (user) => {
     console.log("getting firestore user")
@@ -91,8 +82,8 @@ function App() {
 
     const result = await setDoc(doc(db, "users", _user.uid), {
       name: extraInfo.name,
-      fcmTokens: arrayUnion(currentToken)
-    })
+      fcmTokens: arrayUnion({ token: currentToken, timestamp: Timestamp.now() })
+    }, { merge: true })
       .catch(err => console.log(err))
 
     return result
@@ -170,7 +161,7 @@ function App() {
             <Route path="/about" element={<About />} />
 
             <Route element={<PrivateRoutes user={user} navLocation={"/login"} />}>
-              <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} />} />
+              <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
               <Route path="/account" element={<Account logout={logout} nav={nav} user={user} firestoreUser={firestoreUser} />} />
               <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
               <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} changeName={changeName} firestoreUser={firestoreUser} />} />

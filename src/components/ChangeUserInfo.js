@@ -20,7 +20,7 @@ export default function ChangeUserInfo({ firestoreUser, user, changeName }) {
         e.preventDefault()
         if (name === "") return setAlert({ message: "Name cannot be blank.", varient: "danger" })
         try {
-            await setDoc(doc(db, "users", user.uid), { name: name })
+            await setDoc(doc(db, "users", user.uid), { name: name }, { merge: true })
             changeName(name)
             setAlert({ message: "Info changed successfully. ", varient: "success" })
         } catch (err) {

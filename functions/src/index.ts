@@ -3,6 +3,29 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 const db = admin.firestore();
 
+exports.addFcmToken = functions.https.onCall(async (data, context) => {
+
+    let tokens = null
+
+    if (context.auth) {
+        const query = db.collection('users').doc(context.auth.uid).collection("fcmTokens").where('token', '==', data.token)
+        tokens = await query.get()
+        if (tokens) {
+            tokens.forEach(snapshot => {
+                console.log(snapshot.data())
+
+            })
+        }
+        // Add token to with timstamp
+        const now = admin.firestore.Timestamp.now()
+        db.collection("users").doc(context.auth.uid).collection("fcmTokens").add({
+            token: data.token,
+            timestamp: now
+        })
+    }
+    return ({ msg: "recieved data", data: data })
+});
+
 export const taskRunner = functions.runWith({ memory: '2GB' }).pubsub
 
     .schedule('* * * * *').onRun(async context => {
@@ -60,7 +83,6 @@ const workers: Workers = {
                     notification: {
                         title: title,
                         body: body,
-                        // tag: "any-string-here"
                     }
                 };
                 admin.messaging().send(payload).then((response) => {
@@ -72,27 +94,6 @@ const workers: Workers = {
                 });
             });
         }
-        // if (options.token) {
-        //     const title = options.title ? options.title : "No title"
-        //     const body = options.body ? options.body : "No body"
-        //     // const message = "test message"
-        //     const payload = {
-        //         token: options.token,
-        //         notification: {
-        //             title: title,
-        //             body: body,
-        //             // tag: "any-string-here"
-        //         }
-        //     };
-        //     admin.messaging().send(payload).then((response) => {
-        //         // Response is a message ID string.
-        //         console.log('Successfully sent message:', response);
-        //         return { success: true };
-        //     }).catch((error) => {
-        //         return { error: error.code };
-        //     });
-        // }
-        // db.collection('logs').add({ notification: 'notification' })
     }
 }
 
