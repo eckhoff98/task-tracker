@@ -67,7 +67,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                         defaultValue={datetime}
                         onChange={(e) => {
                             setdatetime(e.target.value)
-                            setTaskData({ ...taskData, datetime: e.target.value })
+                            setTaskData({ ...taskData, datetime: new Date(e.target.value) })
                         }}
                     />
                 </FloatingLabel>

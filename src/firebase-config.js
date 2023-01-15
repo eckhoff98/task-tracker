@@ -36,6 +36,7 @@ const appCheck = initializeAppCheck(app, {
 
 export async function requestPermission(user) {
     if (!user) return console.log("no logged in user, canceling permission request")
+
     try {
         console.log('Requesting permission...');
         const permission = await Notification.requestPermission()
@@ -52,7 +53,7 @@ export async function requestPermission(user) {
 }
 
 const addFcmToken = httpsCallable(functions, 'addFcmToken');
-
+export const addNotificationTask = httpsCallable(functions, 'addNotificationTask');
 // const addFcmToken = async (user, token) => {
     
     // const docsnap = await getDoc(doc(db, "users", user.uid))

@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
 // FIREBASE
-import { db, auth, messaging, requestPermission } from "./firebase-config"
+import { db, auth, messaging, requestPermission, addNotificationTask } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion, Timestamp } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import { getToken } from "firebase/messaging";
@@ -98,7 +98,8 @@ function App() {
     const userDoc = doc(db, "users", user.uid)
     const tasksSubCollection = collection(userDoc, "tasks")
     const data = await getDocs(tasksSubCollection).catch(err => console.log(err))
-    setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id })))
+    // converting firebase timestamp to js date here aswell
+    setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id, datetime: item.data().datetime.toDate() })))
   }
 
   const addTask = async (task) => {
@@ -108,25 +109,29 @@ function App() {
     const record = await addDoc(tasksSubCollection, {
       ...task,
       uid: user.uid,
-      datetime: String(new Date())
+      datetime: new Date()
     }).catch(err => console.log(err))
+
 
     setTasks([...tasks, {
       ...task,
       freshTask: true,
       id: record.id,
       uid: user.uid,
-      datetime: String(new Date())
+      datetime: new Date()
     }])
   }
 
   const updateTask = async (task) => {
+    console.log(task)
     if (task.name === "") task.name = "New Task"
     if (!user) return
     const userDoc = doc(db, "users", user.uid)
     const taskDoc = doc(userDoc, "tasks", task.id)
     setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
     await updateDoc(taskDoc, task).catch(err => console.log(err))
+
+    await addNotificationTask(task).catch(err => console.log(err))
   }
 
   const deleteTask = async (task) => {

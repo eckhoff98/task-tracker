@@ -4,19 +4,16 @@ admin.initializeApp();
 const db = admin.firestore();
 
 exports.addFcmToken = functions.https.onCall(async (data, context) => {
-
-    let tokens = null
-
     if (context.auth) {
         const query = db.collection('users').doc(context.auth.uid).collection("fcmTokens").where('token', '==', data.token)
-        tokens = await query.get()
+        const tokens = await query.get()
         if (tokens) {
+            // Delete all duplicate tokens
             tokens.forEach(snapshot => {
-                console.log(snapshot.data())
-
+                context.auth && db.collection("users").doc(context.auth.uid).collection("fcmTokens").doc(snapshot.id).delete()
             })
         }
-        // Add token to with timstamp
+        // Add token to user's firestore with timstamp
         const now = admin.firestore.Timestamp.now()
         db.collection("users").doc(context.auth.uid).collection("fcmTokens").add({
             token: data.token,
@@ -24,6 +21,37 @@ exports.addFcmToken = functions.https.onCall(async (data, context) => {
         })
     }
     return ({ msg: "recieved data", data: data })
+});
+
+exports.addNotificationTask = functions.https.onCall(async (data, context) => {
+    if (!context.auth) return
+    const query = db.collection("users").doc(context.auth.uid).collection("fcmTokens")
+    const tokens = await query.get()
+
+    if (!tokens) return
+    const justTokens: any[] = []
+    tokens.forEach(snapshot => {
+        justTokens.push(snapshot.data().token)
+    });
+
+    // Create and add a notification task for task runner
+    // const now = admin.firestore.Timestamp.now()
+    // console.log(data.datetime)
+    console.log(admin.firestore.Timestamp.fromDate(new Date(data.datetime)))
+    const task = {
+        performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
+        status: "scheduled",
+        worker: "notification",
+        options: {
+            title: data.name,
+            body: data.description,
+            // name: "name",
+            tokens: justTokens
+        }
+    }
+    db.collection("tasks").add(task)
+
+    return ({ tokens: justTokens })
 });
 
 export const taskRunner = functions.runWith({ memory: '2GB' }).pubsub
@@ -65,6 +93,9 @@ interface Workers {
     [key: string]: (options: any) => Promise<any>
 }
 
+
+
+
 // Business logic for named tasks. Function name should match worker field on task document. 
 const workers: Workers = {
     helloWorld: () => db.collection('logs').add({ hello: 'world' }),
@@ -74,8 +105,8 @@ const workers: Workers = {
         }
         if (options.tokens.length > 0) {
             console.log("tokens is not zero")
-            const title = options.title ? options.title : "No title"
-            const body = options.body ? options.body : "No body"
+            const title = options.title ? options.title : ""
+            const body = options.body ? options.body : ""
             options.tokens.forEach((_token: string) => {
                 console.log("sending to: " + _token)
                 const payload = {
