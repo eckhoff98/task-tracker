@@ -42,10 +42,6 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
         justTokens.push(snapshot.data().token)
     });
 
-    // Check if task already exists
-
-
-    console.log(admin.firestore.Timestamp.fromDate(new Date(data.datetime)))
     const task = {
         performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
         status: "scheduled",
@@ -53,10 +49,10 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
         options: {
             title: data.name,
             body: data.description,
-            // name: "name",
             tokens: justTokens
         }
     }
+
     if (data.taskRunnerTaskId) {
         (await db.collection("tasks").doc(data.taskRunnerTaskId).get()).exists && db.collection("tasks").doc(data.taskRunnerTaskId).update(task)
         return ({ taskRunnerTaskId: data.taskRunnerTaskId })
@@ -68,46 +64,32 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
 });
 
 export const taskRunner = functions.runWith({ memory: '2GB' }).pubsub
-
     .schedule('* * * * *').onRun(async context => {
-
         // Consistent timestamp
         const now = admin.firestore.Timestamp.now();
-
         // Query all documents ready to perform
         const query = db.collection('tasks').where('performAt', '<=', now).where('status', '==', 'scheduled');
-
         const tasks = await query.get();
-
-
         // Jobs to execute concurrently. 
         const jobs: Promise<any>[] = [];
-
         // Loop over documents and push job.
         tasks.forEach(snapshot => {
             const { worker, options } = snapshot.data();
-
             const job = workers[worker](options)
-
                 // Update doc with status on success or error
                 .then(() => snapshot.ref.update({ status: 'complete' }))
                 .catch((err) => snapshot.ref.update({ status: 'error' }));
 
             jobs.push(job);
         });
-
         // Execute all jobs concurrently
         return await Promise.all(jobs);
-
     });
 
 // Optional interface, all worker functions should return Promise. 
 interface Workers {
     [key: string]: (options: any) => Promise<any>
 }
-
-
-
 
 // Business logic for named tasks. Function name should match worker field on task document. 
 const workers: Workers = {

@@ -104,6 +104,7 @@ function App() {
   }
 
   const addTask = async (task) => {
+    // Adds a basic task template that will be updated with the updateTask function
     if (!user) return
 
     const userDoc = doc(db, "users", user.uid)
@@ -131,24 +132,27 @@ function App() {
     const taskDoc = doc(userDoc, "tasks", task.id)
 
 
-
+    // Add notification task and check if it returns an id for the task, 
+    // then update task to store that id
     if (task.reminder) {
       const result = await addNotificationTask(task).catch(err => console.log(err))
-      if (result.data.taskRunnerTaskId) {
-        const taskRunnerTaskId = result.data.taskRunnerTaskId
-        setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
-        await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
+      const id = result.data.taskRunnerTaskId
+      if (id) {
+        setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: id } : t)])
+        await updateDoc(taskDoc, { ...task, taskRunnerTaskId: id }).catch(err => console.log(err))
       }
-    } else {
-      if (task.taskRunnerTaskId) {
-        await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
-        delete task.taskRunnerTaskId
-      }
-      await updateDoc(taskDoc, task).catch(err => console.log(err))
-      setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+      return
     }
 
+    // If reminder is not checked, remove the the taskRunnerTask and remover the taskRunnerTaskId from task
+    if (task.taskRunnerTaskId) {
+      await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
+      delete task.taskRunnerTaskId
+    }
 
+    // Update doc and tasks state
+    await updateDoc(taskDoc, task).catch(err => console.log(err))
+    setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
   }
 
   const deleteTask = async (task) => {
@@ -157,7 +161,7 @@ function App() {
     const taskDoc = doc(userDoc, "tasks", task.id)
     setTasks([...tasks.filter((t) => t.id !== task.id)])
     await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
-    console.log(task)
+
     await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
   }
 
