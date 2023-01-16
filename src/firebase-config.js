@@ -32,8 +32,6 @@ const appCheck = initializeAppCheck(app, {
     isTokenAutoRefreshEnabled: true
 });
 
-
-
 export async function requestPermission(user) {
     if (!user) return console.log("no logged in user, canceling permission request")
 
