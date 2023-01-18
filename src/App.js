@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { db, auth, messaging, requestPermission, addNotificationTask, removeNotificationTask } from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion, Timestamp } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
-import { getToken } from "firebase/messaging";
+import { getToken, onMessage } from "firebase/messaging";
 
 import PrivateRoutes from './PrivateRoutes';
 
@@ -38,6 +38,10 @@ function App() {
       requestPermission(user)
     })
   }, [])
+  onMessage(messaging, (payload) => {
+    setTasks([...tasks])
+    console.log("setting tasks")
+  });
 
   useEffect(() => {
     if (!user) return
@@ -162,7 +166,9 @@ function App() {
     setTasks([...tasks.filter((t) => t.id !== task.id)])
     await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
 
-    await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
+    if (task.taskRunnerTaskId) {
+      await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
+    }
   }
 
   const logout = () => {

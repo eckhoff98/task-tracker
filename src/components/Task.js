@@ -20,11 +20,6 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const [moreInfo, setMoreInfo] = useState(false)
     const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask)
 
-
-    // useEffect(() => {
-    //     timeToReminder(task.date, task.time)
-    // }, [editTaskToggel, moreInfo])
-
     const ReminderIcon = () => {
         if (task.reminder) return (<BsAlarmFill size={25} />)
     }
@@ -51,10 +46,11 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
 
 
     const TaskInfo = () => {
+        const notificationActive = (new Date(task.datetime) <= new Date()) && task.reminder
         if (!moreInfo) {
             return (
                 <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}>
-                    <div className="card bg-dark">
+                    <div className={notificationActive ? "card bg-dark border-success" : "card bg-dark"}>
                         <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
                             <h2 className="taskLessInfo">{timeToReminder(task.datetime)} &nbsp; <ReminderIcon /></h2>
@@ -66,7 +62,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
 
         return (
             <div onClick={() => (!editTaskToggel) && setMoreInfo(!moreInfo)}>
-                <div className="card bg-dark">
+                <div className={notificationActive ? "card bg-dark border-success" : "card bg-dark"}>
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
                         <h2 className="taskLessInfo">

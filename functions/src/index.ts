@@ -31,6 +31,7 @@ exports.removeNotificationTask = functions.https.onCall(async (data, context) =>
     const result = (await db.collection("tasks").doc(data.taskRunnerTaskId).get()).exists && await db.collection("tasks").doc(data.taskRunnerTaskId).delete()
     return result
 })
+
 exports.addNotificationTask = functions.https.onCall(async (data, context) => {
     if (!context.auth) return
     const query = db.collection("users").doc(context.auth.uid).collection("fcmTokens")
@@ -47,6 +48,7 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
         status: "scheduled",
         worker: "notification",
         options: {
+            taskId: data.id ? data.id : "no_id",
             title: data.name,
             body: data.description,
             tokens: justTokens
@@ -109,7 +111,8 @@ const workers: Workers = {
                     notification: {
                         title: title,
                         body: body,
-                    }
+                    },
+                    data: { taskId: options.taskId }
                 };
                 admin.messaging().send(payload).then((response) => {
                     // Response is a message ID string.
