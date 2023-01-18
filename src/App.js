@@ -38,9 +38,9 @@ function App() {
       requestPermission(user)
     })
   }, [])
+
   onMessage(messaging, (payload) => {
     setTasks([...tasks])
-    console.log("setting tasks")
   });
 
   useEffect(() => {
