@@ -56,24 +56,23 @@ const TaskForm = ({ task, form, _cancel }) => {
                         onChange={(e) => setTaskData({ ...taskData, description: e.target.value })}
                     />
                 </FloatingLabel>
+                <div className="taskFormTime">
+                    {/* datetime */}
+                    <FloatingLabel controlId="floatingInput" label="datetime" className="mb-3">
+                        <Form.Control
+                            className="form-control"
+                            type="datetime-local"
+                            name="datetime"
+                            placeholder="date time"
+                            defaultValue={datetime}
+                            onChange={(e) => {
+                                setdatetime(e.target.value)
+                                setTaskData({ ...taskData, datetime: new Date(e.target.value) })
+                            }}
+                        />
+                    </FloatingLabel>
 
-                {/* datetime */}
-                <FloatingLabel controlId="floatingInput" label="datetime" className="mb-3">
-                    <Form.Control
-                        className="form-control"
-                        type="datetime-local"
-                        name="datetime"
-                        placeholder="date time"
-                        defaultValue={datetime}
-                        onChange={(e) => {
-                            setdatetime(e.target.value)
-                            setTaskData({ ...taskData, datetime: new Date(e.target.value) })
-                        }}
-                    />
-                </FloatingLabel>
 
-                {/* Time And Date */}
-                <div className="btn-grid">
                     {/* Reminder Button */}
                     <Button className="mb-3"
                         type="button"
@@ -81,8 +80,10 @@ const TaskForm = ({ task, form, _cancel }) => {
                         size="lg"
                         style={{ padding: "0" }}
                         onClick={() => setTaskData({ ...taskData, reminder: !taskData.reminder })}
-                    >Reminder ( ! )<ReminderIcon /></Button>
+                    >Reminder <ReminderIcon /></Button>
+
                 </div>
+
 
                 <FloatingLabel controlId="floatingInput" label="Location" className="mb-3">
                     <Form.Control
