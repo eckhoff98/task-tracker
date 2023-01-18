@@ -21,7 +21,13 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask)
 
     const ReminderIcon = () => {
-        if (task.reminder) return (<BsAlarmFill size={25} />)
+        if (task.reminder) return (
+            <>
+                &nbsp;
+                &nbsp;
+                <BsAlarmFill size={15} />
+            </>
+        )
     }
 
     const form = (task) => {
@@ -53,7 +59,12 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                     <div className={notificationActive ? "card bg-dark border-success" : "card bg-dark"}>
                         <div className="card-header taskLess">
                             <h2 >{task.name}</h2>
-                            <h2 className="taskLessInfo">{timeToReminder(task.datetime)} &nbsp; <ReminderIcon /></h2>
+                            <div className="taskLessInfo">
+                                {timeToReminder(task.datetime)}
+
+                                <ReminderIcon />
+
+                            </div>
                         </div>
                     </div>
                 </div>
