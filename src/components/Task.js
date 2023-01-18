@@ -61,9 +61,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                             <h2 >{task.name}</h2>
                             <div className="taskLessInfo">
                                 {timeToReminder(task.datetime)}
-
                                 <ReminderIcon />
-
                             </div>
                         </div>
                     </div>
@@ -76,9 +74,13 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
                 <div className={notificationActive ? "card bg-dark border-success" : "card bg-dark"}>
                     <div className="card-header taskLess">
                         <h2 >{task.name}</h2>
-                        <h2 className="taskLessInfo">
+                        <div className="taskLessInfo">
+                            {timeToReminder(task.datetime)}
+                            <ReminderIcon />
+                        </div>
+                        {/* <h2 className="taskLessInfo">
                             {timeToReminder(task.datetime)} &nbsp; <ReminderIcon />
-                        </h2>
+                        </h2> */}
                     </div>
                     <div className="card-body">
                         <p className="card-text"><BsPencilSquare /> {task.description}</p>
