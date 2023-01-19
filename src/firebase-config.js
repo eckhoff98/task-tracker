@@ -51,8 +51,6 @@ export async function requestPermission(user) {
 }
 
 const addFcmToken = httpsCallable(functions, 'addFcmToken');
-export const addNotificationTask = httpsCallable(functions, 'addNotificationTask');
-export const removeNotificationTask = httpsCallable(functions, 'removeNotificationTask');
 
 
 export const addTaskServer = httpsCallable(functions, 'addTaskServer');

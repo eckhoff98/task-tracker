@@ -3,8 +3,7 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 const db = admin.firestore();
 
-// User tasks
-
+// -------------------- User tasks --------------------
 exports.addFcmToken = functions.https.onCall(async (data, context) => {
     if (!context.auth) return
     const query = db.collection('users').doc(context.auth.uid).collection("fcmTokens").where('token', '==', data.token)
@@ -92,7 +91,7 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
 
 });
 
-// Tasks
+// -------------------- tasks --------------------
 exports.addTaskServer = functions.https.onCall(async (data, context) => {
     if (!context.auth) return
 
