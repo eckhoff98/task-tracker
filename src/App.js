@@ -5,7 +5,12 @@ import Container from 'react-bootstrap/esm/Container';
 import { useNavigate } from "react-router-dom"
 
 // FIREBASE
-import { db, auth, messaging, requestPermission, addNotificationTask, removeNotificationTask } from "./firebase-config"
+import {
+  db, auth, messaging,
+  requestPermission,
+  addNotificationTask, removeNotificationTask,
+  addTaskServer, updateTaskServer, deleteTaskServer
+} from "./firebase-config"
 import { collection, setDoc, getDoc, getDocs, addDoc, updateDoc, doc, deleteDoc, arrayUnion, Timestamp } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import { getToken, onMessage } from "firebase/messaging";
@@ -41,6 +46,7 @@ function App() {
 
   onMessage(messaging, (payload) => {
     setTasks([...tasks])
+    console.log("setting tasks")
   });
 
   useEffect(() => {
@@ -86,7 +92,7 @@ function App() {
 
     const result = await setDoc(doc(db, "users", _user.uid), {
       name: extraInfo.name,
-      fcmTokens: arrayUnion({ token: currentToken, timestamp: Timestamp.now() })
+      // fcmTokens: arrayUnion({ token: currentToken, timestamp: Timestamp.now() })
     }, { merge: true })
       .catch(err => console.log(err))
 
@@ -97,79 +103,131 @@ function App() {
     firestoreUser.name = name
   }
 
+  // -------------------- Tasks --------------------
   const getTasks = async () => {
     if (!user) return
-    const userDoc = doc(db, "users", user.uid)
-    const tasksSubCollection = collection(userDoc, "tasks")
-    const data = await getDocs(tasksSubCollection).catch(err => console.log(err))
-    // converting firebase timestamp to js date here aswell
+    const userDocRef = doc(db, "users", user.uid)
+    const taskDocRef = collection(userDocRef, "tasks")
+    const data = await getDocs(taskDocRef).catch(err => console.log(err))
 
+    // converting firebase timestamp to js date here aswell
     setTasks(data.docs.map((item) => ({ ...item.data(), id: item.id, datetime: item.data().datetime.toDate() })))
+  }
+
+  const createNewTask = () => {
+    if (!user) return
+    console.log("TASK")
+    const now = new Date()
+
+    setTasks([...tasks, {
+      name: "",
+      description: "",
+      location: "",
+      reminder: false,
+      freshTask: true,
+      datetime: now
+    }])
   }
 
   const addTask = async (task) => {
     // Adds a basic task template that will be updated with the updateTask function
     if (!user) return
+    const record = await addTaskServer({ ...task, freshTask: false, uid: user.uid }).catch(err => console.log(err))
+    console.log(record)
 
-    const userDoc = doc(db, "users", user.uid)
-    const tasksSubCollection = collection(userDoc, "tasks")
-    const record = await addDoc(tasksSubCollection, {
+    // Add task to firestore db
+    // const userDoc = doc(db, "users", user.uid)
+    // const taskDocRef = collection(userDoc, "tasks")
+    // const record2 = await addDoc(taskDoc, {
+    //   ...task,
+    //   freshTask: false,
+    //   uid: user.uid,
+    //   // datetime: new Date()
+    // }).catch(err => console.log(err))
+    // console.log({ record2: record2 })
+
+    // Removes the task added to list that just for creating new task
+    const removed = [...tasks.filter((t) => t.freshTask === false)]
+    setTasks([...removed, {
       ...task,
-      uid: user.uid,
-      datetime: new Date()
-    }).catch(err => console.log(err))
+      freshTask: false,
+      id: record.data.taskId,
+      taskRunnerTaskId: record.data.taskRunnerTaskId
+    }
+    ])
+
+    // if (task.reminder) {
+    //   const result = await addNotificationTask({ ...task, id: record.id }).catch(err => console.log(err))
+    //   const taskRunnerTaskId = result.data.taskRunnerTaskId
+    //   if (taskRunnerTaskId) {
+    //     setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
+    //     // await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
+    //   }
+    //   return
+    // }
 
 
-    setTasks([...tasks, {
-      ...task,
-      freshTask: true,
-      id: record.id,
-      uid: user.uid,
-      datetime: new Date()
-    }])
+    // setTasks([...tasks, {
+    //   ...task,
+    //   // freshTask: true,
+    //   // id: record.id,
+    //   // uid: user.uid,
+    //   // datetime: new Date()
+    // }])
   }
 
   const updateTask = async (task) => {
-    if (task.name === "") task.name = "New Task"
+    // if (task.name === "") task.name = "New Task"
     if (!user) return
-    const userDoc = doc(db, "users", user.uid)
-    const taskDoc = doc(userDoc, "tasks", task.id)
 
-
-    // Add notification task and check if it returns an id for the task, 
-    // then update task to store that id
-    if (task.reminder) {
-      const result = await addNotificationTask(task).catch(err => console.log(err))
-      const id = result.data.taskRunnerTaskId
-      if (id) {
-        setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: id } : t)])
-        await updateDoc(taskDoc, { ...task, taskRunnerTaskId: id }).catch(err => console.log(err))
-      }
-      return
-    }
-
-    // If reminder is not checked, remove the the taskRunnerTask and remover the taskRunnerTaskId from task
-    if (task.taskRunnerTaskId) {
-      await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
-      delete task.taskRunnerTaskId
-    }
-
-    // Update doc and tasks state
-    await updateDoc(taskDoc, task).catch(err => console.log(err))
+    const result = await updateTaskServer(task)
     setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+
+
+
+    // const userDoc = doc(db, "users", user.uid)
+    // const taskDoc = doc(userDoc, "tasks", task.id)
+
+
+    // // Add notification task and check if it returns an id for the task, 
+    // // then update task to store that id
+    // if (task.reminder) {
+    //   const result = await addNotificationTask(task).catch(err => console.log(err))
+    //   const taskRunnerTaskId = result.data.taskRunnerTaskId
+    //   if (taskRunnerTaskId) {
+    //     setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
+    //     await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
+    //   }
+    //   return
+    // }
+
+    // // If reminder is not checked, remove the the taskRunnerTask and remover the taskRunnerTaskId from task
+    // if (task.taskRunnerTaskId) {
+    //   await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
+    //   delete task.taskRunnerTaskId
+    // }
+
+    // // Update doc and tasks state
+    // await updateDoc(taskDoc, task).catch(err => console.log(err))
+    // setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
   }
 
   const deleteTask = async (task) => {
     if (!user) return
-    const userDoc = doc(db, "users", user.uid)
-    const taskDoc = doc(userDoc, "tasks", task.id)
     setTasks([...tasks.filter((t) => t.id !== task.id)])
-    await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
+    const result = await deleteTaskServer(task)
+    // console.log(task)
+    // const userDoc = doc(db, "users", user.uid)
+    // const taskDoc = doc(userDoc, "tasks", task.id)
+    // setTasks([...tasks.filter((t) => t.id !== task.id)])
+    // await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
 
-    if (task.taskRunnerTaskId) {
-      await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
-    }
+    // const result = await removeNotificationTask(task).catch(err => console.log(err))
+    // console.log(result)
+    // if (task.taskRunnerTaskId) {
+    // }
   }
+  // -------------------- end of (Tasks) --------------------
 
   const logout = () => {
     auth.signOut()
@@ -195,7 +253,7 @@ function App() {
             <Route path="/about" element={<About />} />
 
             <Route element={<PrivateRoutes user={user} navLocation={"/login"} />}>
-              <Route path="/tasks" element={<Tasks tasks={tasks} _addTask={addTask} _updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
+              <Route path="/tasks" element={<Tasks tasks={tasks} createNewTask={createNewTask} addTask={addTask} updateTask={updateTask} _deleteTask={deleteTask} nav={nav} user={user} />} />
               <Route path="/account" element={<Account logout={logout} nav={nav} user={user} firestoreUser={firestoreUser} />} />
               <Route path="/change-password" element={<ChangePassword nav={nav} user={user} />} />
               <Route path="/change-user-info" element={<ChangeUserInfo nav={nav} user={user} changeName={changeName} firestoreUser={firestoreUser} />} />

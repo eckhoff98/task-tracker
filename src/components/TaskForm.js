@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/esm/Button';
 import { useEffect } from "react";
 
 
-const TaskForm = ({ task, form, _cancel }) => {
+const TaskForm = ({ task, form, _cancel, addTask, updateTask, setEditTaskToggel }) => {
     const [taskData, setTaskData] = useState(task)
     const [datetime, setdatetime] = useState()
 
@@ -21,8 +21,15 @@ const TaskForm = ({ task, form, _cancel }) => {
         setdatetime(stringToHtmlDatetime(task.datetime))
     }, [])
 
-    const submit = () => {
-        form({ ...taskData, name: (taskData.name === "") ? "New Task" : taskData.name, freshTask: false })
+    const submit = (e) => {
+        e.preventDefault()
+        // form({ ...taskData, name: (taskData.name === "") ? "New Task" : taskData.name, freshTask: false })
+        if (task.freshTask) {
+            addTask({ ...taskData })
+        } else {
+            updateTask({ ...taskData })
+        }
+        setEditTaskToggel(false)
     }
 
     const ReminderIcon = () => {
@@ -30,7 +37,7 @@ const TaskForm = ({ task, form, _cancel }) => {
     }
 
     return (
-        <form onSubmit={submit}>
+        <form onSubmit={(e) => submit(e)}>
             <div className="margin-1em">
                 <FloatingLabel controlId="floatingInput" label="Task" className="mb-3">
                     <Form.Control
@@ -98,6 +105,7 @@ const TaskForm = ({ task, form, _cancel }) => {
                 </FloatingLabel>
 
                 <div className="d-grid btn-grid">
+
                     <Button variant="outline-success" type="submit" size="lg"><strong>Save</strong></Button>
                     <Button variant="outline-danger" type="button" size="lg" onClick={() => _cancel()}><strong>Cancel</strong></Button>
                 </div>

@@ -8,14 +8,14 @@ import TasksHeader from "./TasksHeader"
 // import { db, auth } from "../firebase-config"
 
 
-const Tasks = ({ tasks, _updateTask, _deleteTask, _addTask, user }) => {
+const Tasks = ({ tasks, updateTask, _deleteTask, addTask, createNewTask, user }) => {
 
     return (
         <>
             <div className="tasks">
-                <TasksHeader _addTask={_addTask} user={user} />
+                <TasksHeader addTask={addTask} user={user} createNewTask={createNewTask} />
                 {tasks.map((task, index) => {
-                    return <Task key={index} task={task} _updateTask={_updateTask} _deleteTask={_deleteTask} />
+                    return <Task key={index} task={task} updateTask={updateTask} _deleteTask={_deleteTask} addTask={addTask} />
                 })}
             </div>
 

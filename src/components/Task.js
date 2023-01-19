@@ -15,7 +15,7 @@ import moment from "moment"
 import { convertToDate, convertToTime } from "../time"
 
 
-const Task = ({ task, _updateTask, _deleteTask }) => {
+const Task = ({ task, updateTask, _deleteTask, addTask }) => {
 
     const [moreInfo, setMoreInfo] = useState(false)
     const [editTaskToggel, setEditTaskToggel] = useState(task.freshTask)
@@ -31,7 +31,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     }
 
     const form = (task) => {
-        _updateTask(task)
+        updateTask(task)
         setEditTaskToggel(false)
     }
 
@@ -101,7 +101,7 @@ const Task = ({ task, _updateTask, _deleteTask }) => {
     if (editTaskToggel) {
         return (
             <div className="card bg-dark" >
-                <TaskForm task={task} form={form} _cancel={cancel} />
+                <TaskForm task={task} form={form} _cancel={cancel} addTask={addTask} updateTask={updateTask} setEditTaskToggel={setEditTaskToggel} />
             </div>
         )
     } else {

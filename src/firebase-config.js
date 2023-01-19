@@ -45,7 +45,7 @@ export async function requestPermission(user) {
         if (!token) return console.log('No registration token available. Request permission to generate one.');
         console.log(token)
         const result = await addFcmToken({ token: token })
-        console.log(result)
+        // console.log(result)
         return token
     } catch (err) { console.log(err) }
 }
@@ -55,6 +55,9 @@ export const addNotificationTask = httpsCallable(functions, 'addNotificationTask
 export const removeNotificationTask = httpsCallable(functions, 'removeNotificationTask');
 
 
+export const addTaskServer = httpsCallable(functions, 'addTaskServer');
+export const updateTaskServer = httpsCallable(functions, 'updateTaskServer');
+export const deleteTaskServer = httpsCallable(functions, 'deleteTaskServer');
 
 
 
