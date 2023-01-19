@@ -98,21 +98,21 @@ exports.addTaskServer = functions.https.onCall(async (data, context) => {
 
     // Generate an id here
     const randomId: string = String(Date.now() + Math.random()).replace(/[,.-]/g, '');
+    try {
+        await db.collection("users")
+            .doc(context.auth.uid).collection("tasks")
+            .doc(randomId).set({
+                ...data,
+                datetime: new Date(data.datetime),
+                id: randomId
+            })
+        data.reminder && await addNotificationTask2(data, context.auth.uid, randomId)
 
-    await db.collection("users")
-        .doc(context.auth.uid).collection("tasks")
-        .doc(randomId).set({
-            ...data,
-            datetime: new Date(data.datetime),
-            id: randomId
-        })
-
-    data.reminder && await addNotificationTask2(data, context.auth.uid, randomId)
-
-    return ({
-        taskId: randomId
-        // taskRunnerTaskId: taskRunnerTaskId && taskRunnerTaskId
-    })
+        return ({ msg: "success", taskId: randomId })
+    } catch (err) {
+        console.log(err)
+        return err
+    }
 });
 exports.updateTaskServer = functions.https.onCall(async (data, context) => {
     if (!context.auth) return
@@ -128,6 +128,7 @@ exports.updateTaskServer = functions.https.onCall(async (data, context) => {
         } else {
             await db.collection("tasks").doc(data.id).delete()
         }
+        return ({ msg: "success" })
     } catch (err) {
         console.log(err)
         return err
@@ -140,6 +141,7 @@ exports.deleteTaskServer = functions.https.onCall(async (data, context) => {
             .collection("tasks").doc(data.id)
             .delete()
         await db.collection("tasks").doc(data.id).delete()
+        return ({ msg: "success" })
     } catch (err) {
         console.log(err)
         return err

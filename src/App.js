@@ -132,48 +132,21 @@ function App() {
   const addTask = async (task) => {
     // Adds a basic task template that will be updated with the updateTask function
     if (!user) return
-    const record = await addTaskServer({ ...task, freshTask: false, uid: user.uid }).catch(err => console.log(err))
-    console.log(record)
-
-    // Add task to firestore db
-    // const userDoc = doc(db, "users", user.uid)
-    // const taskDocRef = collection(userDoc, "tasks")
-    // const record2 = await addDoc(taskDoc, {
-    //   ...task,
-    //   freshTask: false,
-    //   uid: user.uid,
-    //   // datetime: new Date()
-    // }).catch(err => console.log(err))
-    // console.log({ record2: record2 })
-
     // Removes the task added to list that just for creating new task
     const removed = [...tasks.filter((t) => t.freshTask === false)]
+    // Add to tasks fast for uex, then add ids from result later
+    setTasks([...removed, { ...task, freshTask: false, }])
+
+    const result = await addTaskServer({ ...task, freshTask: false, uid: user.uid }).catch(err => console.log(err))
+
     setTasks([...removed, {
       ...task,
       freshTask: false,
-      id: record.data.taskId,
-      taskRunnerTaskId: record.data.taskRunnerTaskId
+      id: result.data.taskId,
+      // taskRunnerTaskId: result.data.taskRunnerTaskId
     }
     ])
-
-    // if (task.reminder) {
-    //   const result = await addNotificationTask({ ...task, id: record.id }).catch(err => console.log(err))
-    //   const taskRunnerTaskId = result.data.taskRunnerTaskId
-    //   if (taskRunnerTaskId) {
-    //     setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
-    //     // await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
-    //   }
-    //   return
-    // }
-
-
-    // setTasks([...tasks, {
-    //   ...task,
-    //   // freshTask: true,
-    //   // id: record.id,
-    //   // uid: user.uid,
-    //   // datetime: new Date()
-    // }])
+    console.log({ result: result })
   }
 
   const updateTask = async (task) => {
@@ -183,49 +156,17 @@ function App() {
     const result = await updateTaskServer(task)
     setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
 
+    console.log({ result: result })
 
-
-    // const userDoc = doc(db, "users", user.uid)
-    // const taskDoc = doc(userDoc, "tasks", task.id)
-
-
-    // // Add notification task and check if it returns an id for the task, 
-    // // then update task to store that id
-    // if (task.reminder) {
-    //   const result = await addNotificationTask(task).catch(err => console.log(err))
-    //   const taskRunnerTaskId = result.data.taskRunnerTaskId
-    //   if (taskRunnerTaskId) {
-    //     setTasks([...tasks.map((t) => (t.id === task.id) ? { ...task, taskRunnerTaskId: taskRunnerTaskId } : t)])
-    //     await updateDoc(taskDoc, { ...task, taskRunnerTaskId: taskRunnerTaskId }).catch(err => console.log(err))
-    //   }
-    //   return
-    // }
-
-    // // If reminder is not checked, remove the the taskRunnerTask and remover the taskRunnerTaskId from task
-    // if (task.taskRunnerTaskId) {
-    //   await removeNotificationTask({ taskRunnerTaskId: task.taskRunnerTaskId }).catch(err => console.log(err))
-    //   delete task.taskRunnerTaskId
-    // }
-
-    // // Update doc and tasks state
-    // await updateDoc(taskDoc, task).catch(err => console.log(err))
-    // setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
   }
 
   const deleteTask = async (task) => {
     if (!user) return
     setTasks([...tasks.filter((t) => t.id !== task.id)])
     const result = await deleteTaskServer(task)
-    // console.log(task)
-    // const userDoc = doc(db, "users", user.uid)
-    // const taskDoc = doc(userDoc, "tasks", task.id)
-    // setTasks([...tasks.filter((t) => t.id !== task.id)])
-    // await deleteDoc(taskDoc, task.id).catch(err => console.log(err))
 
-    // const result = await removeNotificationTask(task).catch(err => console.log(err))
-    // console.log(result)
-    // if (task.taskRunnerTaskId) {
-    // }
+    console.log({ result: result })
+
   }
   // -------------------- end of (Tasks) --------------------
 
