@@ -105,8 +105,6 @@ exports.addTaskServer = functions.https.onCall(async (data, context) => {
                 datetime: new Date(data.datetime),
                 id: randomId
             })
-        data.reminder && await addNotificationTask2(data, context.auth.uid, randomId)
-
         return ({ msg: "success", taskId: randomId })
     } catch (err) {
         console.log(err)
@@ -119,14 +117,6 @@ exports.updateTaskServer = functions.https.onCall(async (data, context) => {
         await db.collection("users").doc(context.auth.uid)
             .collection("tasks").doc(data.id)
             .update({ ...data, datetime: new Date(data.datetime) })
-
-        // Update notifcationTask
-        if (data.reminder) {
-            await db.collection("tasks").doc(data.id).delete()
-            await addNotificationTask2(data, context.auth.uid, data.id)
-        } else {
-            await db.collection("tasks").doc(data.id).delete()
-        }
         return ({ msg: "success" })
     } catch (err) {
         console.log(err)
@@ -139,22 +129,40 @@ exports.deleteTaskServer = functions.https.onCall(async (data, context) => {
         await db.collection("users").doc(context.auth.uid)
             .collection("tasks").doc(data.id)
             .delete()
-        await db.collection("tasks").doc(data.id).delete()
+        // await db.collection("tasks").doc(data.id).delete()
         return ({ msg: "success" })
     } catch (err) {
         console.log(err)
         return err
     }
-
-
-    // Update notifcationTask
-    // if (data.reminder) {
-    //     await db.collection("tasks").doc(data.id).delete()
-    //     await addNotificationTask2(data, context.auth.uid, data.id)
-    // }
 });
+exports.userTasksCreate = functions.firestore
+    .document('users/{userId}/tasks/{task}')
+    .onCreate(async (snap, context) => {
+        const newValue = snap.data();
+        await addNotificationTask2(newValue, context.params.userId)
+    });
+exports.userTasksUpdate = functions.firestore
+    .document('users/{userId}/tasks/{task}')
+    .onUpdate(async (change, context) => {
+        const newValue = change.after.data();
+        console.log(newValue)
+        if (newValue.reminder) {
+            await db.collection("tasks").doc(newValue.id).delete()
+            await addNotificationTask2(newValue, context.params.userId)
+        } else {
+            await db.collection("tasks").doc(newValue.id).delete()
+        }
+    });
+exports.userTasksDelete = functions.firestore
+    .document('users/{userId}/tasks/{task}')
+    .onDelete(async (snap, context) => {
+        await db.collection("tasks").doc(snap.data().id).delete()
+        console.log("delete")
+    })
 
-const addNotificationTask2 = async (data: any, uid: string, taskId: string) => {
+const addNotificationTask2 = async (data: any, uid: string) => {
+    if (!data.reminder) return ({ msg: "no reminder" })
     console.log("addNotificationTask2")
     const query = db.collection("users").doc(uid).collection("fcmTokens")
     const tokens = await query.get()
@@ -166,20 +174,22 @@ const addNotificationTask2 = async (data: any, uid: string, taskId: string) => {
     });
 
     const task = {
-        performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
+        // performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
+        performAt: data.datetime,
         status: "scheduled",
         worker: "notification",
         options: {
-            taskId: taskId ? taskId : "no_id",
+            taskId: data.id ? data.id : "no_id",
             title: data.name,
             body: data.description,
             tokens: justTokens
         }
     }
 
-    await db.collection("tasks").doc(taskId).set(task)
+    await db.collection("tasks").doc(data.id).set(task)
     return ({ msg: "success" })
 }
+
 
 export const taskRunner = functions.runWith({ memory: '2GB' }).pubsub
     .schedule('* * * * *').onRun(async context => {
