@@ -213,32 +213,54 @@ interface Workers {
 const workers: Workers = {
     helloWorld: () => db.collection('logs').add({ hello: 'world' }),
     notification: async (options) => {
-        if (options.name) {
-            console.log(options.name)
+        // if (options.name) {
+        //     console.log(options.name)
+        // }
+
+        // Testing
+        const title = options.title ? options.title : ""
+        const body = options.body ? options.body : ""
+        const tokens = options.tokens
+        const paylod = {
+            notification: {
+                title: title,
+                body: body,
+                click_action: "/"
+            },
+            data: {
+                taskId: options.taskId,
+            }
         }
-        if (options.tokens.length > 0) {
-            console.log("tokens is not zero")
-            const title = options.title ? options.title : ""
-            const body = options.body ? options.body : ""
-            options.tokens.forEach((_token: string) => {
-                console.log("sending to: " + _token)
-                const payload = {
-                    token: _token,
-                    notification: {
-                        title: title,
-                        body: body,
-                    },
-                    data: { taskId: options.taskId }
-                };
-                admin.messaging().send(payload).then((response) => {
-                    // Response is a message ID string.
-                    console.log('Successfully sent message:', response);
-                    return { success: true };
-                }).catch((error) => {
-                    return { error: error.code };
-                });
-            });
+        try {
+            await admin.messaging().sendToDevice(tokens, paylod)
+        } catch (err) {
+            console.log(err)
+            return err
         }
+
+        // if (options.tokens.length > 0) {
+        //     // console.log("tokens is not zero")
+        //     const title = options.title ? options.title : ""
+        //     const body = options.body ? options.body : ""
+        //     options.tokens.forEach((_token: string) => {
+        //         console.log("sending to: " + _token)
+        //         const payload = {
+        //             token: _token,
+        //             notification: {
+        //                 title: title,
+        //                 body: body,
+        //             },
+        //             data: { taskId: options.taskId }
+        //         };
+        //         admin.messaging().send(payload).then((response) => {
+        //             // Response is a message ID string.
+        //             console.log('Successfully sent message:', response);
+        //             return { success: true };
+        //         }).catch((error) => {
+        //             return { error: error.code };
+        //         });
+        //     });
+        // }
     }
 }
 
