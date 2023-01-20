@@ -131,40 +131,66 @@ function App() {
   const addTask = async (task) => {
     // Adds a basic task template that will be updated with the updateTask function
     if (!user) return
-    // Removes the task added to list that just for creating new task
+
+    // trying it this way
     const removed = [...tasks.filter((t) => t.freshTask === false)]
-    // Add to tasks fast for uex, then add ids from result later
-    setTasks([...removed, { ...task, freshTask: false, }])
 
-    const result = await addTaskServer({ ...task, freshTask: false, uid: user.uid }).catch(err => console.log(err))
+    const randomId = String(Date.now() + Math.random()).replace(/[,.-]/g, '');
+    setTasks([...removed, { ...task, freshTask: false, id: randomId }])
 
-    setTasks([...removed, {
+    const userDocRef = doc(db, "users", user.uid)
+    const taskDocRef = doc(userDocRef, "tasks", randomId)
+    await setDoc(taskDocRef, {
       ...task,
       freshTask: false,
-      id: result.data.taskId,
-      // taskRunnerTaskId: result.data.taskRunnerTaskId
-    }
-    ])
-    console.log({ result: result })
+      // datetime: new Date(task.datetime),
+      id: randomId
+    })
+
+
+    // // Removes the task added to list that just for creating new task
+    // const removed = [...tasks.filter((t) => t.freshTask === false)]
+    // // Add to tasks fast for uex, then add ids from result later
+    // setTasks([...removed, { ...task, freshTask: false, }])
+
+    // const result = await addTaskServer({ ...task, freshTask: false, uid: user.uid }).catch(err => console.log(err))
+
+    // setTasks([...removed, {
+    //   ...task,
+    //   freshTask: false,
+    //   id: result.data.taskId,
+    //   // taskRunnerTaskId: result.data.taskRunnerTaskId
+    // }
+    // ])
+    // console.log({ result: result })
   }
 
   const updateTask = async (task) => {
     // if (task.name === "") task.name = "New Task"
     if (!user) return
 
-    const result = await updateTaskServer(task)
-    setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+    // Trying this way
+    const userDocRef = doc(db, "users", user.uid)
+    const taskDocRef = doc(userDocRef, "tasks", task.id)
+    await updateDoc(taskDocRef, task)
 
-    console.log({ result: result })
+    // const result = await updateTaskServer(task)
+    // setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
+
+    // console.log({ result: result })
 
   }
 
   const deleteTask = async (task) => {
     if (!user) return
     setTasks([...tasks.filter((t) => t.id !== task.id)])
-    const result = await deleteTaskServer(task)
+    const userDocRef = doc(db, "users", user.uid)
+    const taskDocRef = doc(userDocRef, "tasks", task.id)
+    await deleteDoc(taskDocRef)
 
-    console.log({ result: result })
+    // const result = await deleteTaskServer(task)
+
+    // console.log({ result: result })
 
   }
   // -------------------- end of (Tasks) --------------------
