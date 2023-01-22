@@ -150,7 +150,7 @@ function App() {
   const updateTask = async (task) => {
     // if (task.name === "") task.name = "New Task"
     if (!user) return
-
+    setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
     const userDocRef = doc(db, "users", user.uid)
     const taskDocRef = doc(userDocRef, "tasks", task.id)
     await updateDoc(taskDocRef, task)
