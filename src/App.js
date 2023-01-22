@@ -129,10 +129,9 @@ function App() {
   }
 
   const addTask = async (task) => {
-    // Adds a basic task template that will be updated with the updateTask function
     if (!user) return
+    if (task.name === "") task.name = "New Task"
 
-    // trying it this way
     const removed = [...tasks.filter((t) => t.freshTask === false)]
 
     const randomId = String(Date.now() + Math.random()).replace(/[,.-]/g, '');
@@ -140,45 +139,21 @@ function App() {
 
     const userDocRef = doc(db, "users", user.uid)
     const taskDocRef = doc(userDocRef, "tasks", randomId)
+
     await setDoc(taskDocRef, {
       ...task,
       freshTask: false,
-      // datetime: new Date(task.datetime),
       id: randomId
     })
-
-
-    // // Removes the task added to list that just for creating new task
-    // const removed = [...tasks.filter((t) => t.freshTask === false)]
-    // // Add to tasks fast for uex, then add ids from result later
-    // setTasks([...removed, { ...task, freshTask: false, }])
-
-    // const result = await addTaskServer({ ...task, freshTask: false, uid: user.uid }).catch(err => console.log(err))
-
-    // setTasks([...removed, {
-    //   ...task,
-    //   freshTask: false,
-    //   id: result.data.taskId,
-    //   // taskRunnerTaskId: result.data.taskRunnerTaskId
-    // }
-    // ])
-    // console.log({ result: result })
   }
 
   const updateTask = async (task) => {
     // if (task.name === "") task.name = "New Task"
     if (!user) return
 
-    // Trying this way
     const userDocRef = doc(db, "users", user.uid)
     const taskDocRef = doc(userDocRef, "tasks", task.id)
     await updateDoc(taskDocRef, task)
-
-    // const result = await updateTaskServer(task)
-    // setTasks([...tasks.map((t) => (t.id === task.id) ? task : t)])
-
-    // console.log({ result: result })
-
   }
 
   const deleteTask = async (task) => {
@@ -187,11 +162,6 @@ function App() {
     const userDocRef = doc(db, "users", user.uid)
     const taskDocRef = doc(userDocRef, "tasks", task.id)
     await deleteDoc(taskDocRef)
-
-    // const result = await deleteTaskServer(task)
-
-    // console.log({ result: result })
-
   }
   // -------------------- end of (Tasks) --------------------
 

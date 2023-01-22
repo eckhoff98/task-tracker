@@ -92,50 +92,50 @@ exports.addNotificationTask = functions.https.onCall(async (data, context) => {
 });
 
 // -------------------- tasks --------------------
-exports.addTaskServer = functions.https.onCall(async (data, context) => {
-    if (!context.auth) return
+// exports.addTaskServer = functions.https.onCall(async (data, context) => {
+//     if (!context.auth) return
 
-    // Generate an id here
-    const randomId: string = String(Date.now() + Math.random()).replace(/[,.-]/g, '');
-    try {
-        await db.collection("users")
-            .doc(context.auth.uid).collection("tasks")
-            .doc(randomId).set({
-                ...data,
-                datetime: new Date(data.datetime),
-                id: randomId
-            })
-        return ({ msg: "success", taskId: randomId })
-    } catch (err) {
-        console.log(err)
-        return err
-    }
-});
-exports.updateTaskServer = functions.https.onCall(async (data, context) => {
-    if (!context.auth) return
-    try {
-        await db.collection("users").doc(context.auth.uid)
-            .collection("tasks").doc(data.id)
-            .update({ ...data, datetime: new Date(data.datetime) })
-        return ({ msg: "success" })
-    } catch (err) {
-        console.log(err)
-        return err
-    }
-});
-exports.deleteTaskServer = functions.https.onCall(async (data, context) => {
-    if (!context.auth) return
-    try {
-        await db.collection("users").doc(context.auth.uid)
-            .collection("tasks").doc(data.id)
-            .delete()
-        // await db.collection("tasks").doc(data.id).delete()
-        return ({ msg: "success" })
-    } catch (err) {
-        console.log(err)
-        return err
-    }
-});
+//     // Generate an id here
+//     const randomId: string = String(Date.now() + Math.random()).replace(/[,.-]/g, '');
+//     try {
+//         await db.collection("users")
+//             .doc(context.auth.uid).collection("tasks")
+//             .doc(randomId).set({
+//                 ...data,
+//                 datetime: new Date(data.datetime),
+//                 id: randomId
+//             })
+//         return ({ msg: "success", taskId: randomId })
+//     } catch (err) {
+//         console.log(err)
+//         return err
+//     }
+// });
+// exports.updateTaskServer = functions.https.onCall(async (data, context) => {
+//     if (!context.auth) return
+//     try {
+//         await db.collection("users").doc(context.auth.uid)
+//             .collection("tasks").doc(data.id)
+//             .update({ ...data, datetime: new Date(data.datetime) })
+//         return ({ msg: "success" })
+//     } catch (err) {
+//         console.log(err)
+//         return err
+//     }
+// });
+// exports.deleteTaskServer = functions.https.onCall(async (data, context) => {
+//     if (!context.auth) return
+//     try {
+//         await db.collection("users").doc(context.auth.uid)
+//             .collection("tasks").doc(data.id)
+//             .delete()
+//         // await db.collection("tasks").doc(data.id).delete()
+//         return ({ msg: "success" })
+//     } catch (err) {
+//         console.log(err)
+//         return err
+//     }
+// });
 exports.userTasksCreate = functions.firestore
     .document('users/{userId}/tasks/{task}')
     .onCreate(async (snap, context) => {
