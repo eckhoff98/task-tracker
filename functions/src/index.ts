@@ -176,7 +176,7 @@ const addNotificationTask2 = async (data: any, uid: string) => {
     const task = {
         // performAt: admin.firestore.Timestamp.fromDate(new Date(data.datetime)),
         performAt: data.datetime,
-        status: "scheduled",
+        status: (new Date(data.datetime) >= new Date()) ? "scheduled" : "complete",
         worker: "notification",
         options: {
             taskId: data.id ? data.id : "no_id",
